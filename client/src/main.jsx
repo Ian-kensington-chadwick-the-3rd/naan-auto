@@ -1,9 +1,11 @@
 import  ReactDOM  from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-
+import './app.css'
 import App from './app.jsx'
 import Home from './pages/Home.jsx'
 import Error from './pages/error.jsx'
+import inv from './pages/inventory.jsx'
+
 
 const router = createBrowserRouter([
     {
@@ -15,7 +17,18 @@ const router = createBrowserRouter([
                 index: true,
                 element: <Home/>
             },
-
+            {
+                path: '/aboutUs',
+                element: <aboutUs/>
+            },
+            {
+                path: '/inventory',
+                element: <inv/>
+            },
+            {
+                path: '/contactUs',
+                element: <contactUs/>
+            }
         ]
     }
 ]);

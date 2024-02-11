@@ -4,10 +4,12 @@ import { Link } from "react-router-dom";
 const Header = () => {
     return (
         <header className="header" >
-            <div className="header1">
-                <p>
-                    call us 406-250-2747
-                </p>
+           <div className="header1">
+                <div className="header1-center">
+                    <span className="address-and-phone">
+                        call us 406-250-2747
+                    </span>
+                </div>
             </div>
             <div className="link-container link">
                 <Link to='/aboutUs'>
@@ -25,7 +27,7 @@ const Header = () => {
                         Contact Us
                     </p>
                 </Link>
-            </div>
+            </div>             
         </header>
     );
 }

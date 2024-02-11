@@ -4,16 +4,30 @@ body, html {
 }
 
 .header{
-    background-color: black;
-    padding: 1vh;   
+    background-color: black;   
     border-width: 100vw;
+    height:177px;
 }
 
 .header1{
-    background-color: blue;
+    background-color: #012345;
     color: white;
-    
+    height:46px;
 }
+
+.header1-center{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.address-and-phone{
+    padding:0.5 0;
+    line-height: 1.5rem;
+    font-size: 24px;
+
+}
+
 
 .min-100-vh {
     min-height: 100vh;
@@ -27,4 +41,6 @@ body, html {
 .link {
     margin-right: 20px; /* Add space between links */
 }
+
+
 

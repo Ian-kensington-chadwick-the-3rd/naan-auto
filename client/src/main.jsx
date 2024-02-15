@@ -23,7 +23,7 @@ const router = createBrowserRouter([
             },
             {
                 path: '/inventory',
-                element: <inv/>
+                element: <inventory/>
             },
             {
                 path: '/contactUs',

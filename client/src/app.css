@@ -12,22 +12,26 @@ body, html {
 .header1{
     background-color: #012345;
     color: white;
-    height:46px;
+    display:flex;
+    justify-content: space-around;
+    padding:0.5rem 0;
 }
 
-.header1-center{
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.bottomnavbarcontainer{
+    display:flex;
+    justify-content: space-around;
+}
+
+
+.carlogo{
+    height: 100px;
 }
 
 .address-and-phone{
-    padding:0.5 0;
     line-height: 1.5rem;
     font-size: 24px;
-
+    color:black;
 }
-
 
 .min-100-vh {
     min-height: 100vh;
@@ -40,6 +44,7 @@ body, html {
 
 .link {
     margin-right: 20px; /* Add space between links */
+    text-decoration: none; /* removes purple link decoration */
 }
 
 

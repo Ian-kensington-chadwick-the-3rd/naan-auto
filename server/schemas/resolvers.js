@@ -1,7 +1,17 @@
+const { Car } = require('../models')
+
 const resolvers = {
     Query: {
-      placeholder: () => 'Placeholder response',
+      Cars: async () => {
+        return Car.find()
+      }
     },
+    Mutations: {
+      addCar: async (parent, {Year, Make, Milage, Description, Trans}) => {
+        const car = await Car.create({Year, Make, Milage, Description, Trans});
+        return { car }
+      }
+    }
   };
 
 module.exports = resolvers;

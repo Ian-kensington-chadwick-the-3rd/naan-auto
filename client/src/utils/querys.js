@@ -23,5 +23,5 @@ export const ADD_CARS = gql`
             Trans
         }
     }`
-export const DELETE_CARS = gql`
-    `
+// export const DELETE_CARS = gql`
+//     `

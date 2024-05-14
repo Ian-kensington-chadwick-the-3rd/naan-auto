@@ -1,4 +1,4 @@
-const { Car } = require('../models/carschema')
+const { Car } = require('../models/carschema.js')
 
 const resolvers = {
     Query: {
@@ -6,10 +6,11 @@ const resolvers = {
         return Car.find()
       }
     },
-    Mutations: {
-      addCar: async (parent, {Year, Make, Milage, Description, Trans}) => {
-        const car = await Car.create({Year, Make, Milage, Description, Trans});
-        return { car }
+    Mutation: {
+      addCar: async (parent, {Year, Make, Mileage, Description, Trans}) => {
+        const car = await Car.create({Year, Make, Mileage, Description, Trans});
+        console.log('year: ',Year,"Make:", Make, " Mileage:" ,Mileage,"desription", Description, "trans:", Trans);
+        return  car
       },
       deleteCar: async (parent, { carId }, context) => {
         if (context.car) {
@@ -17,8 +18,8 @@ const resolvers = {
             _id: carId,
           });
           await Car.findOneAndUpdate(
-            { _id: context.car._id},
-            {$pull: {car: car._id}});
+            { _id: context.carId},
+            {$pull: {car: carId}});
             return car;
         }
       }

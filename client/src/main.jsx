@@ -4,7 +4,7 @@ import './app.css'
 import App from './app.jsx'
 import Home from './pages/Home.jsx'
 import Error from './pages/error.jsx'
-import inv from './pages/inventory.jsx'
+import Inv from './pages/inventory.jsx' 
 
 
 const router = createBrowserRouter([
@@ -23,7 +23,7 @@ const router = createBrowserRouter([
             },
             {
                 path: '/inventory',
-                element: <inventory/>
+                element: <Inv/>
             },
             {
                 path: '/contactUs',

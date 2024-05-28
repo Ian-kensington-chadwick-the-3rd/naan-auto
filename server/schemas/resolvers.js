@@ -10,7 +10,7 @@ const resolvers = {
       addCar: async (parent, {Year, Make, Mileage, Description, Trans}) => {
         const car = await Car.create({Year, Make, Mileage, Description, Trans});
         console.log('year: ',Year,"Make:", Make, " Mileage:" ,Mileage,"desription", Description, "trans:", Trans);
-        return  car
+        return { car }
       },
       deleteCar: async (parent, { carId }, context) => {
         if (context.car) {

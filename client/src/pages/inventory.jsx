@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client'
 import React, {useState, useEffect} from 'react';
-
+import { useParams , Link} from 'react-router-dom';
 // starting to attempt to fetch data from our Cars database to append to website. https://www.apollographql.com/docs/react/data/queries
 
 // getting back to basics the data is not being displayed researching https://www.apollographql.com/tutorials/lift-off-part1/03-schema-definition-language-sdl
@@ -19,14 +19,16 @@ const Inv = () => {
         <div>
             <ul>
                 {data.Cars.map((car) => (
-                    <Link to=':id'>
-                        <li key={car.id}>
+                    
+                        <li key={car._id}>
+                            <Link to={`/inventory/${car._id}`} >
                             {car.Year}
                             {car.Make}
                             {car.Mileage}
                             {car.Description}
+                            </Link>
                         </li>
-                    </Link>
+                   
                 ))}
             </ul>
         </div>

@@ -4,6 +4,9 @@ const resolvers = {
     Query: {
       Cars: async () => {
         return Car.find()
+      },
+      findCar: async (_, ID) => {
+        return Car.find({_id: ID})
       }
     },
     Mutation: {

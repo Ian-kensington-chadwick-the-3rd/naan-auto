@@ -12,6 +12,18 @@ export const GET_CARS = gql`
         }
     }`
 
+export const FIND_CAR = gql`
+    query Cars($id: ID!){
+        findCar(_id:$id){
+            _id
+            Year
+            Make
+            Mileage
+            Description
+            Trans
+        }
+    }`
+
 export const ADD_CARS = gql`
     mutation addCars($Year: Int!, $Make: String!, $Mileage: Int!, $Description: String, $Trans: String) {
         addCars(Year: $Year, Make: $Make, Mileage: $Mileage, Description: $Description, Trans: $Trans){

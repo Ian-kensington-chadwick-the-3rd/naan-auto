@@ -11,6 +11,7 @@ const typeDefs =`
 
   type Query {
     Cars: [Car]
+    findCar(_id: ID!): [Car]
   }
 
   type Mutation {

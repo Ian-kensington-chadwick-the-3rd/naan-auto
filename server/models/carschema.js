@@ -19,6 +19,9 @@ const carSchema = new Schema({
     },
     Trans:{
         type: String
+    },
+    imageUrl:{
+        type: [String]
     }
 });
 

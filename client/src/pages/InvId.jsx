@@ -16,17 +16,19 @@ const InvId = () => {
   if (loading) return <p>Loading...</p>;
 
   if (error) return <p>Error: {error.message}</p>;
-
+    console.log(data)
     return (
        
         <div>
             <h1>'this is params {Id}'</h1>
             {cars.map((car) => (
                 <div key = {car._id}>
-                <p>{car.Make}</p>
-                <p>{car.Description}</p>
-                <p>{car.Mileage}</p>
-                <p>{car.Year}</p>
+                <img src={car.imageUrl[0]} height={500} width={400}></img>
+                <p>Model: {car.Make}</p>
+                <p>Description: {car.Description || "null"}</p>
+                <p>Mileage: {car.Mileage}</p>
+                <p>Year: {car.Year}</p>
+
                 </div>
             ))}
         </div>

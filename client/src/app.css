@@ -47,5 +47,8 @@ body, html {
     text-decoration: none; /* removes purple link decoration */
 }
 
-
+.test{
+    display: flex;
+    justify-content: center;
+}
 

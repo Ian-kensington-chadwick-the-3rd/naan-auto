@@ -6,6 +6,7 @@ const typeDefs =`
     Mileage: Int!
     Description: String
     Trans: String
+    imageUrl: [String]
   }
 
 
@@ -15,7 +16,7 @@ const typeDefs =`
   }
 
   type Mutation {
-    addCar(Year: Int!, Make: String!, Mileage: Int!, Description:String, Trans: String): Car
+    addCar(Year: Int!, Make: String!, Mileage: Int!, Description:String, Trans: String, imageUrl: [String]): Car
     deleteCar(carId: ID!): Car
   }
 `;

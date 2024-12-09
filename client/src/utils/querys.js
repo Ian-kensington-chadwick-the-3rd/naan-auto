@@ -9,6 +9,7 @@ export const GET_CARS = gql`
             Mileage
             Description
             Trans
+            imageUrl
         }
     }`
 
@@ -21,18 +22,20 @@ export const FIND_CAR = gql`
             Mileage
             Description
             Trans
+            imageUrl
         }
     }`
 
-export const ADD_CARS = gql`
-    mutation addCars($Year: Int!, $Make: String!, $Mileage: Int!, $Description: String, $Trans: String) {
-        addCars(Year: $Year, Make: $Make, Mileage: $Mileage, Description: $Description, Trans: $Trans){
-            id
+export const ADD_CAR = gql`
+    mutation addCar($Year: Int!, $Make: String!, $Mileage: Int!, $Description: String, $Trans: String, $imageUrl: [String]) {
+        addCar(Year: $Year, Make: $Make, Mileage: $Mileage, Description: $Description, Trans: $Trans, imageUrl: $imageUrl){
+            _id
             Year
             Make
             Mileage
             Description
             Trans
+            imageUrl
         }
     }`
 // export const DELETE_CARS = gql`

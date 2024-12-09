@@ -1,5 +1,8 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose'); 
 
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/naan-auto');
+
+mongoose.connect( 'mongodb://127.0.0.1:27017/naan-auto');
 
 module.exports = mongoose.connection;
+
+// process.env.MONGODB_URI ||

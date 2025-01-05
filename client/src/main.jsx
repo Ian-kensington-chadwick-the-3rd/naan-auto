@@ -4,11 +4,12 @@ import './app.css'
 import App from './app.jsx'
 import Home from './pages/Home.jsx'
 import Error from './pages/error.jsx'
-import Inventory from './pages/inventory' 
+import Inventory from './pages/Inventory' 
 import InvId from './pages/InvId'
 import AddCar from './pages/addCar'
 import ContactUs from './pages/contactUs'
 import AboutUs from './pages/aboutUs'
+import Login from "./pages/Login";
 
 const router = createBrowserRouter([
     {
@@ -36,6 +37,10 @@ const router = createBrowserRouter([
             {
                 path:'/addcar',
                 element: <AddCar/>
+            },
+            {
+                path: '/Login',
+                element: <Login/>
             },
             {
                 path: '/contactUs',

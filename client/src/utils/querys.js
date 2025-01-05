@@ -40,3 +40,12 @@ export const ADD_CAR = gql`
     }`
 // export const DELETE_CARS = gql`
 //     `
+
+export const SIGN_IN = gql`
+mutation signIn($Username: String!, $passwordInput: String!){
+    signIn(Username: $Username, passwordInput: $passwordInput){
+        success
+        message
+        token
+    }
+}`

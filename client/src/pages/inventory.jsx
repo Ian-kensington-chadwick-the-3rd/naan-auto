@@ -1,6 +1,7 @@
 import { useMutation, useQuery } from '@apollo/client'
 import React, {useState, useEffect, useRef} from 'react';
 import { useParams , Link} from 'react-router-dom';
+import { GET_CARS } from '../utils/querys';
 // starting to attempt to fetch data from our Cars database to append to website. https://www.apollographql.com/docs/react/data/queries
 
 // getting back to basics the data is not being displayed researching https://www.apollographql.com/tutorials/lift-off-part1/03-schema-definition-language-sdl
@@ -8,11 +9,10 @@ import { useParams , Link} from 'react-router-dom';
 // data is finnally able to be displayed at a very raw level. the reason that data was not being displayed was because my graphql query string inside of querys.js was not matching my typedefs table ( id => _id, Car => cars line 5.)
 
 // im able to map data to list item elements 
-import { GET_CARS } from '../utils/querys';
-const Inv = () => { 
-    var {loading, error, data} = useQuery(GET_CARS);
-    
-     var base64StringArray = [];
+
+const Inv = () => {    
+    var [loggedIn , setLoggedIn] = useState(false);
+     var {loading, error, data} = useQuery(GET_CARS);
     if (loading) return 'loading...';
     if(error) return `Error!!!! ${error.message}`; 
     console.log("this is data =>",data);
@@ -20,9 +20,13 @@ const Inv = () => {
 
     return (
         <div>
+     
+
+            {loggedIn ? (
             <Link to={`/addCar`}>
                 <button title='add a car'>add car</button>
-            </Link> 
+            </Link>)
+                : ('')} 
 
             <div>
                 <ul>

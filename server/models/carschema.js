@@ -27,4 +27,28 @@ const carSchema = new Schema({
 
 const Car = mongoose.model('Car',carSchema);
 
-module.exports = { Car };
+
+const passwordSchema = new Schema({
+    Password:{
+        type: String
+    }
+})
+
+const Password = mongoose.model('Password',passwordSchema);
+
+const userSchema = new Schema({
+    Username:{
+        type: String,
+        required: true
+    },
+    Admin:{
+        type: String,
+        required: true
+    }
+});
+
+const User = mongoose.model('User', userSchema);
+
+
+
+module.exports = { Car, Password, User };

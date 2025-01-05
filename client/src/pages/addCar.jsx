@@ -2,14 +2,23 @@ import { useMutation } from "@apollo/client";
 import { ADD_CAR } from "../utils/querys";
 import { AdvancedImage } from '@cloudinary/react';
 import { Cloudinary } from "@cloudinary/url-gen";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
+
+
 // gathering my thoughts on how to connect cloudinary so that the payload is percieved as a cloudinary secure url because the base64 url is too big of a payload. After i want to put it in my database stringUrl
 
 
 
-const addCarData = () => {
-
-    const [addCar] = useMutation(ADD_CAR);
+const addCarData = () => { 
+     const [addCar] = useMutation(ADD_CAR);
+if (addCar.loading) return <p>Loading...</p>;
+if (addCar.error) return <p>Error: {error.message}</p>;
+if (addCar.data === null) return <p>No data available</p>;
+if(addCar.data){
+    Navigate('/inventory')
+}
+  
+   
 
     async function picHandler(event) {
         event.preventDefault()
@@ -53,6 +62,7 @@ const addCarData = () => {
                 console.log(pair[0]+ ', ' + pair[1]); 
             }
             try {
+                // const cloudinaryUrl = process.env.CLOUDINARY_URL;
 
                 const response = await fetch('https://api.cloudinary.com/v1_1/dm8t2zlt4/image/upload', {
                 
@@ -110,9 +120,9 @@ const addCarData = () => {
 
                 <label htmlFor="Trans">transmission</label>
                 <input type="text" id="transId"></input>
-                {/* <Link to='/inventory'> */}
+                
                 <input type='submit' value='submit'></input>
-                {/* </Link> */}
+                
             </form>
         </div>
     );

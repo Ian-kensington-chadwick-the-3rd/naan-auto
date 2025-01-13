@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from '@apollo/client'
 import React, {useState, useEffect, useRef} from 'react';
 import { useParams , Link} from 'react-router-dom';
-import { GET_CARS } from '../utils/querys';
+import { GET_CARS, GET_USER, DELETE_CAR } from '../utils/querys';
 // starting to attempt to fetch data from our Cars database to append to website. https://www.apollographql.com/docs/react/data/queries
 
 // getting back to basics the data is not being displayed researching https://www.apollographql.com/tutorials/lift-off-part1/03-schema-definition-language-sdl
@@ -11,16 +11,54 @@ import { GET_CARS } from '../utils/querys';
 // im able to map data to list item elements 
 
 const Inv = () => {    
+ 
+    const { data: userData} = useQuery(GET_USER)
+    const {loading: carLoading, error: carError, data: carData} = useQuery(GET_CARS);
+    const [deleteCar] = useMutation(DELETE_CAR)
     var [loggedIn , setLoggedIn] = useState(false);
-     var {loading, error, data} = useQuery(GET_CARS);
-    if (loading) return 'loading...';
-    if(error) return `Error!!!! ${error.message}`; 
-    console.log("this is data =>",data);
+    const carRef = useRef(null);
 
+   
+    
+    
+    
+    useEffect(()=>{
+    if(userData?.User[0]?.Admin){
+        setLoggedIn(true)
+    } else {
+        setLoggedIn(false)
+    }
+    },[userData]) 
+
+
+
+    if (carLoading) return 'loading...';
+    if(carError) return `Error!!!! ${carError.message}`; 
+    console.log("this is data =>",carData);
+        
+    const handleCarDelete  = async (car) =>{ 
+        try{
+        var carElimination = carRef.current = car._id.toString()
+    
+        const res = await  deleteCar({
+                variables:
+                {
+                    carId:carElimination
+                } 
+            })
+            console.log("deleted response",res)
+        } catch(err){
+            console.log(err)
+        }
+        }
 
     return (
         <div>
-     
+            <div>
+                <Link to={'/Login'}>
+                <button>login</button>
+                </Link>
+            </div>
 
             {loggedIn ? (
             <Link to={`/addCar`}>
@@ -30,9 +68,9 @@ const Inv = () => {
 
             <div>
                 <ul>
-                    {data.Cars.map((car) => (
+                    {carData.Cars.map((car) => (
                         
-                        <li key={car._id}>
+                        <li key={car._id} ref={carRef}>
                             <Link to={`/inventory/${car._id}`} >
                                 {car.Year}
                                 {car.Make}
@@ -40,6 +78,10 @@ const Inv = () => {
                                 {car.Description}
                                 <img src={car.imageUrl[0]} width={500} height={400}></img>
                             </Link>
+                        {loggedIn ? (
+                        <button onClick={() => handleCarDelete(car)}>delete car</button>): 
+                        ('')}
+                            
                         </li>
 
                     ))}

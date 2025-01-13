@@ -1,22 +1,29 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useMutation } from "@apollo/client"
 import { SIGN_IN } from "../utils/querys";
-import { Navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 // create form test signin mutation test token auth test add car.
 
 const login = () => {
     const [signIn] = useMutation(SIGN_IN)
-
-   
-
-      
-    
-
+    const [loggedInSuccess, setLoggedInSuccess] = useState(false)
     const [formData, setFormData] = useState({
         Username: '',
         passwordInput: ''
     })
+
+    const navigate = useNavigate()
+
+    useEffect(()=>{
+        if(loggedInSuccess == true){
+         const timeout = setTimeout(() => {
+            navigate('/inventory')
+          }, 3000); 
+          console.log(timeout)
+          return () => clearTimeout(timeout)
+        }
+    },[loggedInSuccess])
 
     const handleChange = (e) =>{
         const name = e.target.name
@@ -33,7 +40,7 @@ const login = () => {
     async function handleSubmit(e) {
         e.preventDefault()
         try{
-         const {data} =  await signIn({
+        const {data} =  await signIn({
             variables:{
                 Username: formData.Username,
                 passwordInput: formData.passwordInput
@@ -41,11 +48,11 @@ const login = () => {
         })
         console.log(data) 
         localStorage.setItem('token', data.signIn.token)
-        //  if(data.signIn.message === true){
-        //     Navigate('/addcar')
-        // }
-        alert(data.signIn.message)
-       
+        console.log(data.signIn.success)
+        if(data.signIn.success === true){
+           setLoggedInSuccess(true)
+        } 
+        // alert(data.signIn.message)
 
         } catch(error){
             console.log(error)

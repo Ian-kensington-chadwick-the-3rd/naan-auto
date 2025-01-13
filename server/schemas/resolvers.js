@@ -17,7 +17,11 @@ const resolvers = {
       Login: async () =>{
         return Password.find()
       },
-      User: async () =>{
+      User: async (parent, data, context) =>{
+        if(!context || !context.user){
+          console.error("not logged in")
+          throw new Error("not logged in")
+        }
         return User.find()
       }
     },
@@ -49,15 +53,18 @@ const resolvers = {
         return  car 
       },
       deleteCar: async (parent, { carId }, context) => {
-        if (context.car) {
+        console.log("this is context",context)
+        if (!context.user) {
+          throw new Error("user not authenicated")
+        }
           const car = await Car.findOneAndDelete({
             _id: carId,
           });
           await Car.findOneAndUpdate(
-            { _id: context.carId},
+            { _id: carId},
             {$pull: {car: carId}});
             return car;
-        }
+        
       },
 
       signIn: async (parent,{Username, passwordInput},context)=>{

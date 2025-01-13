@@ -20,7 +20,7 @@ const getUserFromToken = (token) => {
         const verifiedToken = jwt.verify(token.slice(7), jwtSecretKey) 
         return verifiedToken
     } catch (e) {
-        console.error("invalid token",e.message)
+        console.error("index.js invalid token",e.message)
         return null;
         
     }
@@ -40,7 +40,6 @@ const startApolloServer = async () => {
 
     app.use('/graphql', expressMiddleware(server,{ 
         context: async ({ req }) => { 
-             console.log(req.headers.authorization)
             const token = req?.headers?.authorization || ""
             const user = getUserFromToken(token);
             return { user };

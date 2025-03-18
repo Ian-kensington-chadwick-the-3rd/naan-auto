@@ -2,13 +2,13 @@ import { useMutation, useQuery } from '@apollo/client'
 import React, {useState, useEffect, useRef} from 'react';
 import { useParams , Link} from 'react-router-dom';
 import { GET_CARS, GET_USER, DELETE_CAR } from '../utils/querys';
-// starting to attempt to fetch data from our Cars database to append to website. https://www.apollographql.com/docs/react/data/queries
+import speedo from '/icons8-speedometer-50.png' 
+import price from '/icons8-price-50.png'
+import steeringWheel from '/icons8-steering-wheel-50.png'
+import hashtag from '/icons8-hashtag-48.png'
+import gearBox from '/icons8-gearbox-64.png'
+import Searchfilter from '../components/searchfilter';
 
-// getting back to basics the data is not being displayed researching https://www.apollographql.com/tutorials/lift-off-part1/03-schema-definition-language-sdl
-
-// data is finnally able to be displayed at a very raw level. the reason that data was not being displayed was because my graphql query string inside of querys.js was not matching my typedefs table ( id => _id, Car => cars line 5.)
-
-// im able to map data to list item elements 
 
 const Inv = () => {    
  
@@ -17,10 +17,20 @@ const Inv = () => {
     const [deleteCar] = useMutation(DELETE_CAR)
     var [loggedIn , setLoggedIn] = useState(false);
     const carRef = useRef(null);
+    const [searchData, setSearchData] = useState([]);
+    const handleSearchData = (data) =>{
+        setSearchData(data)
+    }
+    console.log("rendered data",searchData.map((data)=> data))
+    const data1 = searchData !== null ? searchData : carData.Cars;
 
-   
+
+    // const test = searchData.map((data)=> data)
+
     
-    
+    useEffect(()=>{
+        console.log("yay!!!!!! searchData has appeared",searchData)
+    },[searchData])
     
     useEffect(()=>{
     if(userData?.User[0]?.Admin){
@@ -30,7 +40,9 @@ const Inv = () => {
     }
     },[userData]) 
 
-
+    useEffect(()=>{
+        return () => carData
+    },[carData])
 
     if (carLoading) return 'loading...';
     if(carError) return `Error!!!! ${carError.message}`; 
@@ -52,46 +64,64 @@ const Inv = () => {
         }
         }
 
-    return (
-        <div>
-            <div>
-                <Link to={'/Login'}>
-                <button>login</button>
-                </Link>
-            </div>
 
+    return (
+        <div className='space'>
             {loggedIn ? (
             <Link to={`/addCar`}>
                 <button title='add a car'>add car</button>
             </Link>)
                 : ('')} 
-
-            <div>
-                <ul>
-                    {carData.Cars.map((car) => (
+                <div style={{display:'flex'}}>
+                <Searchfilter onData={ handleSearchData }/>
+            <div className='container'>
+            
+                    {data1.map((car) => (
                         
-                        <li key={car._id} ref={carRef}>
-                            <Link to={`/inventory/${car._id}`} >
-                                {car.Year}
-                                {car.Make}
-                                {car.Mileage}
-                                {car.Description}
-                                <img src={car.imageUrl[0]} width={500} height={400}></img>
-                            </Link>
+                        <div key={car._id} ref={carRef} style={{margin: '20px', textDecoration:'none' }} className='card'>
+                        
+                            <div> 
+                                <Link to={`/inventory/${car._id}`} > 
+                                <img src={car.imageUrl[0]} className='card-img'/>
+                                </Link>
+                            </div> 
+                            
+                            <div className='title-price-holder'>
+                                <div className='price-holder'>
+                                    <div>
+                                        <span>{car.year} {car.make} {car.model}</span>
+                                    </div>
+                                    <div >
+                                        <span>${car.price}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div >
+                                <ul className='list-style'>
+                                    <li><img src={speedo} className='favicon' />
+                                    <span className='short-info'>{car.mileage}</span> </li>
+                                    <li><img src={gearBox} className='favicon' /><span className='short-info'>{car.trans}</span></li>
+                                    <li><img src={price} className='favicon' /><span className='short-info'>{car.price}</span></li>
+                                </ul>
+                            </div> 
+                            <div style={{overflow:'hidden'}}>
+                                <p style={{paddingLeft:'15px',overflow:'clip'}}> {car.description}</p>
+                            </div>
                         {loggedIn ? (
                         <button onClick={() => handleCarDelete(car)}>delete car</button>): 
                         ('')}
                             
-                        </li>
+                        </div>
 
                     ))}
-                </ul>
+            
+            </div>
             </div>
         </div>
     );
 
 }
-{/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
+
 export default Inv; 
 
 

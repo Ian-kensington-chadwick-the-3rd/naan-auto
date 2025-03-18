@@ -1,15 +1,17 @@
 import  ReactDOM  from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import './app.css'
-import App from './app.jsx'
-import Home from './pages/Home.jsx'
-import Error from './pages/error.jsx'
-import Inventory from './pages/Inventory' 
-import InvId from './pages/InvId'
-import AddCar from './pages/addCar'
-import ContactUs from './pages/contactUs'
-import AboutUs from './pages/aboutUs'
-import Login from "./pages/Login";
+import './app.css';
+import App from './app.jsx';
+import Home from './pages/Home.jsx';
+import Error from './pages/error.jsx';
+import Inventory from './pages/Inventory.jsx' ;
+import InvId from './pages/InvId.jsx';
+import AddCar from './pages/addCar.jsx';
+import ContactUs from './pages/contactUs.jsx';
+import AboutUs from './pages/aboutUs.jsx';
+import Login from "./pages/Login.jsx";
+import ProtectedRoute from "./components/protectedRoute.jsx";
+import Dashboard from './pages/adminDashboard.jsx'
 
 const router = createBrowserRouter([
     {
@@ -26,7 +28,6 @@ const router = createBrowserRouter([
                 element: <AboutUs/>
             },
             {
-                // attempting to create and :Id endpoint so that when a user wants to look at the images for a specific car once you click on the list item in inventory it will bring you to that page using the specified id.
                 path: '/inventory',
                 element: <Inventory/>,
             },
@@ -45,10 +46,22 @@ const router = createBrowserRouter([
             {
                 path: '/contactUs',
                 element: <ContactUs/>
+            },
+            {
+                path:'/protectedRoute',
+                element: <ProtectedRoute/>,
+                children: [
+                    {
+                        index: true,
+                        path:'/protectedRoute/dashboard',
+                        element: <Dashboard/>
+                    },
+                ]
             }
         ]
-    }
+    },
 ]);
+
 
 ReactDOM.createRoot(document.getElementById('root')).render(
     <RouterProvider router={router}></RouterProvider>

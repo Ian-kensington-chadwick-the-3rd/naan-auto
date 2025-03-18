@@ -4,11 +4,11 @@ export const GET_CARS = gql`
     query GetCars {
         Cars {
             _id
-            Year
-            Make
-            Mileage
-            Description
-            Trans
+            year
+            make
+            mileage
+            description
+            trans
             imageUrl
         }
     }`
@@ -17,46 +17,41 @@ export const FIND_CAR = gql`
     query Cars($id: ID!){
         findCar(_id:$id){
             _id
-            Year
-            Make
-            Mileage
-            Description
-            Trans
+            year
+            make
+            mileage
+            description
+            trans
             imageUrl
         }
     }`
 
 export const ADD_CAR = gql`
-    mutation addCar($Year: Int!, $Make: String!, $Mileage: Int!, $Description: String, $Trans: String, $imageUrl: [String]) {
-        addCar(Year: $Year, Make: $Make, Mileage: $Mileage, Description: $Description, Trans: $Trans, imageUrl: $imageUrl){
+    mutation addCar($year: Int!, $make: String!, $model: String!,$mileage: Int!, $description: String, $trans: String, $imageUrl: [String] $price: Int, $vin: Int) {
+        addCar(year: $year, make: $make, model: $model, mileage: $mileage, description: $description, trans: $trans, imageUrl: $imageUrl, price: $price, vin: $vin){
             _id
-            Year
-            Make
-            Mileage
-            Description
-            Trans
+            year
+            make
+            mileage
+            description
+            trans
             imageUrl
         }
     }`
-// export const DELETE_CARS = gql`
-//     `
 
 export const SIGN_IN = gql`
-mutation signIn($Username: String!, $passwordInput: String!){
-    signIn(Username: $Username, passwordInput: $passwordInput){
+mutation signIn($username: String!, $passwordInput: String!){
+    signIn(username: $username, passwordInput: $passwordInput){
         success
         message
         token
     }
 }`
-// my flow idea is first sign in as admin. 
-// second once admin signed in from that token in my resolvers im going to query user 
-// from admin if admin id is correct change use state for signed in hook
-// from false to true. after it is true then the button to add cars will appear.
+
 export const GET_USER = gql`
 query getUser{
     User {
-        Admin
+        admin
     }
 }
 `
@@ -65,11 +60,98 @@ export const DELETE_CAR = gql`
 mutation deleteCar($carId: ID!){
     deleteCar(carId: $carId) {
         _id
-        Year
-        Make
-        Mileage
-        Description
-        Trans
+        year
+        make
+        mileage
+        description
+        trans
         imageUrl
     }
+}`
+
+export const PRESIGNED_URL = gql`
+mutation createPresignedUrl($key: String!){
+    createPresignedUrl(key: $key){
+        presignedUrl
+    }
+}`
+
+export const SEARCH_FIELD = gql`
+query searchField
+(
+    $minYear: Int
+    $maxYear: Int
+    $minPrice: Int
+    $maxPrice: Int
+    $minMileage: Int
+    $maxMileage: Int
+    $make: String
+    $model: String
+    $description:String 
+    $trans: String
+    $imageUrl: [String]
+    $price:Int
+    $vin: String
+    $drivetrain: String
+    $exteriorColor: String
+    $interiorColor: String
+    $fuelType: String
+    $engineType: String
+    $condition: String
+    $titleHistory: String
+    $ownership: String
+  
+){
+    searchField
+    (
+        minYear: $minYear
+        maxYear: $maxYear 
+        minPrice: $minPrice 
+        maxPrice: $maxPrice 
+        minMileage: $minMileage
+        maxMileage: $maxMileage
+        make: $make
+        model: $model
+        description: $description
+        trans: $trans
+        imageUrl: $imageUrl
+        price: $price
+        vin: $vin
+        drivetrain: $drivetrain
+        exteriorColor: $exteriorColor
+        interiorColor: $interiorColor
+        fuelType: $fuelType
+        engineType: $engineType
+        condition: $condition
+        titleHistory: $titleHistory
+        ownership: $ownership
+    )
+    {
+        _id
+        year
+        make
+        model
+        mileage 
+        description
+        trans
+        imageUrl
+        price
+        vin
+        drivetrain
+        exteriorColor
+        interiorColor
+        fuelType
+        engineType
+        condition
+        titleHistory
+        ownership
+    }
+
+}`
+
+export const AUTH_CHECK = gql`
+query AuthCheck($Key: String ){
+        AuthCheck(Key: $Key){
+            success
+        }
 }`

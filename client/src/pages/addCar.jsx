@@ -1,16 +1,18 @@
 import { useMutation } from "@apollo/client";
-import { ADD_CAR } from "../utils/querys";
+import { ADD_CAR, PRESIGNED_URL } from "../utils/querys";
 import { AdvancedImage } from '@cloudinary/react';
 import { Cloudinary } from "@cloudinary/url-gen";
 import { Link, Navigate } from "react-router-dom";
+import { v4 as uuidv4 } from 'uuid';
 
 
-// gathering my thoughts on how to connect cloudinary so that the payload is percieved as a cloudinary secure url because the base64 url is too big of a payload. After i want to put it in my database stringUrl
+
 
 
 
 const addCarData = () => { 
-     const [addCar] = useMutation(ADD_CAR);
+    const [addCar] = useMutation(ADD_CAR);
+    const [createPresignedUrl] = useMutation(PRESIGNED_URL);
 if (addCar.loading) return <p>Loading...</p>;
 if (addCar.error) return <p>Error: {error.message}</p>;
 if (addCar.data === null) return <p>No data available</p>;
@@ -28,80 +30,94 @@ if(addCar.data){
         const mileage = document.getElementById('mileageId').value
         const disc = document.getElementById('descriptionId').value
         const trans = document.getElementById('transId').value
+        const model = document.getElementById('modelId').value
+        const price = document.getElementById('priceId').value
+        const vin = document.getElementById('vinId').value
         console.log('year', year, 'make', make, 'mileage', mileage, 'disc', disc, 'trans', trans,)
 
-        let base64StringArray = [];
-
-        let file
-        for (let i = 0; i < picture.length; i++) {
-            let reader = new window.FileReader();
-            file = picture[i]
-            console.log(file)
-
-            const base64String = await new Promise((resolve, reject) => {
-                reader.onload = () => {
-                    console.log(reader.result);
-                    const base64 = reader.result;
-                    resolve(base64);
-                };
-                reader.onerror = () => reject(reader.error);
-                reader.readAsDataURL(file);
-            });
-
-            base64StringArray.push(base64String);
-        }
-        console.log("this is base array", base64StringArray)
+        
+        console.log(uploadImageUrl,"result")
+       
         var uploadImageUrl = [];
-        for (const base64String of base64StringArray) {
-    
-            const formData = new FormData();
-            formData.append('file',base64String);
-            formData.append('upload_preset', 'phpgox3z');
-            formData.append('timestamp', Math.floor(Date.now() / 1000));
-            for (var pair of formData.entries()) {
-                console.log(pair[0]+ ', ' + pair[1]); 
-            }
-            try {
-                // const cloudinaryUrl = process.env.CLOUDINARY_URL;
-
-                const response = await fetch('https://api.cloudinary.com/v1_1/dm8t2zlt4/image/upload', {
-                
-                    method: 'POST',
-
-                    body: formData
-
+        try {
+             
+            for (const img of picture) {
+          const uniqueKey = `cars/${uuidv4()}.jpg`; 
+                const { data } = await createPresignedUrl({
+                    variables: { key: uniqueKey }
                 });
 
-                const data = await response.json();
-                uploadImageUrl.push(data.secure_url)
-                console.log('Uploaded image URL:', data.public_id);
-           
-            } catch (error) {
-
-                console.error('Error uploading image:', error);
-
+            if (!data || !data.createPresignedUrl || !data.createPresignedUrl.PresignedUrl) {
+                console.error('Failed to get presigned URL:', data);
+                continue; 
             }
+
+            if (!img) {
+                console.error('Invalid image found in the array');
+                continue; 
+            }  
+
+
+                const contentType = img.type || 'image/jpeg'; 
+                console.log('Image content type:', contentType);
+
+
+                console.log('Presigned URL:', data);
+                const url = data.createPresignedUrl.PresignedUrl;
+        
+                const response = await fetch(url, {
+                    method: 'PUT',
+                    body: img,
+                    headers: {
+                        'Content-Type': contentType
+                    },
+                    mode: 'cors'
+                });
+        
+                console.log('Upload response:', response);
+                
+                if (!response.ok) {
+                    throw new Error(`Failed to upload image with key: ${uniqueKey}`);
+                }
+        
+             
+                uploadImageUrl.push(uniqueKey);
+            }
+        
+         
+            await addCar({
+                variables: {
+                    year: parseInt(year),
+                    make: make,
+                    model: model,
+                    mileage: parseInt(mileage),
+                    description: disc,
+                    trans: trans,
+                    imageUrl: uploadImageUrl, 
+                    price: parseInt(price),
+                    vin: parseInt(vin),
+                }
+            });
+            if(!addCar){
+                throw new Error(console.log('error car failed to add'))
+            }
+            console.log('Car added successfully');
+        
+        } catch (error) {
+            console.error('Error uploading image or adding car:', error);
         }
 
-
-        // new plan the payload to use addCar mutation is for base64StringArray is too large i have to "fetch" the cloudinary api and send the base64 directly to cloudinary from the client side instead of through the backend after i get the secure.url or public name or how ever i need to recieve the file name so i can dynamically render it to the page ill save that id to the backend so that it can be referenced by car id.
-        await addCar({
-            variables: {
-                Year: parseInt(year),
-                Make: make,
-                Mileage: parseInt(mileage),
-                Description: disc,
-                Trans: trans,
-                imageUrl: uploadImageUrl,
-            }
-        })
-
-
-    }
+}
     return (
-        <div>
-            {/* creating a form to test sending file data and seeing how i should send it through my server */}
-            <form onSubmit={event => picHandler(event)}>
+        <div style={{display:'flex',justifyContent:'center'}}>
+            <form onSubmit={event => picHandler(event)} style={{
+                display:'flex', 
+                justifyContent:'center',
+                flexDirection:'column',
+                width: '300px',
+                gap:'10px'
+            
+            }}>
                 <label htmlFor='fileId'>Upload car picture</label> <br />
                 <input type='file' id='fileId' name='images[]' multiple></input>
 
@@ -120,6 +136,16 @@ if(addCar.data){
 
                 <label htmlFor="Trans">transmission</label>
                 <input type="text" id="transId"></input>
+
+                <label htmlFor="modelId">model</label>
+                <input type="text" id="modelId"></input>
+
+                <label htmlFor="price">price</label>
+                <input type="text" id="priceId"></input>
+
+                <label htmlFor="Trans">vin</label>
+                <input type="text" id="vinId"></input>
+
                 
                 <input type='submit' value='submit'></input>
                 
@@ -133,15 +159,18 @@ if(addCar.data){
 export default addCarData
 
 
+   // for (var pair of formData.entries()) {
+            //     console.log(pair[0]+ ', ' + pair[1]); 
+            // }
+  // const formData = new FormData();
+            // formData.append('file',img);
+            // formData.append('timestamp', Math.floor(Date.now() / 1000));
 
 
 
+ //ahttps:pi.cloudinary.com/v1_1/dm8t2zlt4/image/upload
 
-
-
-
-
-
+ // formData.append('upload_preset', 'phpgox3z');
 
 // widget gallery using cloudinary
 // https://www.youtube.com/watch?v=01dy6J9PXzY

@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGoogle } from '@fortawesome/free-brands-svg-icons';
+import { faSquareFacebook } from '@fortawesome/free-brands-svg-icons';
+import naanAutoLogo from '/Naan-auto-logo.jpg'
+import LeftArrowIcon from "./arrow";
 
 const Header = () => {
     return (
@@ -10,38 +12,52 @@ const Header = () => {
                     <span className="address-and-phone">
                         pensicola florida
                     </span>
-                    <span className="address-and-phone">
-                        call us 406-250-2747
+                    <span className="address-and-phone" style={{ marginLeft: '4px' }}>
+                        call us at
+                    </span>
+                    <span className="satisfy-regular" style={{ marginLeft: '6px' }} >
+                        406-250-2747
                     </span>
                 </div>
                 <div>
-                    <a href="">
-                        <FontAwesomeIcon icon={faGoogle} />
+                    <a href="https://www.facebook.com/naanmotors/">
+                        <FontAwesomeIcon icon={faSquareFacebook} style={{ textDecoration: 'none', color: 'white' }} />
                     </a>
                 </div>
             </div>
             <div className="bottomnavbarcontainer">
-                <div className="">
+                <div>
                     <Link to='/'>
-                        <img className="carlogo" src="./src/assets/placeholder-carlogo.jpg"></img>
+                        <img className="carlogo" src={naanAutoLogo}></img>
                     </Link>
                 </div>
-                <div className="link-container link">
-                    <Link to='/aboutUs'>
-                        <p className="link">
-                            About us
-                        </p>
-                    </Link>
-                    <Link to='/inventory'>
-                        <p className="link">
+                <div className="link-container">
+                    <Link to='/inventory' className="link" >
+                        <span className="orangebottom">
                             Inventory
-                        </p>
+                        </span>
                     </Link>
-                    <Link to='/contactUs'>
-                        <p className="link">
+                    <Link to='/contactUs' className="link">
+                        <span className="orangebottom">
                             Contact Us
-                        </p>
+                        </span>
                     </Link>
+                    <Link to='/aboutUs' className="link">
+                        <span className="orangebottom">
+                            About us
+                        </span>
+                    </Link>
+                    <div className="dropdown">
+                        <LeftArrowIcon className='svg' />
+                        <div className="dropdown-content ">
+                            <Link to={'/Login'}>
+                                login
+                            </Link>
+                            <Link to={'/protectedRoute/dashboard'}>
+                                Dashboard
+                            </Link>
+                        </div>
+                    </div>
                 </div>
             </div>
         </header>

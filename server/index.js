@@ -10,11 +10,10 @@ const PORT = process.env.PORT || 3001;
 const app = express();
 require('dotenv').config();
 
-
 const getUserFromToken = (token) => {
     try {
         if(token === null){
-             throw new Error('token is null')
+            throw new Error('token is null')
         }
         const jwtSecretKey = process.env.JWT_SECRET_KEY
         const verifiedToken = jwt.verify(token.slice(7), jwtSecretKey) 
@@ -32,6 +31,7 @@ const server = new ApolloServer({
 });
 
 
+
 const startApolloServer = async () => {
     await server.start();
 
@@ -45,7 +45,7 @@ const startApolloServer = async () => {
             return { user };
         }
     }))
-  
+
 
     if (process.env.NODE_ENV === 'production') {
         app.use(express.static(path.join(__dirname, '../client/dist')));

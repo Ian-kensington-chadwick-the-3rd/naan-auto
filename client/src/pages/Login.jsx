@@ -9,19 +9,18 @@ const login = () => {
     const [signIn] = useMutation(SIGN_IN)
     const [loggedInSuccess, setLoggedInSuccess] = useState(false)
     const [formData, setFormData] = useState({
-        Username: '',
+        username: '',
         passwordInput: ''
     })
 
     const navigate = useNavigate()
 
     useEffect(()=>{
-        if(loggedInSuccess == true){
-         const timeout = setTimeout(() => {
+        if(loggedInSuccess === true){
+        const timeout = setTimeout(() => {
             navigate('/inventory')
-          }, 3000); 
-          console.log(timeout)
-          return () => clearTimeout(timeout)
+        }, 1000); 
+        return () => clearTimeout(timeout)
         }
     },[loggedInSuccess])
 
@@ -42,7 +41,7 @@ const login = () => {
         try{
         const {data} =  await signIn({
             variables:{
-                Username: formData.Username,
+                username: formData.username,
                 passwordInput: formData.passwordInput
             }
         })
@@ -52,7 +51,7 @@ const login = () => {
         if(data.signIn.success === true){
            setLoggedInSuccess(true)
         } 
-        // alert(data.signIn.message)
+         alert(data.signIn.message)
 
         } catch(error){
             console.log(error)
@@ -62,31 +61,33 @@ const login = () => {
     }
     return (
 
-        <div>
-            <form onSubmit={e => handleSubmit(e)}>
+        <div className="log-in_container">
+            <form onSubmit={e => handleSubmit(e)} className="log-in_form">
 
-                <label htmlFor='usernameId'>
-                    <input type="string"
-                     value={formData.Username}
-                     name="Username"
+                <label htmlFor='usernameId' className="">
+                    <input type="text"
+                     value={formData.username}
+                     name="username"
                      onChange={handleChange} 
-                    ></input>
+                     placeholder="Username"
+                     className="log-in_input"></input>
                 </label>
                 
                 <label htmlFor="passwordInputId">
-                    <input type='string' 
+                    <input type='text' 
                     id="passwordInputId" 
                     value={formData.passwordInput} 
                     name="passwordInput"
                     onChange={handleChange} 
-                    ></input>
+                    placeholder="Password"
+                    className="log-in_input"></input>
                 </label>
 
-                <input type='submit' value='submit'></input>
+                <input type='submit' value='submit' className="log-in_button"></input>
             </form>
         </div>
 
     )
 }
 
-export default login
+export default login;

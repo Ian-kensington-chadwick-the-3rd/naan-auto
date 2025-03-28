@@ -50,14 +50,14 @@ export const FIND_CAR = gql`
 
 export const ADD_CAR = gql`
     mutation addCar(
-        $year: Int!, 
-        $make: String!, 
-        $model: String!,
-        $mileage: Int!,
-        $description: String, 
-        $trans: String, 
+        $year: Int!
+        $make: String!
+        $model: String!
+        $mileage: Int!
+        $description: String
+        $trans: String
         $imageUrl: [String] 
-        $price: Int, 
+        $price: Int
         $vin: String
         $drivetrain: String
         $exteriorColor: String
@@ -70,14 +70,14 @@ export const ADD_CAR = gql`
         
         ) {
         addCar(
-            year: $year, 
-            make: $make, 
-            model: $model, 
-            mileage: $mileage, 
-            description: $description, 
-            trans: $trans, 
-            imageUrl: $imageUrl, 
-            price: $price, 
+            year: $year
+            make: $make
+            model: $model
+            mileage: $mileage
+            description: $description 
+            trans: $trans 
+            imageUrl: $imageUrl
+            price: $price
             vin: $vin
             drivetrain: $drivetrain
             exteriorColor: $exteriorColor
@@ -126,8 +126,14 @@ query getUser{
 `
 
 export const DELETE_CAR = gql`
-mutation deleteCar($carId: ID!){
-    deleteCar(carId: $carId) {
+mutation deleteCar(
+    $carId: ID! 
+    $key: String!
+    ){
+    deleteCar(
+        carId: $carId 
+        key: $key
+        ) {
         _id
         year
         make
@@ -169,7 +175,7 @@ query searchField
     $maxMileage: Int
     $make: String
     $model: String
-    $description:String 
+    $description:String
     $trans: String
     $imageUrl: [String]
     $price:Int

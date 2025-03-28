@@ -76,6 +76,7 @@ const AdminForm = () => {
             const result = await deleteCar({
                 variables: {
                     carId: _id
+
                 }
             })
             return result;
@@ -83,12 +84,12 @@ const AdminForm = () => {
             throw new Error(err)
         }
     }
-    const handleFormSubmit = (e,carId) => {
+    const handleFormSubmit = (e,carId,imageUrl) => {
         e.preventDefault();
         const submitButtonName = e.nativeEvent.submitter.name;
         console.log(submitButtonName)
         if (submitButtonName === 'delete') {
-            carDelete(e, carId)
+            carDelete(e, carId, imageUrl)
         }
         else { 
             carUpdate(e, carId)
@@ -163,7 +164,7 @@ const AdminForm = () => {
                             </div>
                             
                         </div>
-                        <form className="admin-dashboard___input " onSubmit={(e) =>handleFormSubmit(e,car._id)}>
+                        <form className="admin-dashboard___input " onSubmit={(e) =>handleFormSubmit(e,car._id,car.imageUrl)}>
                             <div>
                                 <label>Year:</label>
                                 <input className="admin-dashboard__input-style"

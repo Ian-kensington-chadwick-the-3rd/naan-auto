@@ -3,8 +3,27 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSquareFacebook } from '@fortawesome/free-brands-svg-icons';
 import naanAutoLogo from '/Naan-auto-logo.jpg'
 import LeftArrowIcon from "./arrow";
+import { AUTH_CHECK } from "../utils/querys";
+import { useQuery } from '@apollo/client';
+import { useEffect, useState } from 'react';
 
 const Header = () => {
+
+    const [isAdmin, setIsAdmin] = useState(false);
+    const Key = localStorage.getItem('token');
+ 
+    const { data } = useQuery(AUTH_CHECK, {
+        variables: { Key },
+        skip: !Key,
+    });
+    console.log(data)
+    useEffect(() => {
+        if (data?.AuthCheck) {
+            setIsAdmin(true);
+        }
+    }, [data])
+
+
     return (
         <header className="header" >
             <div className="header1">
@@ -53,9 +72,11 @@ const Header = () => {
                             <Link to={'/Login'}>
                                 login
                             </Link>
-                            <Link to={'/protectedRoute/dashboard'}>
-                                Dashboard
-                            </Link>
+                            {isAdmin !== false && (
+                                <Link to={'/protectedRoute/dashboard'}>
+                                    Dashboard
+                                </Link>
+                            )}
                         </div>
                     </div>
                 </div>

@@ -6,10 +6,21 @@ export const GET_CARS = gql`
             _id
             year
             make
-            mileage
+            model
+            mileage 
             description
             trans
             imageUrl
+            price
+            vin
+            drivetrain
+            exteriorColor
+            interiorColor
+            fuelType
+            engineType
+            condition
+            titleHistory
+            ownership
         }
     }`
 
@@ -19,23 +30,80 @@ export const FIND_CAR = gql`
             _id
             year
             make
-            mileage
+            model
+            mileage 
             description
             trans
             imageUrl
+            price
+            vin
+            drivetrain
+            exteriorColor
+            interiorColor
+            fuelType
+            engineType
+            condition
+            titleHistory
+            ownership
         }
     }`
 
 export const ADD_CAR = gql`
-    mutation addCar($year: Int!, $make: String!, $model: String!,$mileage: Int!, $description: String, $trans: String, $imageUrl: [String] $price: Int, $vin: Int) {
-        addCar(year: $year, make: $make, model: $model, mileage: $mileage, description: $description, trans: $trans, imageUrl: $imageUrl, price: $price, vin: $vin){
-            _id
+    mutation addCar(
+        $year: Int!, 
+        $make: String!, 
+        $model: String!,
+        $mileage: Int!,
+        $description: String, 
+        $trans: String, 
+        $imageUrl: [String] 
+        $price: Int, 
+        $vin: String
+        $drivetrain: String
+        $exteriorColor: String
+        $interiorColor: String
+        $fuelType: String
+        $engineType: String
+        $condition: String
+        $titleHistory: String
+        $ownership: String
+        
+        ) {
+        addCar(
+            year: $year, 
+            make: $make, 
+            model: $model, 
+            mileage: $mileage, 
+            description: $description, 
+            trans: $trans, 
+            imageUrl: $imageUrl, 
+            price: $price, 
+            vin: $vin
+            drivetrain: $drivetrain
+            exteriorColor: $exteriorColor
+            interiorColor: $interiorColor
+            fuelType: $fuelType
+            engineType: $engineType
+            condition: $condition
+            titleHistory: $titleHistory
+            ownership: $ownership
+            ){
             year
             make
             mileage
             description
             trans
             imageUrl
+            price
+            vin
+            drivetrain
+            exteriorColor
+            interiorColor
+            fuelType
+            engineType
+            condition
+            titleHistory
+            ownership
         }
     }`
 
@@ -46,6 +114,7 @@ mutation signIn($username: String!, $passwordInput: String!){
         message
         token
     }
+
 }`
 
 export const GET_USER = gql`
@@ -62,17 +131,30 @@ mutation deleteCar($carId: ID!){
         _id
         year
         make
-        mileage
+        model
+        mileage 
         description
         trans
         imageUrl
+        price
+        vin
+        drivetrain
+        exteriorColor
+        interiorColor
+        fuelType
+        engineType
+        condition
+        titleHistory
+        ownership
     }
 }`
 
 export const PRESIGNED_URL = gql`
 mutation createPresignedUrl($key: String!){
     createPresignedUrl(key: $key){
+        success
         presignedUrl
+        message
     }
 }`
 
@@ -100,7 +182,6 @@ query searchField
     $condition: String
     $titleHistory: String
     $ownership: String
-  
 ){
     searchField
     (
@@ -155,3 +236,66 @@ query AuthCheck($Key: String ){
             success
         }
 }`
+
+export const UPDATE_CAR = gql`
+mutation updateCar(
+    $_id: String
+    $year: Int
+    $make: String
+    $model: String
+    $mileage: Int
+    $description: String 
+    $trans: String 
+    $imageUrl: [String]
+    $price: Int 
+    $vin: String
+    $drivetrain: String
+    $exteriorColor: String
+    $interiorColor: String
+    $fuelType: String
+    $engineType: String
+    $condition: String
+    $titleHistory: String
+    $ownership: String
+) {
+    updateCar(
+        _id: $_id
+        year: $year
+        make: $make
+        model: $model
+        mileage: $mileage
+        description: $description 
+        trans: $trans 
+        imageUrl: $imageUrl
+        price: $price
+        vin: $vin
+        drivetrain: $drivetrain
+        exteriorColor: $exteriorColor
+        interiorColor: $interiorColor
+        fuelType: $fuelType
+        engineType: $engineType
+        condition: $condition
+        titleHistory: $titleHistory
+        ownership: $ownership
+    ) {
+        _id
+        year
+        make
+        model
+        mileage
+        description
+        trans
+        imageUrl
+        price
+        vin
+        drivetrain
+        exteriorColor
+        interiorColor
+        fuelType
+        engineType
+        condition
+        titleHistory
+        ownership
+    }
+}
+`

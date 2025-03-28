@@ -100,6 +100,26 @@ const typeDefs = `
       titleHistory: String
       ownership: String
       ): Car
+      updateCar(
+        _id: String
+        year: Int
+        make: String
+        model: String
+        mileage: Int
+        description:String 
+        trans: String 
+        imageUrl: [String]
+        price:Int 
+        vin: String
+        drivetrain: String
+        exteriorColor: String
+        interiorColor: String
+        fuelType: String
+        engineType: String
+        condition: String
+        titleHistory: String
+        ownership: String
+      ): Car
     deleteCar(carId: ID!): Car
     signIn(username: String!, passwordInput:String!): AuthResponse
     createPresignedUrl(key:String!): PresignedResponse

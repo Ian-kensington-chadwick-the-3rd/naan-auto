@@ -137,7 +137,7 @@ const Searchfilter = ({ onData }) => {
     const getDuplicates = (value) => {
         if(filteredData && filteredData.length ===0) return 0
 
-        const array = filteredData.map((data) => data[value]);
+        const array = filteredData.map((data) => data[value]).filter(value => value !== null && value !== undefined && value !== '' && value !== 0);
 
         const counts = {};
         for(const element of array){

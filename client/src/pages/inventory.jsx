@@ -73,7 +73,9 @@ const Inv = () => {
             </Link>)
                 : ('')} 
                 <div style={{display:'flex'}}>
-                <Searchfilter onData={ handleSearchData }/>
+                <div style={{paddingLeft:'150px'}}>
+                    <Searchfilter onData={ handleSearchData } />
+                </div>
             <div className='container'>
             
                     {data1.map((car) => (

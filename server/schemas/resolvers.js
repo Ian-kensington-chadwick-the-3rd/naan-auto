@@ -84,7 +84,7 @@ const resolvers = {
           const jwtSecretKey = process.env.JWT_SECRET_KEY
 
           jwt.verify(Key,jwtSecretKey) 
-        
+      
           return {success: true}
         
       } catch (e) {
@@ -112,7 +112,15 @@ const resolvers = {
         trans, 
         imageUrl,
         price, 
-        vin
+        vin,
+        drivetrain,
+        exteriorColor,
+        interiorColor,
+        fuelType,
+        engineType,
+        condition,
+        titleHistory ,
+        ownership,
         }, context) => {
         
         if (!context || !context.user) {
@@ -143,12 +151,77 @@ const resolvers = {
           // will change below rates are limited change to custom domain once bought http//:${r2AccountId}.r2.cloudflarestorage.com/${r2BucketName}/${imageUrl} => http//:cnd.customdomain.com something like that
           imageUrl:processedImgUrls,
           price, 
-          vin
-        
+          vin,
+          drivetrain,
+          exteriorColor,
+          interiorColor,
+          fuelType,
+          engineType,
+          condition,
+          titleHistory ,
+          ownership,
         });
         console.log('year: ',year,"Make:", make, " Mileage:" ,mileage,"desription", description, "trans:", trans, "this is image url",imageUrl);
         console.log(context)
-        return  car; 
+        return car; 
+      },
+      updateCar: async (parent, {
+        _id,
+        year, 
+        make,
+        model ,
+        mileage,
+        description,
+        trans,
+        imageUrl,
+        price,
+        vin,
+        drivetrain,
+        exteriorColor,
+        interiorColor,
+        fuelType,
+        engineType,
+        condition,
+        titleHistory,
+        ownership
+      }, context) =>{
+
+        if(!context || !context.user){
+          throw new Error('not logged in at update car')
+        }
+
+        const query = {};
+
+        year ? query.year = year : query.year = '';
+        make ? query.make = make : query.make = '';
+        model ? query.model = model : '';
+        mileage ? query.mileage = mileage : query.mileage = ''
+        description ? query.description = description : query.description = '';
+        trans ? query.trans = trans: query.trans;
+        imageUrl?  query.imageUrl = imageUrl :  query.imageUrl = '';
+        price ? query.price = price : query.price = '';
+        vin ? query.vin = vin : query.vin = '';
+        drivetrain ? query.drivetrain = drivetrain : query.drivetrain = '';
+        exteriorColor ? query.exteriorColor = exteriorColor : query.exteriorColor = '';
+        interiorColor ? query.interiorColor = interiorColor : query.interiorColor ='';
+        fuelType  ? query.fuelType = fuelType: query.fuelType = '';
+        engineType ? query.engineType = engineType : query.engineType = '';
+        condition ? query.condition = condition : query.condition = '';
+        titleHistory ? query.titleHistory = titleHistory : query.titleHistory = '';
+        ownership ? query.ownership = ownership : query.ownership = '';
+ console.log(_id)
+        try{
+          console.log(query)
+         
+          const result = await Car.findByIdAndUpdate(
+            {_id}, 
+            {$set: query},
+            {new:true, runValidators: true})
+
+            return result;
+          } catch(err){
+            throw new Error("error at update car" + err  )
+          }
       },
       deleteCar: async (parent, { carId }, context) => {
         console.log("this is context",context)
@@ -236,20 +309,20 @@ const resolvers = {
           const signedUrl = await getSignedUrl(client, command, { expiresIn: 3600 });
           return { 
           success: true,
-          PresignedUrl: signedUrl,
+          presignedUrl: signedUrl,
           message: 'key has successfully been generated!'
         }
         } catch (err) {
           return{
             success: false,
-            PresignedUrl: null,
+            presignedUrl: null,
             message: err
           }
         }
       },
-
-
-  
+      
+      
+      
     },
   };
 

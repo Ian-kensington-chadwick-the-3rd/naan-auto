@@ -94,25 +94,25 @@ const InvId = () => {
                             </div>
                             <div className="vehicle-info-rows">
                                 <div>
-                                    <p className="car-inv">Model | Civic</p>
+                                    <p className="car-inv">Model | {car.model}</p>
                                     <hr className="hr1"/>
                                 </div>
                             </div>
                             <div className="vehicle-info-rows" >
                                 <div>
-                                    <p className="car-inv">Mileage | {car?.mileage}</p>
+                                    <p className="car-inv">Mileage | {car.mileage}</p>
                                     <hr className="hr1"/>
                                 </div>
                             </div>
                             <div className="vehicle-info-rows" >
                                 <div>
-                                    <p className="car-inv">Year | {car?.year}</p>
+                                    <p className="car-inv">Year | {car.year}</p>
                                     <hr className="hr1"/>
                                 </div>
                             </div >
                             <div className="vehicle-info-rows">
                                 <div>
-                                    <p className="car-inv">VIN | {car?.vin}</p>
+                                    <p className="car-inv">VIN | {car.vin || '...'}</p>
                                     <hr className="hr1"/>
                                 </div>
                             </div>
@@ -127,7 +127,7 @@ const InvId = () => {
                             </div>
                             <div className="vehicle-info-rows">
                                 <div>
-                                    <p className="car-inv">Price | $20000</p>
+                                    <p className="car-inv">Price | ${car.price}</p>
                                     <hr className="hr1"/>
                                 </div>
                             </div>
@@ -145,7 +145,6 @@ const InvId = () => {
                 ))}
 
             </section>
-          
         </section>
     )
 }

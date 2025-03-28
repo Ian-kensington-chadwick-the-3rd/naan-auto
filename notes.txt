@@ -1,0 +1,23 @@
+welcome to the last steps of development for this project from now on this will be a sort of kanban board since i prefer to keep it local instead of creating it on github for personal use.
+
+goals to finish for mvp:
+
+addStyle 
+    inventory:false,
+    addCar:false, 
+    dashboard:false,
+    aboutUs: false, 
+    home: false
+
+addFunctionality
+
+    in the dashboard there will be three options update/delete/add cars, see messages from users filling out input fields.✔️
+
+    when deleting a car i will be able to also delete the files in my r2 bucket as i can in the mongo dashboard
+
+
+
+smallAdditions(things i would like to polish)
+
+    fix searchFilter to not allow empty strings in the select options
+    

@@ -15,20 +15,20 @@ const login = () => {
 
     const navigate = useNavigate()
 
-    useEffect(()=>{
-        if(loggedInSuccess === true){
-        const timeout = setTimeout(() => {
-            navigate('/inventory')
-        }, 1000); 
-        return () => clearTimeout(timeout)
+    useEffect(() => {
+        if (loggedInSuccess === true) {
+            const timeout = setTimeout(() => {
+                navigate('/protectedRoute/dashboard')
+            }, 1000);
+            return () => clearTimeout(timeout)
         }
-    },[loggedInSuccess])
+    }, [loggedInSuccess])
 
-    const handleChange = (e) =>{
+    const handleChange = (e) => {
         const name = e.target.name
         const value = e.target.value
         console.log(name, value)
-        setFormData((data)=>({
+        setFormData((data) => ({
             ...data,
             [name]: value
         }))
@@ -38,26 +38,26 @@ const login = () => {
 
     async function handleSubmit(e) {
         e.preventDefault()
-        try{
-        const {data} =  await signIn({
-            variables:{
-                username: formData.username,
-                passwordInput: formData.passwordInput
+        try {
+            const { data } = await signIn({
+                variables: {
+                    username: formData.username,
+                    passwordInput: formData.passwordInput
+                }
+            })
+            console.log(data)
+            localStorage.setItem('token', data.signIn.token)
+            console.log(data.signIn.success)
+            if (data.signIn.success === true) {
+                setLoggedInSuccess(true)
             }
-        })
-        console.log(data) 
-        localStorage.setItem('token', data.signIn.token)
-        console.log(data.signIn.success)
-        if(data.signIn.success === true){
-           setLoggedInSuccess(true)
-        } 
-         alert(data.signIn.message)
+            alert(data.signIn.message)
 
-        } catch(error){
+        } catch (error) {
             console.log(error)
         }
-        
-        
+
+
     }
     return (
 
@@ -66,21 +66,21 @@ const login = () => {
 
                 <label htmlFor='usernameId' className="">
                     <input type="text"
-                     value={formData.username}
-                     name="username"
-                     onChange={handleChange} 
-                     placeholder="Username"
-                     className="log-in_input"></input>
+                        value={formData.username}
+                        name="username"
+                        onChange={handleChange}
+                        placeholder="Username"
+                        className="log-in_input"></input>
                 </label>
-                
+
                 <label htmlFor="passwordInputId">
-                    <input type='text' 
-                    id="passwordInputId" 
-                    value={formData.passwordInput} 
-                    name="passwordInput"
-                    onChange={handleChange} 
-                    placeholder="Password"
-                    className="log-in_input"></input>
+                    <input type='text'
+                        id="passwordInputId"
+                        value={formData.passwordInput}
+                        name="passwordInput"
+                        onChange={handleChange}
+                        placeholder="Password"
+                        className="log-in_input"></input>
                 </label>
 
                 <input type='submit' value='submit' className="log-in_button"></input>

@@ -6,11 +6,10 @@ import Home from './pages/Home.jsx';
 import Error from './pages/error.jsx';
 import Inventory from './pages/Inventory.jsx' ;
 import InvId from './pages/InvId.jsx';
-import AddCar from './pages/addCar.jsx';
 import ContactUs from './pages/contactUs.jsx';
 import AboutUs from './pages/aboutUs.jsx';
 import Login from "./pages/Login.jsx";
-import ProtectedRoute from "./components/protectedRoute.jsx";
+import ProtectedRoute from "./components/protectedRoute";
 import Dashboard from './pages/adminDashboard.jsx'
 
 const router = createBrowserRouter([
@@ -24,38 +23,34 @@ const router = createBrowserRouter([
                 element: <Home/>
             },
             {
-                path: '/aboutUs',
+                path: 'aboutUs',
                 element: <AboutUs/>
             },
             {
-                path: '/inventory',
+                path: 'inventory',
                 element: <Inventory/>,
             },
             {
-                path: '/inventory/:Id',
+                path: 'inventory/:Id',
                 element: <InvId/>
             },
             {
-                path:'/addcar',
-                element: <AddCar/>
-            },
-            {
-                path: '/Login',
+                path: 'Login',
                 element: <Login/>
             },
             {
-                path: '/contactUs',
+                path: 'contactUs',
                 element: <ContactUs/>
             },
             {
-                path:'/protectedRoute',
+                path:'protectedRoute',
                 element: <ProtectedRoute/>,
                 children: [
                     {
-                        index: true,
-                        path:'/protectedRoute/dashboard',
+                        path:'dashboard',
                         element: <Dashboard/>
                     },
+
                 ]
             }
         ]

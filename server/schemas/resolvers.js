@@ -330,34 +330,3 @@ module.exports = resolvers ;
 
 
 
-      //   try {
-      //      var baseUrls = [];
-      //    if(Array.isArray(imageUrl)){ //temp 
-      //     for (const img of imageUrl) {
-      //       console.log("Uploading image:", img);
-
-      //       const uploadResponse = await cloudinary.uploader.upload(img, {
-      //           folder: 'cars',
-      //       });
-      //       console.log("Image uploaded:", uploadResponse.secure_url);
-      //       baseUrls.push(uploadResponse.secure_url);  
-      //   }
-      // } else {
-      //   const uploadResponse = await cloudinary.uploader.upload(imageUrl, {
-      //     folder: 'cars',
-      // });
-      // baseUrls.push(uploadResponse.secure_url)
-      // console.log(imageUrl)
-      // }    
-      // } catch (error) {
-      //   console.error('Error uploading image or creating car:', error);
-      //   console.log('this is base urls',baseUrls)
-      //   throw new Error('Failed to add car');
-      // }   
-      
-      
-      
-      // const  signedUp = await User.create({
-        //   Username:Username,
-        //   Admin: randomId
-        // })

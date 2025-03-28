@@ -25,7 +25,6 @@ const Inv = () => {
     const data1 = searchData !== null ? searchData : carData.Cars;
 
 
-    // const test = searchData.map((data)=> data)
 
     
     useEffect(()=>{
@@ -128,31 +127,3 @@ export default Inv;
 
 
 
-
-
-// function picHandler(event){
-    //     event.preventDefault()
-    //     const picture = document.getElementById('fileId').files
-        
-    //    let reader = new FileReader();
-      
-    //     let file
-    //     for (let i = 0; i < picture.length; i++) {
-    //          let reader = new FileReader();
-    //         file = picture[i]
-    //         console.log(file)
-    //             reader.onload = function () {
-    //             console.log(reader.result)
-                
-    //         };  
-    //         reader.readAsDataURL(file)  
-    //         var base64 = reader.result
-    //         let base64String = base64.split(',')[1]
-    //         base64StringArray.push(base64String);
-            
-    //     }
-    //     reader.onerror = function(){
-    //         console.log(reader.error)
-    //     }
-    // }
-        

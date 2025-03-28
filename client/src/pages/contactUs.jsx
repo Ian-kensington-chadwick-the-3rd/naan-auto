@@ -166,7 +166,3 @@ const contactUs = () => {
 export default contactUs;
 
 
-// dealer info
-// contact us form
-// google maps component
-// request more info

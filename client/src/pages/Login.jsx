@@ -3,7 +3,6 @@ import { useMutation } from "@apollo/client"
 import { SIGN_IN } from "../utils/querys";
 import { useNavigate } from 'react-router-dom';
 
-// create form test signin mutation test token auth test add car.
 
 const login = () => {
     const [signIn] = useMutation(SIGN_IN)

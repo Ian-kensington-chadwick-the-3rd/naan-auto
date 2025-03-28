@@ -43,17 +43,6 @@ const Searchfilter = ({ onData }) => {
     const [makeFirst, setMakeFirst] = useState(false)
     const [formReset, setFormReset] = useState(false)
 
-    // in react updating a usestate that contains a boolean or number is considered read only replacing 
-    // a usestate that posseses an object is considered mutating if you update filter.minyear = year BAD. in react everything is immutable
-    // instead react allows you to pass the previous data so that you are not updating the old data 
-    // but you are only replacing the data that is specified through the form name='modelname'
-    // here i use [name]: value because it specifys a property with a dynamic name meaning i dont have to create a function that handles a change for every single form variable 
-
-    // second use data to query search field 
-
-    // this whole thing needs fixing will send a query correctly but wont query correct data
-
-
     if (error) {
         console.log("we got a problem", error)
     }
@@ -365,11 +354,3 @@ const Searchfilter = ({ onData }) => {
 
 export default Searchfilter;
 
-// <input type='text' name='model' placeholder='model'/>
-// <input type='text' name='make' placeholder='make'/>
-// <input type="text" name="trans" placeholder="transmission"/>
-// <input type="text" name="drivetrain" placeholder="drivetrain"/>
-// <input type="text" name="exteriorColor" placeholder="exterior color"/>
-// <input type="text" name="interiorColor" placeholder="interior color"/>
-// <input type="text" name='fuelType' placeholder="fuel type"/>
-// <input type="text" name="engineType" placeholder="engine type"/>

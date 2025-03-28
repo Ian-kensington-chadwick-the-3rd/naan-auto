@@ -3,21 +3,32 @@ welcome to the last steps of development for this project from now on this will 
 goals to finish for mvp:
 
 addStyle 
-    inventory:false,
-    addCar:false, 
-    dashboard:false,
-    aboutUs: false, 
-    home: false
+    inventory:false,❌
+    addCar:false, ❌
+    dashboard:false,❌
+    aboutUs: false, ❌
+    home: false,❌
+    messages:false❌
+    adminDashboard/inventory:false❌
 
 addFunctionality
 
-    in the dashboard there will be three options update/delete/add cars, see messages from users filling out input fields.✔️
+    in the dashboard there will be three options update/delete/add cars.✔️
 
-    when deleting a car i will be able to also delete the files in my r2 bucket as i can in the mongo dashboard
+    when deleting a car i will be able to also delete the files in my r2 bucket as i can in the mongo db❌
+
+    send messages from footer and Contact Us.❌
+
+    see messages from adminDashboard.❌
+
+    add image carousel in adminDashboard inventory.❌
+
+    add image carousel in the inventory page.❌
 
 
 
 smallAdditions(things i would like to polish)
 
-    fix searchFilter to not allow empty strings in the select options
+    fix searchFilter to not allow empty strings in the select options.❌
     
+    add https://motion.dev/docs/inviewhttps://motion.dev/docs/inview.❌

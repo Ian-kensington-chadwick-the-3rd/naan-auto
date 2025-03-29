@@ -36,4 +36,4 @@ smallAdditions(things i would like to polish)
     add https://motion.dev/docs/inviewhttps://motion.dev/docs/inview.❌
 
     when not inputing a field that is required graphql will not send a mutation to create a presigned url to upload pictures until all 
-    required fields are input.❌
+    required fields are input.✔️

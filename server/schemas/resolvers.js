@@ -135,7 +135,7 @@ const resolvers = {
       }
       const r2AccountId = process.env.R2_ACCOUNT_ID
       const r2BucketName = process.env.R2_BUCKET_NAME
-      const baseUrl = 'https://pub-50ee404c2cfc48dd970fc6470185d232.r2.dev'
+      const baseUrl = ''
       // checking if image is an array or single if not upload only one picture
       const processedImgUrls = Array.isArray(imageUrl) ?
         imageUrl.map(key => `${baseUrl}/${key}`) : [`${baseUrl}/${imageUrl}`]

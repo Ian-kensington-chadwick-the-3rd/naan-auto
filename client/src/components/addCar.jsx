@@ -10,7 +10,6 @@ import { useEffect, useState } from 'react'
 
 
 
-
 const AddCarData = () => { 
     const [addCar] = useMutation(ADD_CAR);
     const [createPresignedUrl] = useMutation(PRESIGNED_URL);
@@ -71,6 +70,9 @@ if (addCar.error) return <p>Error: {error.message}</p>;
         var uploadImageUrl = [];
         console.log(uploadImageUrl)
         try {
+
+            if(addCar.errors.message){return console.error(addCar.errors.message)}
+
             for (const img of picture) {
             const uniqueKey = `cars/${uuidv4()}.jpg`; 
                 const { data } = await createPresignedUrl({
@@ -105,6 +107,7 @@ if (addCar.error) return <p>Error: {error.message}</p>;
                 });
         
                 console.log('Upload response:', response);
+                
                 
                 if  (response.ok)  {
                     uploadImageUrl.push(uniqueKey);

@@ -128,7 +128,7 @@ query getUser{
 export const DELETE_CAR = gql`
 mutation deleteCar(
     $carId: ID! 
-    $key: String!
+    $key: [String]!
     ){
     deleteCar(
         carId: $carId 

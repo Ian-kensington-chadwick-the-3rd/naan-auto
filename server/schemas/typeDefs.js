@@ -120,7 +120,7 @@ const typeDefs = `
         titleHistory: String
         ownership: String
       ): Car
-    deleteCar(carId: ID!, key:String!): Car
+    deleteCar(carId: ID!, key:[String]!): Car
     signIn(username: String!, passwordInput:String!): AuthResponse
     createPresignedUrl(key:String!): PresignedResponse
   }

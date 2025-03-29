@@ -71,12 +71,12 @@ const AdminForm = () => {
     }
 
 
-    const carDelete = async (e, _id) => {
+    const carDelete = async (e, _id, imageUrl) => {
         try {
             const result = await deleteCar({
                 variables: {
-                    carId: _id
-
+                    carId: _id,
+                    key: imageUrl
                 }
             })
             return result;
@@ -135,7 +135,7 @@ const AdminForm = () => {
     const showImage = (img) =>{
         setModalImage(img)
     }
-    console.log(modalImage)
+
 
     useEffect(()=>{
 

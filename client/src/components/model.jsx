@@ -16,9 +16,9 @@ const Modal = ({ showModal, closeModal, img }) => {
         <div style={modalBackground}>
             <button type="button" onClick={closeModal} style={{ position: 'absolute', right: '10px', top: '10px' }}>X</button>
             <div style={imageDirection}>
-                {image.map(image => (
+                {image.map((image,index) => (
                     <div>
-                        <img style={imageStyle} src={image}></img>
+                        <img style={imageStyle} src={image} key={index}></img>
                     </div>
                 ))}
             </div>

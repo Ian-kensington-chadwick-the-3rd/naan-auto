@@ -7,7 +7,7 @@ import Error from './pages/error.jsx';
 import Inventory from './pages/Inventory.jsx' ;
 import InvId from './pages/InvId.jsx';
 import ContactUs from './pages/contactUs.jsx';
-import AboutUs from './pages/aboutUs.jsx';
+import AboutUs from './pages/AboutUs.jsx';
 import Login from "./pages/Login.jsx";
 import ProtectedRoute from "./components/protectedRoute";
 import Dashboard from './pages/adminDashboard.jsx'

@@ -15,7 +15,7 @@ addFunctionality
 
     in the dashboard there will be three options update/delete/add cars.✔️
 
-    when deleting a car i will be able to also delete the files in my r2 bucket as i can in the mongo db❌
+    when deleting a car i will be able to also delete the files in my r2 bucket as i can in the mongo db✔️
 
     add drag and drop so that admin can rearange the order of the image list so they can set things like thumbnail.❌
 
@@ -34,3 +34,6 @@ smallAdditions(things i would like to polish)
     fix searchFilter to not allow empty strings in the select options.❌
     
     add https://motion.dev/docs/inviewhttps://motion.dev/docs/inview.❌
+
+    when not inputing a field that is required graphql will not send a mutation to create a presigned url to upload pictures until all 
+    required fields are input.❌

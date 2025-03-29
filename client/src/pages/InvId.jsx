@@ -24,7 +24,7 @@ const InvId = () => {
     console.log(data)
     let dataImg = data?.findCar[0]?.imageUrl;
 
-    const arrayLength = cars[0].imageUrl.length;
+    const arrayLength = cars[0]?.imageUrl?.length;
 
     const setIndexForwards = () => {
         setSlideIndex((prevIndex) =>

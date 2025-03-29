@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const { v4: uuidv4 } = require('uuid');
 const bcrypt = require("bcrypt");
 require('dotenv').config()
-const { S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectCommand } = require('@aws-sdk/client-s3');
+const { S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectsCommand } = require('@aws-sdk/client-s3');
 const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
 
 
@@ -135,7 +135,7 @@ const resolvers = {
       }
       const r2AccountId = process.env.R2_ACCOUNT_ID
       const r2BucketName = process.env.R2_BUCKET_NAME
-      const baseUrl = ''
+      const baseUrl = 'https://pub-50ee404c2cfc48dd970fc6470185d232.r2.dev'
       // checking if image is an array or single if not upload only one picture
       const processedImgUrls = Array.isArray(imageUrl) ?
         imageUrl.map(key => `${baseUrl}/${key}`) : [`${baseUrl}/${imageUrl}`]
@@ -233,7 +233,6 @@ const resolvers = {
       const secretKey = process.env.R2_SECRET_ACCESS_KEY
       const bucketName = process.env.R2_BUCKET_NAME
 
-
       const client = new S3Client({
         region: 'us-east-1',
         endpoint: `https://${accountId}.r2.cloudflarestorage.com`,
@@ -241,14 +240,35 @@ const resolvers = {
           accessKeyId: accessKey,
           secretAccessKey: secretKey
         },
-      });
-      const command = new DeleteObjectCommand({ Bucket: bucketName, Key: key })
+      });   
+
+      // https://pub-50ee404c2cfc48dd970fc6470185d232.r2.dev/cars/064cb9da-fa7d-4b1b-99d0-4fb15e703bf5.jpg
+  
+      const command = new DeleteObjectsCommand({ 
+        Bucket: bucketName,
+        Delete:{
+          Objects: key.map(k => {
+            // Extract just the filename from the URL
+            const pathParts = new URL(k).pathname.split('/');
+            const filename = pathParts[pathParts.length - 1];
+            
+            // Create the correct key with your bucket structure
+            console.log(pathParts,'pathparts')
+            console.log(filename,'filename')
+
+          
+            return { Key: `cars/${filename}` };
+          })
+
+        }
+        })  
 
       try {
+        console.log(command)
         const response = await client.send(command);
         console.log(response)
       } catch (err) {
-        throw new Error(err)
+        console.error(err,'err at deleting picture from r2 database')
       }
 
       try {
@@ -260,7 +280,7 @@ const resolvers = {
           { $pull: { car: carId } });
         return car;
       } catch (err) {
-        throw new Error(err)
+        console.error(err,'error at deleting car from mongo db')
       }
     },
     signIn: async (parent, { username, passwordInput }, context) => {

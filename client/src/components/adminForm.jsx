@@ -136,10 +136,17 @@ const AdminForm = () => {
         setModalImage(img)
     }
 
+    const [imageId, setImageId] = useState()
+    const modalId = (id) =>{
+        setImageId(id)
+    }
+
 
     useEffect(()=>{
 
     },[])
+
+
 
     const data1 = searchData !== null ? searchData : data.Cars;
     console.log(data1)
@@ -148,7 +155,7 @@ const AdminForm = () => {
 
     return (
         <div style={{ display: 'flex' }}> 
-        <Modal showModal={modal} closeModal={closeModal} img={modalImage}/>
+        <Modal showModal={modal} closeModal={closeModal} img={modalImage} id={imageId} />
             <div style={{ paddingLeft: '100px' }}>
                 <Searchfilter onData={handleSearchData} />
             </div>
@@ -160,7 +167,7 @@ const AdminForm = () => {
                             <img src={car.imageUrl} key={index} style={{ width: '400px', height: '400px' }} ></img> 
                             
                             <div className="admin-dashboard__imgscrollbar" >
-                                <img src={car.imageUrl} key={index} style={{ width: '100px', height: '100px' }} onClick={()=> {showModal();showImage(car.imageUrl);}}/>
+                                <img src={car.imageUrl} key={index} style={{ width: '100px', height: '100px' }} onClick={()=> {showModal();showImage(car.imageUrl);modalId(car._id);}}/>
                             </div>
                             
                         </div>

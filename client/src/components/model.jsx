@@ -1,27 +1,63 @@
 import { useState, useEffect } from 'react'
+import { UPDATE_CAR } from '../utils/querys'
+import { useMutation } from '@apollo/client'
 
-const Modal = ({ showModal, closeModal, img }) => {
+const Modal = ({ showModal, closeModal, img, id }) => {
 
     if (!showModal) return null
 
     const [image, setImage] = useState([])
+    const [draggedIndex,setDraggedIndex] = useState(null)
+
     useEffect(() => {
         setImage(img)
         console.log(img, "imagessan")
     }, [img])
 
+    const [updateImgIndex] = useMutation(UPDATE_CAR)
+
+    const dragStartHandler = (index) =>{
+        setDraggedIndex(index)
+    }
+
+    const dragOverHandler = (e) => {
+        e.preventDefault()
+    }
+
+    const dropHandler = (dropIndex) =>{
+    if(draggedIndex !== null && dropIndex !== null){
+        const newImages = [...image]
+        const [draggedImage] = newImages.splice(draggedIndex,1)
+        newImages.splice(dropIndex, 0, draggedImage)
+        setImage(newImages)
+        setDraggedIndex(null)
+    }
+    }
+
+    const submitHandler = (e) =>{
+        e.preventDefault();  
+        updateImgIndex({
+            variables: {
+                _id: id,
+                imageUrl: image
+            }
+        })
+        
+    }
 
 
     return (
         <div style={modalBackground}>
             <button type="button" onClick={closeModal} style={{ position: 'absolute', right: '10px', top: '10px' }}>X</button>
-            <div style={imageDirection}>
+            <div style={imageDirection} >
                 {image.map((image,index) => (
-                    <div>
-                        <img style={imageStyle} src={image} key={index}></img>
+                    <div onDragStart={() => dragStartHandler(index)} onDrop={() => dropHandler(index)} onDragOver={(e) => dragOverHandler(e)} key={index} >
+                        <img style={imageStyle} src={image} draggable={true}></img>
                     </div>
+                    
                 ))}
             </div>
+                    <button onClick={e => submitHandler(e)}>submit</button>
         </div>
     )
 }
@@ -41,12 +77,11 @@ const modalBackground = {
     borderRadius: '8px',
     width: '800px',
     height: '800px',
-    index: 2
+    zIndex: 2
 };
 
 const imageDirection ={
     display:'flex',
     justifyContent:'center',
     padding:'10px'
-    
 };

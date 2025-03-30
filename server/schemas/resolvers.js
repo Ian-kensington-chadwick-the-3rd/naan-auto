@@ -192,23 +192,23 @@ const resolvers = {
 
       const query = {};
 
-      year ? query.year = year : query.year = '';
-      make ? query.make = make : query.make = '';
-      model ? query.model = model : '';
-      mileage ? query.mileage = mileage : query.mileage = ''
-      description ? query.description = description : query.description = '';
-      trans ? query.trans = trans : query.trans;
-      imageUrl ? query.imageUrl = imageUrl : query.imageUrl = '';
-      price ? query.price = price : query.price = '';
-      vin ? query.vin = vin : query.vin = '';
-      drivetrain ? query.drivetrain = drivetrain : query.drivetrain = '';
-      exteriorColor ? query.exteriorColor = exteriorColor : query.exteriorColor = '';
-      interiorColor ? query.interiorColor = interiorColor : query.interiorColor = '';
-      fuelType ? query.fuelType = fuelType : query.fuelType = '';
-      engineType ? query.engineType = engineType : query.engineType = '';
-      condition ? query.condition = condition : query.condition = '';
-      titleHistory ? query.titleHistory = titleHistory : query.titleHistory = '';
-      ownership ? query.ownership = ownership : query.ownership = '';
+      if (year) query.year = year;
+      if (make) query.make = make;
+      if (model) query.model = model;
+      if (mileage) query.mileage = mileage;
+      if (description) query.description = description;
+      if (trans) query.trans = trans;
+      if (imageUrl) query.imageUrl = imageUrl;
+      if (price) query.price = price;
+      if (vin) query.vin = vin;
+      if (drivetrain) query.drivetrain = drivetrain;
+      if (exteriorColor) query.exteriorColor = exteriorColor;
+      if (interiorColor) query.interiorColor = interiorColor;
+      if (fuelType) query.fuelType = fuelType;
+      if (engineType) query.engineType = engineType;
+      if (condition) query.condition = condition;
+      if (titleHistory) query.titleHistory = titleHistory;
+      if (ownership) query.ownership = ownership;
       console.log(_id)
       try {
         console.log(query)
@@ -248,15 +248,13 @@ const resolvers = {
         Bucket: bucketName,
         Delete:{
           Objects: key.map(k => {
-            // Extract just the filename from the URL
+            // Extract just the filename from the URL by creating a new url constructer then by accessing the instance property 'pathname' 
+            // which returns /cars/064cb9da-fa7d-4b1b-99d0-4fb15e703bf5.jpg then is splits by '/' => ['', 'cars', '064cb9da-fa7d-4b1b-99d0-4fb15e703bf5.jpg']
+            // last but not least i access the filename by using the last index of the array
             const pathParts = new URL(k).pathname.split('/');
             const filename = pathParts[pathParts.length - 1];
             
             // Create the correct key with your bucket structure
-            console.log(pathParts,'pathparts')
-            console.log(filename,'filename')
-
-          
             return { Key: `cars/${filename}` };
           })
 

@@ -47,6 +47,18 @@ const typeDefs = `
     success: Boolean
   }
 
+
+
+  type userMessage{
+    firstName: String
+    lastName:String
+    emailAddress:String
+    phoneNumber: String
+    message:String
+    dateString: String
+    timeString: String,
+  }
+
   type Query {
     User: [User]
     Cars: [Car]
@@ -78,6 +90,7 @@ const typeDefs = `
       ownership: String
     ) : [Car]
       AuthCheck(Key: String) : Auth
+      getMessage: [userMessage]
   }
 
   type Mutation {
@@ -123,6 +136,8 @@ const typeDefs = `
     deleteCar(carId: ID!, key:[String]!): Car
     signIn(username: String!, passwordInput:String!): AuthResponse
     createPresignedUrl(key:String!): PresignedResponse
+    sendMessage(firstName: String!, lastName:String!, emailAddress:String!, phoneNumber: String!, message:String! timeString: String dateString: String): userMessage
+    deleteMessage(_id: String!): [userMessage]
   }
 `;
 

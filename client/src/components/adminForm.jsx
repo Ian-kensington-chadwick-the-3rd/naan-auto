@@ -81,7 +81,7 @@ const AdminForm = () => {
             })
             return result;
         } catch (err) {
-            throw new Error(err)
+            console.error(err)
         }
     }
     const handleFormSubmit = (e,carId,imageUrl) => {
@@ -156,9 +156,9 @@ const AdminForm = () => {
     return (
         <div style={{ display: 'flex' }}> 
         <Modal showModal={modal} closeModal={closeModal} img={modalImage} id={imageId} />
-            <div style={{ paddingLeft: '100px' }}>
+            
                 <Searchfilter onData={handleSearchData} />
-            </div>
+            
             
             <div className="container-dashboard">
                 {data1.map((car, index) => (

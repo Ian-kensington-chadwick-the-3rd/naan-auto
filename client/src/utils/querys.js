@@ -305,3 +305,47 @@ mutation updateCar(
     }
 }
 `
+
+export const SEND_MESSAGE = gql`
+    mutation sendMessage(
+        $firstName: String!
+        $lastName: String!
+        $emailAddress: String!
+        $phoneNumber: String!
+        $message: String!
+        $timeString: String
+        $dateString: String
+    ){
+        sendMessage(
+            firstName: $firstName
+            lastName: $lastName 
+            emailAddress: $emailAddress
+            phoneNumber: $phoneNumber
+            message: $message
+            timeString: $timeString
+            dateString: $dateString
+        ){
+            firstName
+            lastName
+            emailAddress
+            phoneNumber
+            message
+            dateString
+            timeString
+            
+        }
+    }
+`
+
+export const GET_MESSAGE = gql`
+    query getMessage {
+            getMessage {
+                firstName
+                lastName
+                emailAddress
+                phoneNumber
+                message
+                timeString
+                dateString
+            }
+    }`

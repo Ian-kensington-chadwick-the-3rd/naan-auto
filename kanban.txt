@@ -4,7 +4,7 @@ goals to finish for mvp:
 
 addStyle 
     inventory:false,❌
-    addCar:false, ❌
+    addCar:true, ✔️
     dashboard:false,❌
     aboutUs: false, ❌
     home: false,❌
@@ -21,7 +21,7 @@ addFunctionality
 
     send messages from footer and Contact Us.❌
 
-    see messages from adminDashboard.❌
+    see messages from adminDashboard.✔️
 
     add image carousel in adminDashboard inventory.❌
 
@@ -37,3 +37,5 @@ smallAdditions(things i would like to polish)
 
     when not inputing a field that is required graphql will not send a mutation to create a presigned url to upload pictures until all 
     required fields are input.✔️
+
+    add floating label for searchfilter.❌

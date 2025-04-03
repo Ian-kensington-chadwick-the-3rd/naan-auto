@@ -84,5 +84,35 @@ const userSchema = new Schema({
 const User = mongoose.model('User', userSchema);
 
 
+const userMessage = new Schema({
+    firstName:{
+        type: String,
+        required: true
+    },
+    lastName:{
+        type:String,
+        required: true
+    },
+    emailAddress:{
+        type:String,
+        required: true
+    },
+    phoneNumber:{
+        type:String,
+        required:true
+    },
+    message:{
+        type:String,
+        required:true
+    },
+    timeString:{
+        type:String
+    },
+    dateString:{
+        type:String
+    }
+})
 
-module.exports = { Car, Password, User };
+const Message = mongoose.model('Message', userMessage)
+
+module.exports = { Car, Password, User, Message };

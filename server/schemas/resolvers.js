@@ -1,4 +1,4 @@
-const { Car, Password, User } = require('../models/carschema.js')
+const { Car, Password, User, Message } = require('../models/carschema.js')
 const jwt = require("jsonwebtoken");
 const { v4: uuidv4 } = require('uuid');
 const bcrypt = require("bcrypt");
@@ -99,6 +99,19 @@ const resolvers = {
         throw new Error("not logged in")
       }
       return User.find()
+    },
+    getMessage: async (parent, data, context) => {
+      if (!context || !context.user) {
+        console.error("Authentication failed: Context or user not found.");
+        throw new Error("Authentication required.");
+      }
+
+      if (!context.user.id) {
+        console.error("Authentication failed: User ID not found.");
+        throw new Error("Authentication denied.");
+      }
+
+      return Message.find()
     }
   },
   Mutation: {
@@ -240,33 +253,33 @@ const resolvers = {
           accessKeyId: accessKey,
           secretAccessKey: secretKey
         },
-      });   
+      });
 
       // https://pub-50ee404c2cfc48dd970fc6470185d232.r2.dev/cars/064cb9da-fa7d-4b1b-99d0-4fb15e703bf5.jpg
-  
-      const command = new DeleteObjectsCommand({ 
+
+      const command = new DeleteObjectsCommand({
         Bucket: bucketName,
-        Delete:{
+        Delete: {
           Objects: key.map(k => {
             // Extract just the filename from the URL by creating a new url constructer then by accessing the instance property 'pathname' 
             // which returns /cars/064cb9da-fa7d-4b1b-99d0-4fb15e703bf5.jpg then is splits by '/' => ['', 'cars', '064cb9da-fa7d-4b1b-99d0-4fb15e703bf5.jpg']
             // last but not least i access the filename by using the last index of the array
             const pathParts = new URL(k).pathname.split('/');
             const filename = pathParts[pathParts.length - 1];
-            
+
             // Create the correct key with your bucket structure
             return { Key: `cars/${filename}` };
           })
 
         }
-        })  
+      })
 
       try {
         console.log(command)
         const response = await client.send(command);
         console.log(response)
       } catch (err) {
-        console.error(err,'err at deleting picture from r2 database')
+        console.error(err, 'err at deleting picture from r2 database')
       }
 
       try {
@@ -278,7 +291,7 @@ const resolvers = {
           { $pull: { car: carId } });
         return car;
       } catch (err) {
-        console.error(err,'error at deleting car from mongo db')
+        console.error(err, 'error at deleting car from mongo db')
       }
     },
     signIn: async (parent, { username, passwordInput }, context) => {
@@ -364,8 +377,29 @@ const resolvers = {
         }
       }
     },
+    sendMessage: async (parent, { firstName, lastName, emailAddress, phoneNumber, message, timeString, dateString }) => {
 
+      await Message.create({ firstName, lastName, emailAddress, phoneNumber, message, timeString, dateString })
 
+      return {
+        firstName,
+        lastName,
+        emailAddress,
+        phoneNumber,
+        message,
+        timeString,
+        dateString
+      }
+
+    },
+    deleteMessage: async (parent, {id}) =>{
+      try{
+      const result = await Message.findByIdAndDelete({_id: id})
+      return result
+      } catch{
+       throw new Error('failed to delete error')
+      }
+    }
 
   },
 };

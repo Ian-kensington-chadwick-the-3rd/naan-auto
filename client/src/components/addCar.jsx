@@ -1,27 +1,33 @@
 import { useMutation } from "@apollo/client";
 import { ADD_CAR, PRESIGNED_URL } from "../utils/querys";
-import { AdvancedImage } from '@cloudinary/react';
+import { AdvancedImage, placeholder } from '@cloudinary/react';
 import { Cloudinary } from "@cloudinary/url-gen";
 import { Link, Navigate } from "react-router-dom";
 import { v4 as uuidv4 } from 'uuid';
 import { useEffect, useState } from 'react'
+import AdminForm from "./adminForm";
+import Loading from "./loading";
 
 const AddCarData = () => {
-    const [addCar] = useMutation(ADD_CAR);
+    const [addCar, { loading }] = useMutation(ADD_CAR);
     const [createPresignedUrl] = useMutation(PRESIGNED_URL);
     if (addCar.loading) return <p>Loading...</p>;
     if (addCar.error) return <p>Error: {addCar.error.message}</p>;
 
+    const [loadingCss, setLoadingCss] = useState(false);
+
+    // if validation 
     const [validation, setValidation] = useState({})
+    // sets our form
     const [form, setForm] = useState({
-        year: null,
+        year: '',
         make: '',
         model: '',
-        mileage: null,
+        mileage: '',
         description: '',
-        trans: null,
+        trans: '',
         imageUrl: [],
-        price: null,
+        price: '',
         vin: '',
         drivetrain: '',
         exteriorColor: '',
@@ -32,16 +38,46 @@ const AddCarData = () => {
         titleHistory: '',
         ownership: '',
     });
-    useEffect(() => {
-        console.log(form)
-    }, [form])
 
-    // set form
+    // this sets css for floating label using the span tag
+    const [focus, setFocus] = useState({
+        year: false,
+        make: false,
+        model: false,
+        mileage: false,
+        description: false,
+        trans: false,
+        imageUrl: false,
+        price: false,
+        vin: false,
+        drivetrain: false,
+        exteriorColor: false,
+        interiorColor: false,
+        fuelType: false,
+        engineType: false,
+        condition: false,
+        titleHistory: false,
+        ownership: false,
+    })
 
+    const handleFocus = (field) => {
+        setFocus((prev) => ({
+            ...prev,
+            [field]: true
+        }));
+    };
+
+    const handleBlur = (field) => {
+        setFocus((prev) => ({
+            ...prev,
+            [field]: false
+        }))
+    }
+
+    // parses form input
     const handleInputChange = (e) => {
         e.preventDefault()
         const { name, value, type, files } = e.target;
-        console.log([name, value])
         if (type === 'file') {
             setForm(prev => ({
                 ...prev,
@@ -69,7 +105,6 @@ const AddCarData = () => {
         var uploadImageUrl = [];
         console.log(uploadImageUrl);
 
-
         setValidation({});
         const missingFields = {};
 
@@ -85,10 +120,17 @@ const AddCarData = () => {
             missingFields.make = 'please input value for make';
         };
 
+        if (!form.price) {
+            missingFields.price = 'please input value for price'
+        }
+
+        if (!form.mileage) {
+            missingFields.mileage = 'please input value for mileage'
+        }
 
         const nextYear = new Date().getFullYear() + 1;
         if (form.year < 1900 || form.year > nextYear) {
-            missingFields.year = `please return a valid number between year 1900 and year ${nextYear} `;
+            missingFields.year = `between 1900 and year ${nextYear} `;
         };
 
         if (form.price && form.price <= 0) {
@@ -103,7 +145,7 @@ const AddCarData = () => {
             setValidation(missingFields);
             return;
         }
-
+        setLoadingCss(true);
         try {
             for (const img of picture) {
                 const uniqueKey = `cars/${uuidv4()}.jpg`;
@@ -169,79 +211,276 @@ const AddCarData = () => {
             if (!addCar) {
                 throw new Error(console.log('error car failed to add'))
             }
+            setLoadingCss(false);
             console.log('Car added successfully');
+            setForm({
+                year: '',
+                make: '',
+                model: '',
+                mileage: '',
+                description: '',
+                trans: '',
+                imageUrl: [],
+                price: '',
+                vin: '',
+                drivetrain: '',
+                exteriorColor: '',
+                interiorColor: '',
+                fuelType: '',
+                engineType: '',
+                condition: '',
+                titleHistory: '',
+                ownership: '',
+            })
 
         } catch (error) {
             console.error('Error uploading image or adding car:', error);
         }
 
     }
+
+
+    // we get event.target.name if useState name === form name 
+
     return (
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
-            <form onSubmit={e => formHandler(e)} style={{
-                display: 'flex',
-                justifyContent: 'center',
-                flexDirection: 'column',
-                width: '300px',
-                gap: '10px'
+        <div className="addcar__parent-container">
+            {loadingCss && <Loading className={'loading'} />}
+            <form onSubmit={e => formHandler(e)} className={`addcar__flex-direction ${loadingCss && 'blur'}`} >
+                <div className="addcar__grid-container">
+                    <div>
+                        <label className="">Upload car pictures</label>
+                        <br />
+                        <input
+                            type='file'
+                            name='imageUrl'
+                            multiple onChange={handleInputChange}
+                        />
+                    </div>
 
-            }}>
-                <label >Upload car picture</label> <br />
-                <input type='file' name='imageUrl' multiple onChange={handleInputChange} />
+                    <label className="custom-field addcar__grid-col-start" >
+                        <input
+                            type="text"
+                            name="year"
+                            value={form.year}
+                            onChange={handleInputChange}
+                            className="input"
+                            onFocus={() => handleFocus('year')}
+                            onBlur={() => handleBlur('year')} />
+                        <span className={`placeholder ${focus.year || form.year || validation.year ? 'placeholder-up' : ''}`}
+                        style={validation.year && { color: 'red' }}>
+                            {!validation.year ? 'Year!' : validation.year}
+                        </span>
+                    </label>
+
+                    <label className="custom-field">
+                        <input
+                            type="text"
+                            name="make"
+                            value={form.make}
+                            onChange={handleInputChange}
+                            className="input"
+                            onFocus={() => handleFocus('make')}
+                            onBlur={() => handleBlur('make')} />
+                        <span className={`placeholder ${focus.make || form.make || validation.make ? 'placeholder-up' : ''}`}
+                            style={validation.make && { color: 'red' }}>
+                            {!validation.make ? 'Make!' : validation.make}
+                        </span>
+                    </label>
 
 
-                <label>year </label>
-                {validation.year && <span style={{color:'red',fontSize:'15px'}}>{validation.year}</span>}
-                <input type='number' name="year" value={form.year} onChange={handleInputChange} />
+                    <label className="custom-field">
+                        <input type="text" name="model"
+                            value={form.model} onChange={handleInputChange}
+                            onFocus={() => handleFocus('model')}
+                            onBlur={() => handleBlur('model')}
+                            className="input"
+                        />
+                        <span className={`placeholder ${focus.model || form.model || validation.model ? 'placeholder-up' : ''}`}
+                            style={validation.model && { color: 'red' }}>
+                            {!validation.model ? 'Model!' : validation.model}
+                        </span>
+                    </label>
 
-                <label >make </label>
-                {validation.make && <span style={{color:'red',fontSize:'15px'}}>{validation.make}</span>}
-                <input type='text' name="make" value={form.make} onChange={handleInputChange} />
+                    <label className="custom-field">
+                        <input type='number'
+                            name="mileage"
+                            value={form.mileage}
+                            onChange={handleInputChange}
+                            onFocus={() => handleFocus('mileage')}
+                            onBlur={() => handleBlur('mileage')}
+                            className="input"
+                        />
+                        <span className={`placeholder ${focus.mileage || form.mileage || validation.mileage ? 'placeholder-up' : ''}`}
+                            style={validation.mileage && { color: 'red' }}>
+                            {!validation.mileage ? 'Mileage!' : validation.mileage}
+                        </span>
+                    </label>
 
-                <label> model</label>
-                {validation.model && <span style={{color:'red',fontSize:'15px'}}>{validation.model}</span>}
-                <input type="text" name="model" value={form.model} onChange={handleInputChange} />
+                    <label className="custom-field">
+                        <input type="text"
+                            name="trans"
+                            value={form.trans}
+                            onChange={handleInputChange}
+                            className="input"
+                            onFocus={() => handleFocus('trans')}
+                            onBlur={() => handleBlur('trans')} />
+                        <span className={`placeholder ${focus.trans || form.trans || validation.trans ? 'placeholder-up' : ''}`}>
+                            Transmission
+                        </span>
+                    </label>
 
-                <label >mileage {validation.mileage && <span style={{color:'red',fontSize:'15px'}}>{validation.mileage}</span>}</label>
-                <input type='number' name="mileage" value={form.mileage} onChange={handleInputChange} />
+                    <label className="custom-field">
+                        <input type="text"
+                            name="price"
+                            value={form.price}
+                            onChange={handleInputChange}
+                            className="input"
+                            onFocus={() => handleFocus('price')}
+                            onBlur={() => handleBlur('price')} />
+                        <span className={`placeholder ${focus.price || form.price || validation.price ? 'placeholder-up' : ''}`}
+                        style={validation.price && { color: 'red' }}>
+                            {!validation.price ? 'Price!' : validation.price}
+                        </span>
+                    </label>
 
-                <label >description</label>
-                <textarea name="description" value={form.description} onChange={handleInputChange} />
 
-                <label> transmission</label>
-                <input type="text" name="trans" value={form.trans} onChange={handleInputChange} />
+                    <label className="custom-field"  >
+                        <input
+                            type="text"
+                            name="vin"
+                            value={form.vin}
+                            onChange={handleInputChange}
+                            className="input"
+                            onFocus={() => handleFocus('vin')}
+                            onBlur={() => handleBlur('vin')} />
+                        <span className={`placeholder ${focus.vin || form.vin ? 'placeholder-up' : ''}`}>
+                            Vin
+                        </span>
+                    </label>
 
-                <label> price</label>
-                <input type="text" name="price" value={form.price} onChange={handleInputChange} />
 
-                <label> vin</label>
-                <input type="text" name="vin" value={form.vin} onChange={handleInputChange} />
 
-                <label >drivetrain</label>
-                <input name="drivetrain" value={form.drivetrain} onChange={handleInputChange} />
 
-                <label>exterior color</label>
-                <input type="text" name="exteriorColor" value={form.exteriorColor} onChange={handleInputChange} />
+                    <label className="custom-field">
+                        <input
+                            type="text"
+                            name="drivetrain"
+                            value={form.drivetrain}
+                            onChange={handleInputChange}
+                            className="input"
+                            onFocus={() => handleFocus('drivetrain')}
+                            onBlur={() => handleBlur('drivetrain')} />
+                        <span className={`placeholder ${focus.drivetrain || form.drivetrain ? 'placeholder-up' : ''}`}>
+                            Drivetrain
+                        </span>
+                    </label>
 
-                <label >interior color</label>
-                <input type="text" name="interiorColor" value={form.interiorColor} onChange={handleInputChange} />
+                    <label className="custom-field">
+                        <input
+                            type="text"
+                            name="exteriorColor"
+                            value={form.exteriorColor}
+                            onChange={handleInputChange}
+                            className="input"
+                            onFocus={() => handleFocus('exteriorColor')}
+                            onBlur={() => handleBlur('exteriorColor')} />
+                        <span className={`placeholder ${focus.exteriorColor || form.exteriorColor ? 'placeholder-up' : ''}`}>
+                            Exterior Color
+                        </span>
+                    </label>
 
-                <label>fuel type</label>
-                <input type="text" name="fuelType" value={form.fuelType} onChange={handleInputChange} />
+                    <label className="custom-field">
+                        <input
+                            type="text"
+                            name="interiorColor"
+                            value={form.interiorColor}
+                            onChange={handleInputChange}
+                            className="input"
+                            onFocus={() => handleFocus('interiorColor')}
+                            onBlur={() => handleBlur('interiorColor')} />
+                        <span className={`placeholder ${focus.interiorColor || form.interiorColor ? 'placeholder-up' : ''}`}>
+                            Interior Color
+                        </span>
+                    </label>
 
-                <label>engineType</label>
-                <input name="engineType" value={form.engineType} onChange={handleInputChange} />
+                    <label className="custom-field">
+                        <input
+                            type="text"
+                            name="fuelType"
+                            value={form.fuelType}
+                            onChange={handleInputChange}
+                            className="input"
+                            onFocus={() => handleFocus('fuelType')}
+                            onBlur={() => handleBlur('fuelType')} />
+                        <span className={`placeholder ${focus.fuelType || form.fuelType ? 'placeholder-up' : ''}`}>
+                            Fuel Type
+                        </span>
+                    </label>
 
-                <label>condition</label>
-                <input name="condition" value={form.condition} onChange={handleInputChange} />
+                    <label className="custom-field">
+                        <input
+                            type="text"
+                            name="engineType"
+                            value={form.engineType}
+                            onChange={handleInputChange}
+                            className="input"
+                            onFocus={() => handleFocus('engineType')}
+                            onBlur={() => handleBlur('engineType')} />
+                        <span className={`placeholder ${focus.engineType || form.engineType ? 'placeholder-up' : ''}`}>
+                            Engine Type
+                        </span>
+                    </label>
 
-                <label>titleHistory</label>
-                <input name="titleHistory" value={form.titleHistory} onChange={handleInputChange} />
+                    <label className="custom-field">
+                        <input
+                            type="text"
+                            name="condition"
+                            value={form.condition}
+                            onChange={handleInputChange}
+                            className="input"
+                            onFocus={() => handleFocus('condition')}
+                            onBlur={() => handleBlur('condition')} />
+                        <span className={`placeholder ${focus.condition || form.condition ? 'placeholder-up' : ''}`}>
+                            Condition
+                        </span>
+                    </label>
 
-                <label>ownership</label>
-                <input name="ownership" value={form.ownership} onChange={handleInputChange} />
+                    <label className="custom-field">
+                        <input
+                            type="text"
+                            name="titleHistory"
+                            value={form.titleHistory}
+                            onChange={handleInputChange}
+                            className="input"
+                            onFocus={() => handleFocus('titleHistory')}
+                            onBlur={() => handleBlur('titleHistory')} />
+                        <span className={`placeholder ${focus.titleHistory || form.titleHistory ? 'placeholder-up' : ''}`}>
+                            Title History
+                        </span>
+                    </label>
 
-                <input type='submit' value='submit' />
+                    <label className="custom-field" >
+                        <input
+                            type="text"
+                            name="ownership"
+                            value={form.ownership}
+                            onChange={handleInputChange}
+                            className="input"
+                            onFocus={() => handleFocus('ownership')}
+                            onBlur={() => handleBlur('ownership')} />
+                        <span className={`placeholder ${focus.ownership || form.ownership ? 'placeholder-up' : ''}`}>
+                            ownership
+                        </span>
+                    </label>
+
+
+                </div>
+
+                <div className="addcar__desc-div">
+                    <label >Description</label>
+                    <textarea name="description" value={form.description} onChange={handleInputChange} className="addcar__description" placeholder="Car Description" />
+                    <button type='submit' value='submit' className="addcar__button">submit</button>
+                </div>
 
             </form>
         </div>

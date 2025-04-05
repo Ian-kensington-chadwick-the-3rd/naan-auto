@@ -19,7 +19,7 @@ addFunctionality
 
     add drag and drop so that admin can rearange the order of the image list so they can set things like thumbnail.✔️
 
-    send messages from footer and Contact Us.❌
+    send messages from footer and Contact Us.✔️
 
     see messages from adminDashboard.✔️
 

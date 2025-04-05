@@ -12,7 +12,7 @@ const AdminForm = () => {
     const [deleteCar] = useMutation(DELETE_CAR,{
         refetchQueries: [
             {query: GET_CARS},
-            {query: SEARCH_FIELD, variables:{}}
+            {query: SEARCH_FIELD}
         ]
     });
     
@@ -23,15 +23,6 @@ const AdminForm = () => {
     useEffect(()=>{
         console.log("this is refetch",refetch)
     },[data])
-
-    // const [startData, setStartData] = useState([])
-
-    // useEffect(() => {
-    //     if(data && data.Cars) {
-    //         setStartData(data.Cars)
-    //     }
-    // }, [data])
-    // console.log("data in the useEffect",startData)
 
     // will have the ability to update cars delete cars and create cars
     const [selectedCar, setSelectedCar] = useState(null)

@@ -1,13 +1,15 @@
 import { Link } from "react-router-dom";
 import { useMutation } from "@apollo/client";
-import { SEND_MESSAGE } from "../utils/querys";
+import { GET_MESSAGE, SEND_MESSAGE } from "../utils/querys";
 import { useEffect, useState } from 'react'
 import phone from '/icons8-phone-50.png'
 import placemarker from '/icons8-place-marker-24.png'
 import email from '/icons8-email-50.png'
 
 const footer = () => {
-    const [sendMessage] = useMutation(SEND_MESSAGE)
+    const [sendMessage] = useMutation(SEND_MESSAGE,{
+        refetchQueries:[{query: GET_MESSAGE}]
+    })
     const [form, setForm] = useState({
         firstName: '',
         lastName: '',

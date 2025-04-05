@@ -1,24 +1,49 @@
 import { useQuery, useMutation } from "@apollo/client";
 import { useState, useEffect } from 'react'
-import { GET_CARS, UPDATE_CAR, DELETE_CAR } from "../utils/querys";
+import { GET_CARS, UPDATE_CAR, DELETE_CAR, SEARCH_FIELD } from "../utils/querys";
 import Searchfilter from "./searchfilter";
 import Modal from "./model";
 
 const AdminForm = () => {
-    const { loading, data, error } = useQuery(GET_CARS);
-    const [updateCar] = useMutation(UPDATE_CAR);
-    const [deleteCar] = useMutation(DELETE_CAR)
+    const { loading, data, error, refetch } = useQuery(GET_CARS);
+    const [updateCar] = useMutation(UPDATE_CAR,{
+        refetchQueries: [{query: GET_CARS}]
+    });
+    const [deleteCar] = useMutation(DELETE_CAR,{
+        refetchQueries: [
+            {query: GET_CARS},
+            {query: SEARCH_FIELD, variables:{}}
+        ]
+    });
+    
+    useEffect(()=>{
+        refetch();
+    },[refetch])
+
+    useEffect(()=>{
+        console.log("this is refetch",refetch)
+    },[data])
+
+    // const [startData, setStartData] = useState([])
+
+    // useEffect(() => {
+    //     if(data && data.Cars) {
+    //         setStartData(data.Cars)
+    //     }
+    // }, [data])
+    // console.log("data in the useEffect",startData)
+
     // will have the ability to update cars delete cars and create cars
     const [selectedCar, setSelectedCar] = useState(null)
     const [form, setForm] = useState({
-        year: 0,
+        year: '',
         make: '',
         model: '',
-        mileage: 0,
+        mileage: '',
         description: '',
         trans: '',
         imageUrl: [],
-        price: 0,
+        price: '',
         vin: '',
         drivetrain: '',
         exteriorColor: '',
@@ -30,6 +55,8 @@ const AdminForm = () => {
         ownership: ''
     })
     console.log(data)
+
+
 
     useEffect(() => {
         if (selectedCar) {
@@ -73,10 +100,13 @@ const AdminForm = () => {
 
     const carDelete = async (e, _id, imageUrl) => {
         try {
+
+            const imageUrlArray = Array.isArray(imageUrl) ? imageUrl : [imageUrl];
+
             const result = await deleteCar({
                 variables: {
                     carId: _id,
-                    key: imageUrl
+                    key: imageUrlArray
                 }
             })
             return result;
@@ -84,15 +114,15 @@ const AdminForm = () => {
             console.error(err)
         }
     }
-    const handleFormSubmit = (e,carId,imageUrl) => {
+    const handleFormSubmit = async (e, carId, imageUrl) => {
         e.preventDefault();
         const submitButtonName = e.nativeEvent.submitter.name;
         console.log(submitButtonName)
         if (submitButtonName === 'delete') {
-            carDelete(e, carId, imageUrl)
+            await carDelete(e, carId, imageUrl)
         }
-        else { 
-            carUpdate(e, carId)
+        else {
+            await carUpdate(e, carId)
         }
     }
 
@@ -114,64 +144,64 @@ const AdminForm = () => {
         }
     };
 
+
     const [searchData, setSearchData] = useState([]);
-    const handleSearchData = (data) => {
+    const [usedSearch, setUsedSearch] = useState(false)
+    useEffect(()=>{
+        console.log(usedSearch)
+    },[usedSearch])
+    const handleSearchData = (data, usedSearch) => {
         setSearchData(data)
+        setUsedSearch(usedSearch)
     }
 
     const [modal, setModal] = useState(false)
 
-    const showModal = () =>{
+    const showModal = () => {
         setModal(true);
         console.log(modal)
     }
 
-    const closeModal = () =>{
+    const closeModal = () => {
         setModal(false);
         console.log(modal)
     }
 
     const [modalImage, setModalImage] = useState()
-    const showImage = (img) =>{
+    const showImage = (img) => {
         setModalImage(img)
     }
 
     const [imageId, setImageId] = useState()
-    const modalId = (id) =>{
+    const modalId = (id) => {
         setImageId(id)
     }
-
-
-    useEffect(()=>{
-
-    },[])
-
-
-
-    const data1 = searchData !== null ? searchData : data.Cars;
-    console.log(data1)
+    console.log(data?.Cars,"this is DATA CARSSSSS")
+    const data1 = usedSearch === true ? searchData : (data?.Cars || []);
+    
+    console.log("data1!!!!!!!!!!",data1)
     if (loading) return 'loading... cars';
     if (error) return 'error with loading cars', error;
 
     return (
-        <div style={{ display: 'flex' }}> 
-        <Modal showModal={modal} closeModal={closeModal} img={modalImage} id={imageId} />
-            
-                <Searchfilter onData={handleSearchData} />
-            
-            
+        <div style={{ display: 'flex' }}>
+            <Modal showModal={modal} closeModal={closeModal} img={modalImage} id={imageId} />
+
+            <Searchfilter onData={handleSearchData} />
+
+
             <div className="container-dashboard">
                 {data1.map((car, index) => (
                     <div key={index} className='admin-dashboard__item' >
                         <div>
-                            <img src={car.imageUrl} key={index} style={{ width: '400px', height: '400px' }} ></img> 
-                            
+                            <img src={car.imageUrl} key={index} style={{ width: '400px', height: '400px' }} ></img>
+
                             <div className="admin-dashboard__imgscrollbar" >
-                                <img src={car.imageUrl} key={index} style={{ width: '100px', height: '100px' }} onClick={()=> {showModal();showImage(car.imageUrl);modalId(car._id);}}/>
+                                <img src={car.imageUrl} key={index} style={{ width: '100px', height: '100px' }} onClick={() => { showModal(); showImage(car.imageUrl); modalId(car._id); }} />
                             </div>
-                            
+
                         </div>
-                        <form className="admin-dashboard___input " onSubmit={(e) =>handleFormSubmit(e,car._id,car.imageUrl)}>
+                        <form className="admin-dashboard___input " onSubmit={(e) => handleFormSubmit(e, car._id, car.imageUrl)}>
                             <div>
                                 <label>Year:</label>
                                 <input className="admin-dashboard__input-style"

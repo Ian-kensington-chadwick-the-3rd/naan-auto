@@ -1,19 +1,32 @@
 
-import { SEARCH_FIELD } from '../utils/querys.js'
+import { SEARCH_FIELD, } from '../utils/querys.js'
 import { useQuery, useLazyQuery } from '@apollo/client';
 import { useEffect, useState } from 'react'
 
 
 const Searchfilter = ({ onData }) => {
-    const [fetchData, { data, error }] = useLazyQuery(SEARCH_FIELD)
+    // queries data only when called by the fetchData function
+    const [fetchData, { data, error, loading }] = useLazyQuery(SEARCH_FIELD)
+    // this hook recieves the data quiried by SEARCH_FIELD and is then mapped through to display the current car options
     const [filteredData, setfilteredData] = useState([])
 
     useEffect(() => {
-        console.log("filtered Data has been passed to parent component", filteredData)
+        setfilteredData(data?.searchField || [])
+    console.log('success data retrieved', data)
+    }, [data]);
 
-        onData(filteredData)
+
+    // if search filter has been used
+   
+    // ships data to parent component adminForm
+    useEffect(() => {
+        if(filteredData && hasActiveFilters())
+        console.log("filtered Data has been passed to parent component", filteredData)
+        onData(filteredData, hasActiveFilters());
+        
     }, [filteredData])
 
+    // integer form
     const [filterInt, setFilterInt] = useState({
         minYear: 0,
         maxYear: 0,
@@ -23,6 +36,7 @@ const Searchfilter = ({ onData }) => {
         maxMileage: 0,
     });
 
+    // string form
     const [filterString, setFilterString] = useState({
         make: '',
         model: '',
@@ -40,32 +54,28 @@ const Searchfilter = ({ onData }) => {
         ownership: '',
     })
 
-    const [makeFirst, setMakeFirst] = useState(false)
-    const [formReset, setFormReset] = useState(false)
+  const hasActiveFilters = () =>{
+        const hasIntFilters = Object.values(filterInt).some(val => val > 0)
+        const hasStringFilters = Object.values(filterString).some(val => val !== '' && val !== 'all')
+        return hasIntFilters || hasStringFilters;
+    }
+    console.log(hasActiveFilters(),"this is filter active")
+
 
     if (error) {
         console.log("we got a problem", error)
     }
 
     // get queried data and set the final use hook to give data to /inventory page
+
+
+    // this hook fetches the data chosen from the form in filter and int reference the fetchdata function at the top
     useEffect(() => {
-        if (data) {
-            console.log('success data retrieved', data)
-            setfilteredData(data.searchField)
-        }
-        console.log("interacted is now", makeFirst)
-    }, [data]);
-
-
-
-    useEffect(() => {
-
         const peanutButterSpread = { ...filterInt, ...filterString }
-
         fetchData({ variables: peanutButterSpread })
     }, [filterInt, filterString])
 
-    // first recieve user input set user data to filter
+    // handles the form and parses the values correctly for backend
     function formHandler(e) {
         const name = e.target.name;
         const value = e.target.value;
@@ -97,11 +107,13 @@ const Searchfilter = ({ onData }) => {
             setMakeFirst(false)
         }
 
+        
 
-        if (name && value) {
-            setFormReset(true)
-        }
     }
+
+       // this hook makes sure that car.make is first chosen before they can search model
+    const [makeFirst, setMakeFirst] = useState(false)
+    const [formReset, setFormReset] = useState(false)
 
     const condition = (value) => {
         if (value !== null && value !== 'all') {
@@ -126,7 +138,7 @@ const Searchfilter = ({ onData }) => {
     const getDuplicates = (value) => {
         if(filteredData && filteredData.length ===0) return 0
 
-        const array = filteredData.map((data) => data[value]).filter(value => value !== null && value !== undefined && value !== '' && value !== 0);
+        const array = filteredData.map((data) => data[value]).filter(value => value !== null && value !== undefined);
 
         const counts = {};
         for(const element of array){

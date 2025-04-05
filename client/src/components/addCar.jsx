@@ -1,5 +1,5 @@
 import { useMutation } from "@apollo/client";
-import { ADD_CAR, PRESIGNED_URL } from "../utils/querys";
+import { ADD_CAR, GET_CARS, PRESIGNED_URL, SEARCH_FIELD } from "../utils/querys";
 import { AdvancedImage, placeholder } from '@cloudinary/react';
 import { Cloudinary } from "@cloudinary/url-gen";
 import { Link, Navigate } from "react-router-dom";
@@ -9,7 +9,12 @@ import AdminForm from "./adminForm";
 import Loading from "./loading";
 
 const AddCarData = () => {
-    const [addCar, { loading }] = useMutation(ADD_CAR);
+    const [addCar] = useMutation(ADD_CAR,{
+        refetchQueries: [
+            {query: GET_CARS},
+            {query: SEARCH_FIELD}
+        ]
+    });
     const [createPresignedUrl] = useMutation(PRESIGNED_URL);
     if (addCar.loading) return <p>Loading...</p>;
     if (addCar.error) return <p>Error: {addCar.error.message}</p>;
@@ -74,7 +79,7 @@ const AddCarData = () => {
         }))
     }
 
-    // parses form input
+    // parses form input for backend
     const handleInputChange = (e) => {
         e.preventDefault()
         const { name, value, type, files } = e.target;

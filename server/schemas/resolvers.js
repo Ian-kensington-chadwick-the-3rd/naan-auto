@@ -149,6 +149,7 @@ const resolvers = {
       const r2AccountId = process.env.R2_ACCOUNT_ID
       const r2BucketName = process.env.R2_BUCKET_NAME
       const baseUrl = ''
+      
       // checking if image is an array or single if not upload only one picture
       const processedImgUrls = Array.isArray(imageUrl) ?
         imageUrl.map(key => `${baseUrl}/${key}`) : [`${baseUrl}/${imageUrl}`]
@@ -176,6 +177,7 @@ const resolvers = {
       });
       console.log('year: ', year, "Make:", make, " Mileage:", mileage, "desription", description, "trans:", trans, "this is image url", imageUrl);
       console.log(context)
+      console.log(car)
       return car;
     },
     updateCar: async (parent, {

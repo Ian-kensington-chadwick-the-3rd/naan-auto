@@ -79,6 +79,7 @@ const AddCarData = () => {
         }))
     }
 
+    const [miniModal, setMiniModal] = useState(false)
     // parses form input for backend
     const handleInputChange = (e) => {
         e.preventDefault()
@@ -100,15 +101,14 @@ const AddCarData = () => {
             }));
         }
     }
-
-
-
+    const [pictureInvalid, setPictureInvalid] = useState([]);
+    const [carUploadSuccess, setCarUploadSuccess] = useState(false);
     async function formHandler(e) {
         e.preventDefault();
-
-        const picture = form.imageUrl;
-        var uploadImageUrl = [];
-        console.log(uploadImageUrl);
+        if(!form.imageUrl || form.imageUrl.length === 0){
+            setValidation({imageUrl: 'Please upload at least on image'})
+            return;
+        }
 
         setValidation({});
         const missingFields = {};
@@ -150,9 +150,81 @@ const AddCarData = () => {
             setValidation(missingFields);
             return;
         }
+        
         setLoadingCss(true);
+
+     
+
+        let invalidImages = 0;
+        let processedCount = 0;
+        await new Promise((resolve,reject) =>{
+
+       
+        const files =  Array.from(form.imageUrl);
+
+        files.forEach((file, index) => {
+        const reader = new FileReader();
+        const img = new Image();
+        console.log(index)
+        reader.onload = (event) => {
+            img.src = event.target.result;
+        };
+    
+        img.onload = () => {
+        const ratio = img.width / img.height;
+        const expected = 4 / 3
+        const tolerance = 0.01
+        
+        console.log(`Image dimensions: ${img.width}px × ${img.height}px`);     
+        const notFourThreeRatio = img.width / img.height
+
+        if(Math.abs(ratio - expected) > tolerance) {
+            setPictureInvalid((prev) => [...prev, form.imageUrl[index].name]);
+            setMiniModal(true);
+            setCarUploadSuccess(false);
+            setLoadingCss(false);
+            invalidImages++;
+            console.log('img does not equal 4:3 ratio', notFourThreeRatio, form.imageUrl[index].name);
+        } 
+            processedCount++;
+
+            if(processedCount === files.length){
+                if(invalidImages > 0){
+                    setMiniModal(true);
+                    setCarUploadSuccess(false);
+                    setLoadingCss(false);
+                    reject(new Error('Some images have invalid aspect ratios'));
+                }else {
+                resolve();
+            }
+            } 
+        };
+        reader.onerror = (error) =>{
+            console.error(error);
+            processedCount++;
+            if(processedCount === files.length){
+                if(invalidImages > 0){
+                    setMiniModal(true);
+                    setCarUploadSuccess(false);
+                    setLoadingCss(false);
+                    reject(new Error('Some images have invalid aspect ratios'));
+                } else {
+                    resolve();
+            }
+            }
+        }
+        
+        reader.readAsDataURL(file);
+    })
+});
+
+
+        const picture = form.imageUrl;
+        var uploadImageUrl = [];
+        
         try {
             for (const img of picture) {
+                console.log('reached img of pic')
                 const uniqueKey = `cars/${uuidv4()}.jpg`;
                 const { data } = await createPresignedUrl({
                     variables: { key: uniqueKey }
@@ -192,7 +264,7 @@ const AddCarData = () => {
 
             }
 
-            await addCar({
+            const result = await addCar({
                 variables: {
                     year: form.year,
                     make: form.make,
@@ -213,11 +285,12 @@ const AddCarData = () => {
                     ownership: form.ownership
                 }
             });
-            if (!addCar) {
+            if (!result) {
                 throw new Error(console.log('error car failed to add'))
             }
             setLoadingCss(false);
-            console.log('Car added successfully');
+            setMiniModal(true);
+            setCarUploadSuccess(true);
             setForm({
                 year: '',
                 make: '',
@@ -244,11 +317,33 @@ const AddCarData = () => {
 
     }
 
+    useEffect(()=>{
+        if(carUploadSuccess === false){
+            console.log(carUploadSuccess)
+            setLoadingCss(false)
+        }
+    },[carUploadSuccess])
 
     // we get event.target.name if useState name === form name 
 
     return (
         <div className="addcar__parent-container">
+            {miniModal && <div className="mini-modal"> 
+                <div className="container">
+                    <div className="message">
+                        {pictureInvalid === true && <span>
+                        img<br/> 
+                        <ul style={{color:'red'}}>{pictureInvalid}</ul> does not equal 4:3 ratio.
+                        <br/> 
+                        ratio is width(px) / height(px). === 1.333 in order for the website to display a clean picture with no gaps or stretching the ratio must equal 4:3 this also helps for mobile responsiveness.
+                        
+                        </span>}
+                        <br/>
+                        {carUploadSuccess === true ? <span style={{color:'green'}}>car upload success!✔️</span> : <span style={{color:'red'}}>car upload falure!❌</span>}
+                        </div>
+                    <button type="button" className="button" onClick={() => {setMiniModal(false); setCarUploadSuccess(false);setPictureInvalid([])}}>X</button>
+                </div>
+            </div>}
             {loadingCss && <Loading className={'loading'} />}
             <form onSubmit={e => formHandler(e)} className={`addcar__flex-direction ${loadingCss && 'blur'}`} >
                 <div className="addcar__grid-container">

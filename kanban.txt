@@ -23,7 +23,7 @@ addFunctionality
 
     see messages from adminDashboard.✔️
 
-    add image carousel in adminDashboard inventory.❌
+    add image carousel in adminDashboard inventory.✔️
 
     add image carousel in the inventory page.❌
 

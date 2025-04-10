@@ -27,7 +27,7 @@ addFunctionality
 
     add image carousel in the inventory page.❌
 
-
+    add pagination to /admindashboard and /inventory.✔️
 
 smallAdditions(things i would like to polish)
 

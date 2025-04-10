@@ -4,6 +4,7 @@ import { GET_CARS, UPDATE_CAR, DELETE_CAR, SEARCH_FIELD } from "../utils/querys"
 import Searchfilter from "./searchfilter";
 import Modal from "./model";
 import SlideShow from "./slideshow";
+import Pagination from "./pagination";
 
 const AdminForm = () => {
     const { loading, data, error, refetch } = useQuery(GET_CARS);
@@ -170,182 +171,199 @@ const AdminForm = () => {
     }
 
 
+
+    
+
+
+    // page equals 1 staring slice 0, 10 page equals 2 next slice if page 
+
     console.log(data?.Cars, "this is DATA CARSSSSS")
     const data1 = usedSearch === true ? searchData : (data?.Cars || []);
+    const [paginatedData, setPaginatedData] = useState([])
 
-    console.log("data1!!!!!!!!!!", data1)
+
+    const handlePaginatedData = (paginatedData) =>{
+        setPaginatedData(paginatedData)
+    }
+
+
+
     if (loading) return 'loading... cars';
     if (error) return 'error with loading cars', error;
 
     return (
-        <div style={{ display: 'flex' }}>
+        <div className="flex spacing-top">
             <Modal showModal={modal} closeModal={closeModal} img={modalImage} id={imageId} />
-
-            <Searchfilter onData={handleSearchData} />
-
-
-            <div className="container-dashboard">
-                {data1.map((car, index) => (
-                    <div key={index} className='admin-dashboard__item' >
-                        <div>
-                            <SlideShow image={car.imageUrl} index={index}/>
-                            <div className="admin-dashboard__imgscrollbar" >
-                                <img src={car.imageUrl} key={index} style={{ width: '100px', height: '100px' }}
-                                    onClick={() => { showModal(); showImage(car.imageUrl); modalId(car._id); }} />
+            <div className="spacing-left-right">
+                <Searchfilter onData={handleSearchData} />
+            </div>
+            <div>
+                <div className="container-dashboard">
+                    {paginatedData.map((car, index) => (
+                        <div key={index} className='admin-dashboard__item' >
+                            <div>
+                                <SlideShow image={car.imageUrl} index={index} />
+                                <div className="admin-dashboard__imgscrollbar" >
+                                    <img src={car.imageUrl} key={index} style={{ width: '100px', height: '100px' }}
+                                        onClick={() => { showModal(); showImage(car.imageUrl); modalId(car._id); }} />
+                                </div>
                             </div>
+
+                            <form className="admin-dashboard___input " onSubmit={(e) => handleFormSubmit(e, car._id, car.imageUrl)}>
+                                <div>
+                                    <label>Year:</label>
+                                    <input className="admin-dashboard__input-style"
+                                        type="input" value={car._id === selectedCar?._id ? form.year : car.year || ''}
+                                        name="year"
+                                        onChange={e => handleFormChange(e)}
+                                        onClick={() => setSelectedCar(car)}
+                                    />
+                                </div>
+                                <div>
+                                    <label>Make:</label>
+                                    <input className="admin-dashboard__input-style"
+                                        value={car._id === selectedCar?._id ? form.make : car.make || ''}
+                                        name="make"
+                                        onChange={e => handleFormChange(e)}
+                                        onClick={() => setSelectedCar(car)}
+                                    />
+                                </div>
+                                <div>
+                                    <label>Model:</label>
+                                    <input className="admin-dashboard__input-style"
+                                        value={car._id === selectedCar?._id ? form.model : car.model || ''}
+                                        name="model"
+                                        onChange={e => handleFormChange(e)}
+                                        onClick={() => setSelectedCar(car)}
+                                    />
+                                </div>
+                                <div>
+                                    <label>Mileage:</label>
+                                    <input className="admin-dashboard__input-style"
+                                        value={car._id === selectedCar?._id ? form.mileage : car.mileage || ''}
+                                        name="mileage"
+                                        onChange={e => handleFormChange(e)}
+                                        onClick={() => setSelectedCar(car)}
+                                    />
+                                </div>
+                                <div>
+                                    <label>Transmission:</label>
+                                    <input className="admin-dashboard__input-style"
+                                        value={car._id === selectedCar?._id ? form.trans : car.trans || ''}
+                                        name="trans"
+                                        onChange={e => handleFormChange(e)}
+                                        onClick={() => setSelectedCar(car)}
+                                    />
+                                </div>
+                                <div>
+                                    <label>Price:</label>
+                                    <input className="admin-dashboard__input-style"
+                                        value={car._id === selectedCar?._id ? form.price : car.price || ''}
+                                        name="price"
+                                        onChange={e => handleFormChange(e)}
+                                        onClick={() => setSelectedCar(car)}
+                                    />
+                                </div>
+                                <div>
+                                    <label>Vin:</label>
+                                    <input className="admin-dashboard__input-style"
+                                        value={car._id === selectedCar?._id ? form.vin : car.vin || ''}
+                                        name="vin"
+                                        onChange={e => handleFormChange(e)}
+                                        onClick={() => setSelectedCar(car)}
+                                    />
+                                </div>
+                                <div>
+                                    <label>Drivetrain:</label>
+                                    <input className="admin-dashboard__input-style"
+                                        value={car._id === selectedCar?._id ? form.drivetrain : car.drivetrain || ''}
+                                        name="drivetrain"
+                                        onChange={e => handleFormChange(e)}
+                                        onClick={() => setSelectedCar(car)}
+                                    />
+                                </div>
+                                <div>
+                                    <label>Exterior Color:</label>
+                                    <input
+                                        className="admin-dashboard__input-style"
+                                        value={car._id === selectedCar?._id ? form.exteriorColor : car.exteriorColor || ''}
+                                        name="exteriorColor"
+                                        onChange={e => handleFormChange(e)}
+                                        onClick={() => setSelectedCar(car)}
+                                    />
+                                </div>
+                                <div>
+                                    <label>Interior Color:</label>
+                                    <input className="admin-dashboard__input-style"
+                                        value={car._id === selectedCar?._id ? form.interiorColor : car.interiorColor || ''}
+                                        name="interiorColor"
+                                        onChange={e => handleFormChange(e)}
+                                        onClick={() => setSelectedCar(car)}
+                                    />
+                                </div>
+
+                                <div>
+                                    <label>Fuel Type:</label>
+                                    <input className="admin-dashboard__input-style"
+                                        value={car._id === selectedCar?._id ? form.fuelType : car.fuelType || ''}
+                                        name="fuelType"
+                                        onChange={e => handleFormChange(e)}
+                                        onClick={() => setSelectedCar(car)}
+                                    />
+                                </div>
+                                <div>
+                                    <label>Engine Type:</label>
+                                    <input className="admin-dashboard__input-style"
+                                        value={car._id === selectedCar?._id ? form.engineType : car.engineType || ''}
+                                        name="engineType"
+                                        onChange={e => handleFormChange(e)}
+                                        onClick={() => setSelectedCar(car)}
+                                    />
+                                </div>
+                                <div>
+                                    <label>Condition:</label>
+                                    <input className="admin-dashboard__input-style"
+                                        value={car._id === selectedCar?._id ? form.condition : car.condition || ''}
+                                        name="condition"
+                                        onChange={e => handleFormChange(e)}
+                                        onClick={() => setSelectedCar(car)}
+                                    />
+                                </div>
+                                <div>
+                                    <label>Title History:</label>
+                                    <input className="admin-dashboard__input-style"
+                                        value={car._id === selectedCar?._id ? form.titleHistory : car.titleHistory || ''}
+                                        name="titleHistory"
+                                        onChange={e => handleFormChange(e)}
+                                        onClick={() => setSelectedCar(car)}
+                                    />
+                                </div>
+                                <div>
+                                    <label>Ownership:</label>
+                                    <input className="admin-dashboard__input-style"
+                                        value={car._id === selectedCar?._id ? form.ownership : car.ownership || ''}
+                                        name="ownership"
+                                        onChange={e => handleFormChange(e)}
+                                        onClick={() => setSelectedCar(car)}
+                                    />
+                                </div>
+                                <label>Description:</label>
+                                <textarea style={{}} className=""
+                                    value={car._id === selectedCar?._id ? form.description : car.description || ''}
+                                    name="description"
+                                    onChange={e => handleFormChange(e)}
+                                    onClick={() => setSelectedCar(car)}
+                                />
+                                <button type="submit" className="rmi-form_button">Update Car</button>
+                                <button type="submit" name="delete" >Delete</button>
+                            </form>
+                    
                         </div>
 
-                        <form className="admin-dashboard___input " onSubmit={(e) => handleFormSubmit(e, car._id, car.imageUrl)}>
-                            <div>
-                                <label>Year:</label>
-                                <input className="admin-dashboard__input-style"
-                                    type="input" value={car._id === selectedCar?._id ? form.year : car.year || ''}
-                                    name="year"
-                                    onChange={e => handleFormChange(e)}
-                                    onClick={() => setSelectedCar(car)}
-                                />
-                            </div>
-                            <div>
-                                <label>Make:</label>
-                                <input className="admin-dashboard__input-style"
-                                    value={car._id === selectedCar?._id ? form.make : car.make || ''}
-                                    name="make"
-                                    onChange={e => handleFormChange(e)}
-                                    onClick={() => setSelectedCar(car)}
-                                />
-                            </div>
-                            <div>
-                                <label>Model:</label>
-                                <input className="admin-dashboard__input-style"
-                                    value={car._id === selectedCar?._id ? form.model : car.model || ''}
-                                    name="model"
-                                    onChange={e => handleFormChange(e)}
-                                    onClick={() => setSelectedCar(car)}
-                                />
-                            </div>
-                            <div>
-                                <label>Mileage:</label>
-                                <input className="admin-dashboard__input-style"
-                                    value={car._id === selectedCar?._id ? form.mileage : car.mileage || ''}
-                                    name="mileage"
-                                    onChange={e => handleFormChange(e)}
-                                    onClick={() => setSelectedCar(car)}
-                                />
-                            </div>
-                            <div>
-                                <label>Transmission:</label>
-                                <input className="admin-dashboard__input-style"
-                                    value={car._id === selectedCar?._id ? form.trans : car.trans || ''}
-                                    name="trans"
-                                    onChange={e => handleFormChange(e)}
-                                    onClick={() => setSelectedCar(car)}
-                                />
-                            </div>
-                            <div>
-                                <label>Price:</label>
-                                <input className="admin-dashboard__input-style"
-                                    value={car._id === selectedCar?._id ? form.price : car.price || ''}
-                                    name="price"
-                                    onChange={e => handleFormChange(e)}
-                                    onClick={() => setSelectedCar(car)}
-                                />
-                            </div>
-                            <div>
-                                <label>Vin:</label>
-                                <input className="admin-dashboard__input-style"
-                                    value={car._id === selectedCar?._id ? form.vin : car.vin || ''}
-                                    name="vin"
-                                    onChange={e => handleFormChange(e)}
-                                    onClick={() => setSelectedCar(car)}
-                                />
-                            </div>
-                            <div>
-                                <label>Drivetrain:</label>
-                                <input className="admin-dashboard__input-style"
-                                    value={car._id === selectedCar?._id ? form.drivetrain : car.drivetrain || ''}
-                                    name="drivetrain"
-                                    onChange={e => handleFormChange(e)}
-                                    onClick={() => setSelectedCar(car)}
-                                />
-                            </div>
-                            <div>
-                                <label>Exterior Color:</label>
-                                <input
-                                    className="admin-dashboard__input-style"
-                                    value={car._id === selectedCar?._id ? form.exteriorColor : car.exteriorColor || ''}
-                                    name="exteriorColor"
-                                    onChange={e => handleFormChange(e)}
-                                    onClick={() => setSelectedCar(car)}
-                                />
-                            </div>
-                            <div>
-                                <label>Interior Color:</label>
-                                <input className="admin-dashboard__input-style"
-                                    value={car._id === selectedCar?._id ? form.interiorColor : car.interiorColor || ''}
-                                    name="interiorColor"
-                                    onChange={e => handleFormChange(e)}
-                                    onClick={() => setSelectedCar(car)}
-                                />
-                            </div>
+                    ))}
 
-                            <div>
-                                <label>Fuel Type:</label>
-                                <input className="admin-dashboard__input-style"
-                                    value={car._id === selectedCar?._id ? form.fuelType : car.fuelType || ''}
-                                    name="fuelType"
-                                    onChange={e => handleFormChange(e)}
-                                    onClick={() => setSelectedCar(car)}
-                                />
-                            </div>
-                            <div>
-                                <label>Engine Type:</label>
-                                <input className="admin-dashboard__input-style"
-                                    value={car._id === selectedCar?._id ? form.engineType : car.engineType || ''}
-                                    name="engineType"
-                                    onChange={e => handleFormChange(e)}
-                                    onClick={() => setSelectedCar(car)}
-                                />
-                            </div>
-                            <div>
-                                <label>Condition:</label>
-                                <input className="admin-dashboard__input-style"
-                                    value={car._id === selectedCar?._id ? form.condition : car.condition || ''}
-                                    name="condition"
-                                    onChange={e => handleFormChange(e)}
-                                    onClick={() => setSelectedCar(car)}
-                                />
-                            </div>
-                            <div>
-                                <label>Title History:</label>
-                                <input className="admin-dashboard__input-style"
-                                    value={car._id === selectedCar?._id ? form.titleHistory : car.titleHistory || ''}
-                                    name="titleHistory"
-                                    onChange={e => handleFormChange(e)}
-                                    onClick={() => setSelectedCar(car)}
-                                />
-                            </div>
-                            <div>
-                                <label>Ownership:</label>
-                                <input className="admin-dashboard__input-style"
-                                    value={car._id === selectedCar?._id ? form.ownership : car.ownership || ''}
-                                    name="ownership"
-                                    onChange={e => handleFormChange(e)}
-                                    onClick={() => setSelectedCar(car)}
-                                />
-                            </div>
-                            <label>Description:</label>
-                            <textarea style={{}} className=""
-                                value={car._id === selectedCar?._id ? form.description : car.description || ''}
-                                name="description"
-                                onChange={e => handleFormChange(e)}
-                                onClick={() => setSelectedCar(car)}
-                            />
-                            <button type="submit" className="rmi-form_button">Update Car</button>
-                            <button type="submit" name="delete" >Delete</button>
-                        </form>
-                    </div>
-
-                ))}
+                </div>
+                        <Pagination data={ data1 } handlePaginatedData={handlePaginatedData}/>
             </div>
         </div>
     )

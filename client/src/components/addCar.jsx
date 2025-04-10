@@ -154,7 +154,9 @@ const AddCarData = () => {
         setLoadingCss(true);
 
      
+        try{
 
+        
         let invalidImages = 0;
         let processedCount = 0;
         await new Promise((resolve,reject) =>{
@@ -217,7 +219,9 @@ const AddCarData = () => {
         reader.readAsDataURL(file);
     })
 });
-
+} catch (err){
+    console.log(err)
+}
 
         const picture = form.imageUrl;
         var uploadImageUrl = [];

@@ -777,6 +777,7 @@ p.orangebottom:hover {
 
 /* adminDashboard */
 
+
 .container-dashboard {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -877,11 +878,18 @@ p.orangebottom:hover {
     transition: transform 0.5s ease-in-out;
     width: 100%;
     height: 100%;
-    
 }
 
+.spacing-left-right{
+    margin-left:30px;
+    margin-right:30px;
+}
+
+.spacing-top{
+    margin-top:25px
+}
 /* addCar page */
-.addcar {}
+
 
 /* messages page */
 
@@ -1093,10 +1101,34 @@ input[type="file"]:focus {
     background-color: orange
 }
 
-
-
 /* mini modal end */
 
+/* pagination button start */
+
+.pagination-container{
+    display:flex;
+    justify-content: center;
+    margin-top:10px;
+}
+
+.pagination__btn{
+    border-radius: 5px;
+    border-style: none;
+    width:40px;
+    height:40px;
+    margin:5px;
+}
+
+.pagination__btn:hover{
+    background-color: rgb(255, 167, 4);
+    border: 1px solid rgb(0, 0, 0);
+}
+
+.active-btn{
+    background-color: orange;
+}
+
+/* pagination button end */
 
 @media screen and (max-width: 768px) {
     .card-container {

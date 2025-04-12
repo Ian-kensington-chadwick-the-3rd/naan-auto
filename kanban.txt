@@ -25,7 +25,7 @@ addFunctionality
 
     add image carousel in adminDashboard inventory.✔️
 
-    add image carousel in the inventory page.❌
+    add image carousel in the inventory page.✔️
 
     add pagination to /admindashboard and /inventory.✔️
 

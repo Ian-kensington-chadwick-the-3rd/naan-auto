@@ -18,7 +18,7 @@ const Pagination = ({ data, handlePaginatedData }) =>{
     const [activePage, setActivePage] = useState(1)
     const [pageIndex, setPageIndex] = useState(1);
 
-    console.log(pageIndex)
+  
 
     const total = data.length;
     const start = (pageIndex - 1) * 9;
@@ -45,8 +45,7 @@ const Pagination = ({ data, handlePaginatedData }) =>{
     for (let i = 0; i < totalPages; i++) {
         pageArray.push(i + 1)
     }
-    console.log(pageArray)
-    console.log("pageINDEX!!!!!!",pageIndex)
+    
 
     
     useEffect(()=>{
@@ -56,7 +55,7 @@ const Pagination = ({ data, handlePaginatedData }) =>{
    
     
 
-    console.log("data1!!!!!!!!!!", data)
+   
 
     const scrollToTop = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' })

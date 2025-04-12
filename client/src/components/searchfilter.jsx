@@ -12,7 +12,6 @@ const Searchfilter = ({ onData }) => {
 
     useEffect(() => {
         setfilteredData(data?.searchField || [])
-    console.log('success data retrieved', data)
     }, [data]);
 
 
@@ -21,7 +20,6 @@ const Searchfilter = ({ onData }) => {
     // ships data to parent component adminForm
     useEffect(() => {
         if(filteredData && hasActiveFilters())
-        console.log("filtered Data has been passed to parent component", filteredData)
         onData(filteredData, hasActiveFilters());
         
     }, [filteredData])
@@ -59,7 +57,6 @@ const Searchfilter = ({ onData }) => {
         const hasStringFilters = Object.values(filterString).some(val => val !== '' && val !== 'all')
         return hasIntFilters || hasStringFilters;
     }
-    console.log(hasActiveFilters(),"this is filter active")
 
 
     if (error) {
@@ -79,8 +76,6 @@ const Searchfilter = ({ onData }) => {
     function formHandler(e) {
         const name = e.target.name;
         const value = e.target.value;
-        console.log("target???", e.target)
-        console.log("form handler!!!", [name, value])
         if (
             name === "minYear" ||
             name === "maxYear" ||
@@ -117,7 +112,6 @@ const Searchfilter = ({ onData }) => {
 
     const condition = (value) => {
         if (value !== null && value !== 'all') {
-            console.log('interacted value', value)
             setMakeFirst(true)
         }
     }

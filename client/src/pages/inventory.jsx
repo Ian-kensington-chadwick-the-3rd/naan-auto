@@ -9,6 +9,7 @@ import hashtag from '/icons8-hashtag-48.png'
 import gearBox from '/icons8-gearbox-64.png'
 import Searchfilter from '../components/searchfilter';
 import Pagination from '../components/pagination';
+import SlideShow from '../components/slideshow';
 
 
 const Inv = () => {
@@ -19,7 +20,7 @@ const Inv = () => {
     const carRef = useRef(null);
     const [searchData, setSearchData] = useState([]);
     const [usedSearch, setUsedSearch] = useState(false)
-    const handleSearchData = (data , usedSearch) => {
+    const handleSearchData = (data, usedSearch) => {
         setSearchData(data)
         setUsedSearch(usedSearch)
     }
@@ -35,19 +36,17 @@ const Inv = () => {
     }, [userData])
 
     useEffect(() => {
-       console.log(carData)
-       console.log(searchData)
+        console.log(carData)
+        console.log(searchData)
     }, [carData])
 
 
     console.log("this is data =>", carData);
 
-
-
-
     useEffect(() => {
         console.log(usedSearch)
     }, [usedSearch])
+
     const data1 = usedSearch === true ? searchData : (carData?.Cars || []);
     console.log(data1)
 
@@ -69,7 +68,7 @@ const Inv = () => {
                 </Link>)
                 : ('')}
             <div style={{ display: 'flex' }}>
-                <div style={{ paddingLeft: '150px' }}>
+                <div style={{ paddingLeft: '50px' }}>
                     <Searchfilter onData={handleSearchData} />
                 </div>
                 <div>
@@ -79,10 +78,15 @@ const Inv = () => {
 
                             <div key={car._id} ref={carRef} style={{ margin: '20px', textDecoration: 'none' }} className='card'>
 
-                                <div>
-                                    <Link to={`/inventory/${car._id}`} >
-                                        <img src={car.imageUrl[0]} className='card-img' />
+                                <div >
+                                    <Link to={`/inventory/${car._id}`}
+                                    draggable={false}>
+                                        <SlideShow
+                                            image={car.imageUrl}
+
+                                        />
                                     </Link>
+
                                 </div>
 
                                 <div className='title-price-holder'>

@@ -16,12 +16,12 @@ const Searchfilter = ({ onData }) => {
 
 
     // if search filter has been used
-   
+
     // ships data to parent component adminForm
     useEffect(() => {
-        if(filteredData && hasActiveFilters())
-        onData(filteredData, hasActiveFilters());
-        
+        if (filteredData && hasActiveFilters())
+            onData(filteredData, hasActiveFilters());
+
     }, [filteredData])
 
     // integer form
@@ -52,7 +52,7 @@ const Searchfilter = ({ onData }) => {
         ownership: '',
     })
 
-  const hasActiveFilters = () =>{
+    const hasActiveFilters = () => {
         const hasIntFilters = Object.values(filterInt).some(val => val > 0)
         const hasStringFilters = Object.values(filterString).some(val => val !== '' && val !== 'all')
         return hasIntFilters || hasStringFilters;
@@ -102,11 +102,11 @@ const Searchfilter = ({ onData }) => {
             setMakeFirst(false)
         }
 
-        
+
 
     }
 
-       // this hook makes sure that car.make is first chosen before they can search model
+    // this hook makes sure that car.make is first chosen before they can search model
     const [makeFirst, setMakeFirst] = useState(false)
     const [formReset, setFormReset] = useState(false)
 
@@ -116,12 +116,12 @@ const Searchfilter = ({ onData }) => {
         }
     }
     // gets the minimum or maximum amount to tell the users what the lowest/heighest value they can go to
-    const getMinMax = (value) =>{
-        if(filteredData && filteredData.length === 0) return {min: 0, max: 0}
+    const getMinMax = (value) => {
+        if (filteredData && filteredData.length === 0) return { min: 0, max: 0 }
 
         const validValues = filteredData.map(data => data[value]).filter(value => value !== null && value !== undefined)
 
-        if(validValues.length === 0) return {min:0, max:0}
+        if (validValues.length === 0) return { min: 0, max: 0 }
 
         return {
             min: Math.min(...validValues),
@@ -130,15 +130,16 @@ const Searchfilter = ({ onData }) => {
     }
     // displays the count of how many duplicates per car for any filter option below 
     const getDuplicates = (value) => {
-        if(filteredData && filteredData.length ===0) return 0
+        if (filteredData && filteredData.length === 0) return {};
 
-        const array = filteredData.map((data) => data[value]).filter(value => value !== null && value !== undefined);
+        const array = filteredData.map((data) => data[value]).filter(val => val !== null && val !== undefined && val !== '');
 
+        console.log(array)
         const counts = {};
-        for(const element of array){
+        for (const element of array) {
             counts[element] = (counts[element] || 0) + 1
         }
-        return counts
+        return counts;
     }
 
 
@@ -149,14 +150,27 @@ const Searchfilter = ({ onData }) => {
     const exteriorColorCount = getDuplicates('exteriorColor');
     const interiorColorCount = getDuplicates('interiorColor');
     const fuelTypeCount = getDuplicates('fuelType');
-    const engineType = getDuplicates('engineType');
+    const engineTypeCount = getDuplicates('engineType');
     const ownershipCount = getDuplicates('ownership');
     const titleHistoryCount = getDuplicates('titleHistory');
-
 
     const year = getMinMax('year');
     const price = getMinMax('price');
     const mileage = getMinMax('mileage');
+
+
+    const validMakeData = [...new Set(filteredData.map(data => data.make))].filter(val => val !== undefined && val !== null && val !== '')
+    const validModelData = [...new Set(filteredData.map(data => data.model))].filter(val => val !== undefined && val !== null && val !== '')
+    const validTransData = [...new Set(filteredData.map(data => data.trans))].filter(val => val !== undefined && val !== null && val !== '')
+    const validDrivetrainData = [...new Set(filteredData.map(data => data.drivetrain))].filter(val => val !== undefined && val !== null && val !== '')
+    const validExteriorColorData = [...new Set(filteredData.map(data => data.exteriorColor))].filter(val => val !== undefined && val !== null && val !== '')
+    const validInteriorColorData = [...new Set(filteredData.map(data => data.interiorColor))].filter(val => val !== undefined && val !== null && val !== '')
+    const validFuelTypeData = [...new Set(filteredData.map(data => data.fuelType))].filter(val => val !== undefined && val !== null && val !== '')
+    const validEngineTypeData = [...new Set(filteredData.map(data => data.engineType))].filter(val => val !== undefined && val !== null && val !== '')
+    const validOwnershipData = [...new Set(filteredData.map(data => data.ownership))].filter(val => val !== undefined && val !== null && val !== '')
+    const validTitleHistoryData = [...new Set(filteredData.map(data => data.titleHistory))].filter(val => val !== undefined && val !== null && val !== '')
+
+    console.log(validTransData)
 
     return (
         <form className="search_filter__form" >
@@ -181,132 +195,150 @@ const Searchfilter = ({ onData }) => {
 
                     <select onChange={e => formHandler(e)} name='make' value={filterString.make === undefined ? '' : filterString.make} className='search-filter__style'>
                         <option key={`make-default`} value='' disabled hidden>Make</option>
-                        <option key={`make-all`} value='all' >All</option>
-                        {[...new Set(filteredData.map((data) => data.make))].map((data, index) => {
-                            const key = `make-${index}`;
-                            return (
-                                data === null ? (
-                                        <option key={key} value='' disabled> no make filter options</option> 
-                                ) : (
+                        <option key={`make-all`} value='all'>All</option>
+                        {validMakeData.length <= 0 ? (
+                            <option key="no-options" value=''>
+                                no make search options
+                            </option>
+                        ) : (
+                            validMakeData.map((data, index) => {
+                                const key = `make-${index}`; 
+                                return (
                                     <option key={key} value={data}>
                                         {`${data} (${makeCount[data]})`}
-                                    </option>)
-                            )
-                        })}
+                                    </option>
+                                );
+                               
+                            })
+                        )}
                     </select>
 
                     <select onChange={e => formHandler(e)} name='model' value={filterString.model === undefined ? '' : filterString.model}  {...makeFirst === false ? { disabled: true } : ''} className='search-filter__style'>
                         <option key={`model-default`} value='' disabled hidden>Model</option>
                         <option key={`model-all`} value='all'>All</option>
-                        {[...new Set(filteredData.map((data) => data.model))].map((data, index) => {
-                            const key = `model-${index}`;
-                            return (
-                                <option key={key} value={data}>
-                                    {`${data} (${modelCount[data]})`}
-                                </option>
-
-                            )
-                        })}
+                        {validModelData.length <= 0 ? (
+                            <option key="no-options" value=''>
+                                no model search options
+                            </option>
+                        ) : (
+                            validModelData.map((data, index) => {
+                                const key = `make-${index}`;
+                                console.log(data)
+                                return (
+                                    <option key={key} value={data}>
+                                        {`${data} (${modelCount[data]})`}
+                                    </option>
+                                );
+                            })
+                        )}
                     </select>
                     <select onChange={e => formHandler(e)} name='trans' value={filterString.trans === undefined ? '' : filterString.trans} className='search-filter__style'>
                         <option key={`trans-default`} value='' disabled hidden>Transmission</option>
                         <option key={`trans-all`} value='all'>All</option>
-                        {[...new Set(filteredData.map((data) => data.trans))].map((data, index) => {
-                            const key = `trans-${index}`;
-                            return (
-                                data === null ? (
-                                        <option key={key} value='' disabled>no transmission filter options</option>
-                                ) : (
+                        {validTransData.length <= 0 ? (
+                            <option key="no-options" value=''>
+                                no trans search options
+                            </option>
+                        ) : (
+                            validTransData.map((data, index) => {
+                                const key = `make-${index}`;
+                                return (
                                     <option key={key} value={data}>
                                         {`${data} (${transCount[data]})`}
-                                    </option>)
-                            )
-                        })}
+                                    </option>
+                                );
+                            })
+                        )}
                     </select>
                     <select onChange={e => formHandler(e)} name='drivetrain' value={filterString.drivetrain === undefined ? '' : filterString.drivetrain} className='search-filter__style'>
                         <option key={`drivetrain-default`} value='' disabled hidden>drivetrain</option>
                         <option key={`drivetrain-all`} value='all'>All</option>
-                        {[...new Set(filteredData.map((data) => data.drivetrain))].map((data, index) => {
-                            const key = `drivetrain-${index}`;
-                            return (
-                                data === null ? (
-                                    
-                                        <option key={key} value='' disabled> no drivetrain filter options</option>
-                                    
-                                ) : (
+                        {validDrivetrainData.length <= 0 ? (
+                            <option key="no-options" value=''>
+                                no drivetrain search options
+                            </option>
+                        ) : (
+                            validDrivetrainData.map((data, index) => {
+                                const key = `make-${index}`;
+                                return (
                                     <option key={key} value={data}>
-                                        {`${data} (${drivetrainCount[data]})`}
-                                    </option>)
-                            )
-                        })}
+                                        {`${data} (${ drivetrainCount[data]})`}
+                                    </option>
+                                );
+                            })
+                        )}
                     </select>
                     <select onChange={e => formHandler(e)} name='exteriorColor' value={filterString.exteriorColor === undefined ? '' : filterString.exteriorColor} className='search-filter__style'>
                         <option key={`exteriorColor-default`} value='' disabled hidden>Exterior Color</option>
                         <option key={`exteriorColor-all`} value='all'>All</option>
-                        {[...new Set(filteredData.map((data) => data.exteriorColor))].map((data, index) => {
-                            const key = `exteriorColor-${index}`;
-                            return (
-                                data === null ? (
-                                    
-                                        <option key={key} value='' disabled> no exterior color filter options</option>
-                                    
-                                ) : (
+                        {validExteriorColorData.length <= 0 ? (
+                            <option key="no-options" value=''>
+                                no exterior color search options
+                            </option>
+                        ) : (
+                            validExteriorColorData.map((data, index) => {
+                                const key = `make-${index}`;
+                                return (
                                     <option key={key} value={data}>
                                         {`${data} (${exteriorColorCount[data]})`}
-                                    </option>)
-                            )
-                        })}
+                                    </option>
+                                );
+                            })
+                        )}
                     </select>
                     <select onChange={e => formHandler(e)} name='interiorColor' value={filterString.interiorColor === undefined ? '' : filterString.interiorColor} className='search-filter__style'>
                         <option key={`interiorColor-default`} value='' disabled hidden>Interior Color</option>
                         <option key={`interiorColor-all`} value='all'>All</option>
-                        {[...new Set(filteredData.map((data) => data.interiorColor))].map((data, index) => {
-                            const key = `interiorColor-${index}`;
-                            return (
-                                data === null ? (
-                                    
-                                        <option key={key} value='' disabled> no interior filter options</option>
-                                    
-                                ) : (
+                        {validInteriorColorData.length <= 0 ? (
+                            <option key="no-options" value=''>
+                                no interior color search options
+                            </option>
+                        ) : (
+                            validInteriorColorData.map((data, index) => {
+                                const key = `make-${index}`;
+                                return (
                                     <option key={key} value={data}>
                                         {`${data} (${interiorColorCount[data]})`}
-                                    </option>)
-                            )
-                        })}
+                                    </option>
+                                );
+                            })
+                        )}
                     </select>
                     <select onChange={e => formHandler(e)} name='fuelType' value={filterString.fuelType ? '' : filterString.fuelType} className='search-filter__style'>
                         <option key={`fuelType-default`} value='' disabled hidden>Fuel Type</option>
                         <option key={`fuelType-all`} value='all'>All</option>
-                        {[...new Set(filteredData.map((data) => data.fuelType))].map((data, index) => {
-                            const key = `fuelType-${index}`;
-                            return (
-                                data === null ? (
-                                    
-                                        <option key={key} value='' disabled> no fuel type filter options</option>
-                                    
-                                ) : (
+                        {validFuelTypeData.length <= 0 ? (
+                            <option key="no-options" value=''>
+                                no fuel type search options
+                            </option>
+                        ) : (
+                            validFuelTypeData.map((data, index) => {
+                                const key = `make-${index}`;
+                                return (
                                     <option key={key} value={data}>
                                         {`${data} (${fuelTypeCount[data]})`}
-                                    </option>)
-                            )
-                        })}
+                                    </option>
+                                );
+                            })
+                        )}
                     </select>
                     <select onChange={e => formHandler(e)} name='engineType' value={filterString.engineType === undefined ? '' : filterString.engineType} className='search-filter__style'>
                         <option key={`engineType-default`} value='' disabled hidden>Engine Type</option>
                         <option key={`engineType-all`} value='all'>All</option>
-                        {[...new Set(filteredData.map((data) => data.engineType))].map((data, index) => {
-                            const key = `engineType-${index}`;
-                            return (
-                                data === null ? (
-
-                                        <option key={key} value='' disabled> no engine type filter options</option>
-
-                                ) : (
+                        {validEngineTypeData.length <= 0 ? (
+                            <option key="no-options" value=''>
+                                no engine type search options
+                            </option>
+                        ) : (
+                            validEngineTypeData.map((data, index) => {
+                                const key = `make-${index}`;
+                                return (
                                     <option key={key} value={data}>
-                                        {`${data} (${engineType[data]})`}
-                                    </option>)
-                            )
-                        })}
+                                        {`${data} (${engineTypeCount[data]})`}
+                                    </option>
+                                );
+                            })
+                        )}
                     </select>
                 </div>
 
@@ -316,19 +348,20 @@ const Searchfilter = ({ onData }) => {
                         <select className='search-filter__style' name='ownership' value={filterString.ownership === undefined ? '' : filterString.ownership} style={{ width: '100%', height: '30px' }}>
                             <option key={0} value='' disabled hidden>Ownership</option>
                             <option key={1} value='all'>All</option>
-                            {[...new Set(filteredData.map((data) => data.ownership))].map((data, index) => {
-                                const key = `ownership-${index}`;
+                            {validOwnershipData.length <= 0 ? (
+                            <option key="no-options" value=''>
+                                no make search options
+                            </option>
+                        ) : (
+                            validOwnershipData.map((data, index) => {
+                                const key = `make-${index}`;
                                 return (
-                                    data === null ? (
-                                        <>
-                                            <option key={key} value='' disabled> no ownership filter options</option>
-                                        </>
-                                    ) : (
-                                        <option key={key} value={data}>
-                                            {`${data} (${ownershipCount[data]})`}
-                                        </option>)
-                                )
-                            })}
+                                    <option key={key} value={data}>
+                                        {`${data} (${ownershipCount[data]})`}
+                                    </option>
+                                );
+                            })
+                        )}
                         </select>
                         <input type="text" name="vin" placeholder="vin" className='search-filter__style' />
                     </div>
@@ -336,19 +369,20 @@ const Searchfilter = ({ onData }) => {
                         <select className='search-filter__style' name='titleHistory' value={filterString.titleHistory === undefined ? '' : filterString.titleHistory} style={{ width: '100%', height: '30px' }}>
                             <option key={0} value='' disabled hidden>Title History</option>
                             <option key={1} value='all'>All</option>
-                            {[...new Set(filteredData.map((data) => data.titleHistory))].map((data, index) => {
-                            const key = `ownership-${index}`;    
+                            {validTitleHistoryData.length <= 0 ? (
+                            <option key="no-options" value=''>
+                                no make search options
+                            </option>
+                        ) : (
+                            validTitleHistoryData.map((data, index) => {
+                                const key = `make-${index}`;
                                 return (
-                                    data === null ? (
-                                        <>
-                                            <option key={key} value='' disabled> no title history filter options</option>
-                                        </>
-                                    ) : (
-                                        <option key={index} value={data}>
-                                            {`${data} (${ titleHistoryCount[data]})`}
-                                        </option>)
-                                )
-                            })}
+                                    <option key={key} value={data}>
+                                        {`${data} (${titleHistoryCount[data]})`}
+                                    </option>
+                                );
+                            })
+                        )}
                         </select>
                     </div>
 

@@ -31,7 +31,7 @@ addFunctionality
 
 smallAdditions(things i would like to polish)
 
-    fix searchFilter to not allow empty strings in the select options.❌
+    fix searchFilter to not allow empty strings in the select options.✔️
     
     add https://motion.dev/docs/inviewhttps://motion.dev/docs/inview.❌
 

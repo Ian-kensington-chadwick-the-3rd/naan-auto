@@ -194,11 +194,11 @@ const AdminForm = () => {
     return (
         <div className="flex spacing-top">
             <Modal showModal={modal} closeModal={closeModal} img={modalImage} id={imageId} />
-            <div className="spacing-left-right">
+            <div className="spacing-left-right" id='inventorySearch'>
                 <Searchfilter onData={handleSearchData} />
             </div>
             <div>
-                <div className="container-dashboard">
+                <div className="container">
                     {paginatedData.map((car, index) => (
                         <div key={index} className='admin-dashboard__item' >
                             <div>

@@ -1,8 +1,9 @@
 import  ReactDOM  from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {lazy,Suspense} from 'react'
+import {Navigate} from 'react-router-dom'
 import './app.css';
 import App from './app.jsx';
-import Home from './pages/Home.jsx';
 import Error from './pages/error.jsx';
 import Inventory from './pages/Inventory.jsx' ;
 import InvId from './pages/InvId.jsx';
@@ -10,7 +11,7 @@ import ContactUs from './pages/contactUs.jsx';
 import AboutUs from './pages/AboutUs.jsx';
 import Login from "./pages/Login.jsx";
 import ProtectedRoute from "./components/protectedRoute";
-import Dashboard from './pages/adminDashboard.jsx'
+const Dashboard = lazy(()=> import('./pages/adminDashboard.jsx'))
 
 const router = createBrowserRouter([
     {
@@ -20,7 +21,7 @@ const router = createBrowserRouter([
         children: [
             {
                 index: true,
-                element: <Home/>
+                element: <Navigate to="/inventory" replace />
             },
             {
                 path: 'aboutUs',
@@ -59,5 +60,7 @@ const router = createBrowserRouter([
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-    <RouterProvider router={router}></RouterProvider>
+    <Suspense fallback={<div>...loading</div>}>
+        <RouterProvider router={router}></RouterProvider>
+    </Suspense>
 )

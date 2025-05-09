@@ -3,11 +3,11 @@ welcome to the last steps of development for this project from now on this will 
 goals to finish for mvp:
 
 addStyle 
-    inventory:false,❌
+    inventory:true,✔️
     addCar:true, ✔️
     dashboard:false,❌
-    aboutUs: false, ❌
-    home: false,❌
+    aboutUs: true, ✔️
+    home: client does not want home page.✔️
     messages:false❌
     adminDashboard/inventory:false❌
 

@@ -313,8 +313,6 @@ export const SEND_MESSAGE = gql`
         $emailAddress: String!
         $phoneNumber: String!
         $message: String!
-        $timeString: String
-        $dateString: String
     ){
         sendMessage(
             firstName: $firstName
@@ -322,17 +320,8 @@ export const SEND_MESSAGE = gql`
             emailAddress: $emailAddress
             phoneNumber: $phoneNumber
             message: $message
-            timeString: $timeString
-            dateString: $dateString
         ){
-            firstName
-            lastName
-            emailAddress
-            phoneNumber
-            message
-            dateString
-            timeString
-            
+            success
         }
     }
 `

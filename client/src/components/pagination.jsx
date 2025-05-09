@@ -21,9 +21,9 @@ const Pagination = ({ data, handlePaginatedData }) =>{
   
 
     const total = data.length;
-    const start = (pageIndex - 1) * 9;
-    const end = start + 9;
-    const totalPages = Math.ceil(total / 9);
+    const start = (pageIndex - 1) * 15;
+    const end = start + 15;
+    const totalPages = Math.ceil(total / 15);
 
     const prevPage = () => {
         if (pageIndex === 1) {
@@ -50,7 +50,7 @@ const Pagination = ({ data, handlePaginatedData }) =>{
     
     useEffect(()=>{
         const paginatedData = data.slice(start, end)
-        handlePaginatedData(paginatedData)
+        handlePaginatedData(paginatedData,pageIndex,total)
     },[start,end,data])
    
     

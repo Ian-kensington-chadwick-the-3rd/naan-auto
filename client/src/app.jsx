@@ -10,7 +10,7 @@ import { setContext } from "@apollo/client/link/context";
 import { Outlet } from 'react-router-dom';
 import Header from './components/header'
 import Footer from './components/footer'
-import videoBackground from '/white-graphic.mp4'
+import videoBackground from './assets/whitebg.mp4'
 
 const httpLink = createHttpLink({
   uri: '/graphql',
@@ -41,11 +41,12 @@ function App() {
       <div className='app'>
         <video autoPlay muted loop className='video-background' type='video/mp4'>
           <source src={videoBackground} />
-        </video> 
-          <Header />
-          <Outlet /> 
-      </div>  
-      <Footer />
+        </video>
+        <Header />
+        <Outlet />
+        <Footer />
+      </div>
+
     </ApolloProvider>
   )
 }

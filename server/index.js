@@ -10,6 +10,7 @@ const PORT = process.env.PORT || 3001;
 const app = express();
 require('dotenv').config();
 
+
 const getUserFromToken = (token) => {
     try {
         if(token === null){
@@ -35,14 +36,21 @@ const server = new ApolloServer({
 const startApolloServer = async () => {
     await server.start();
 
+
     app.use(express.urlencoded({ extended: false }));
     app.use(express.json());
+
 
     app.use('/graphql', expressMiddleware(server,{ 
         context: async ({ req }) => { 
             const token = req?.headers?.authorization || ""
             const user = getUserFromToken(token);
-            return { user };
+
+            const rawIp = req.headers['x-forwarded-for']?.split(',')[0] || 
+            req.socket?.remoteAddress || null;
+            const ip = rawIp === '::1' ? '127.0.0.1' : rawIp;
+
+            return { user , ip};
         }
     }))
 

@@ -2,13 +2,13 @@ import { Link } from "react-router-dom";
 import { useMutation } from "@apollo/client";
 import { GET_MESSAGE, SEND_MESSAGE } from "../utils/querys";
 import { useEffect, useState } from 'react'
-import phone from '/icons8-phone-50.png'
-import placemarker from '/icons8-place-marker-24.png'
-import email from '/icons8-email-50.png'
+import phone from '../assets/icons8-phone-50.png'
+import placemarker from '../assets/icons8-place-marker-24.png'
+import email from '../assets/icons8-email-50.png'
 
 const footer = () => {
-    const [sendMessage] = useMutation(SEND_MESSAGE,{
-        refetchQueries:[{query: GET_MESSAGE}]
+    const [sendMessage] = useMutation(SEND_MESSAGE, {
+        refetchQueries: [{ query: GET_MESSAGE }]
     })
     const [form, setForm] = useState({
         firstName: '',
@@ -66,10 +66,6 @@ const footer = () => {
 
 
         try {
-            const now = new Date();
-            const time = now.toLocaleTimeString();
-            const date = now.toLocaleDateString();
-
             sendMessage({
                 variables: {
                     firstName: form.firstName,
@@ -77,10 +73,6 @@ const footer = () => {
                     emailAddress: form.emailAddress,
                     message: form.message,
                     phoneNumber: form.phoneNumber,
-                    timeString: time,
-                    dateString: date
-                   
-                   
                 }
             })
         } catch (err) {
@@ -98,141 +90,149 @@ const footer = () => {
     return (
         <footer >
             <div className='footer'>
-
-                <div className="contactinfo_push">
-                    <div className="contactinfo_push">
-                        <h2 className="footer-headers">Contact Info</h2>
-                        <hr className="hr1" />
-                    </div>
-                    <div className="contact-info_text">
-                        <Link to='/inventory' className="NAAN-AUTO_font_link contactinfo_push">
-                            <span className="montserrat-underline NAAN-AUTO_font">NAAN-AUTO</span>
-                        </Link>
-                        <div className="contact-info_flex">
-                            <img src={phone} className="contact-info_icon" />
-                            <span>406-250-2747</span>
+                <div className="footer-columns">
+                    <div className="footer-column">
+                        <div className="contactinfo_push">
+                            <div className="contactinfo_push">
+                                <h2 className="footer-headers">Contact Info</h2>
+                                <hr className="hr1" />
+                            </div>
+                            <div className="contact-info_text">
+                                <Link to='/inventory' className="NAAN-AUTO_font_link contactinfo_push">
+                                    <span className="montserrat-underline NAAN-AUTO_font" onClick={()=> window.scrollTo({top:0,behavior:'smooth'})}>NAAN-AUTO</span>
+                                </Link>
+                                <div className="contact-info_flex">
+                                    <img src={phone} className="contact-info_icon" />
+                                    <span>406-250-2747</span>
+                                </div>
+                                <div className="contact-info_flex">
+                                    <img src={placemarker} className="contact-info_icon" />
+                                    <span className="contactinfo-font">8520 N Palafox St Pensicola FL, 32534</span>
+                                </div>
+                                <div className="contact-info_flex">
+                                    <img src={email} className="contact-info_icon" />
+                                    <span>naanauto@gmail.com</span>
+                                </div>
+                            </div>
                         </div>
-                        <div className="contact-info_flex">
-                            <img src={placemarker} className="contact-info_icon" />
-                            <span className="contactinfo-font">8520 N Palafox St Pensicola FL, 32534</span>
-                        </div>
-                        <div className="contact-info_flex">
-                            <img src={email} className="contact-info_icon" />
-                            <span>naanauto@gmail.com</span>
-                        </div>
                     </div>
-                </div>
-                <div >
-                    <div>
-                        <h2 className="footer-headers">Hours Of Operation</h2>
-                        <hr className="hr1" />
-                    </div>
-                    <div>
-                        <ul className="hoo-ul">
-                            <li className="hoo-li">
-                                <span>
-                                    Monday
-                                </span>
-                                <span>
-                                    09:00 AM - 5:00 PM
-                                </span>
-                            </li>
-                            <li className="hoo-li">
-                                <span>
-                                    Tuesday
-                                </span>
-                                <span>
-                                    09:00 AM - 5:00 PM
-                                </span>
-                            </li>
-                            <li className="hoo-li">
-                                <span>
-                                    Wednesday
-                                </span>
-                                <span>
-                                    09:00 AM - 5:00 PM
-                                </span>
-                            </li>
-                            <li className="hoo-li">
-                                <span>
-                                    Thursday
-                                </span>
-                                <span>
-                                    09:00 AM - 5:00 PM
-                                </span>
-                            </li>
-                            <li className="hoo-li">
-                                <span>
-                                    Friday
-                                </span>
-                                <span>
-                                    09:00 AM - 5:00 PM
-                                </span>
-                            </li>
-                            <li className="hoo-li">
-                                <span>
-                                    Saturday
-                                </span>
-                                <span>
-                                    BY APPOINTMENT ONLY
-                                </span>
-                            </li>
-                            <li className="hoo-li">
-                                <span>
-                                    Sunday
-                                </span>
-                                <span>
-                                    BY APPOINTMENT ONLY
-                                </span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div>
-                    <div>
-                        <h2 className="footer-headers">Request More Info</h2>
-                        <hr className="hr1" />
-                    </div>
-                    <form className="rmi-form" onSubmit={e => submitHandler(e)}>
-                        <div className="rmi-form_grouped_fields">
-                            <input
-                                type="text"
-                                name="firstName"
-                                placeholder="First Name"
-                                className="input-group"
-                                onChange={e => changeHandler(e)}
-                            />
-                            <input
-                                type="text"
-                                name="lastName"
-                                placeholder="Last Name"
-                                className="input-group"
-                                onChange={e => changeHandler(e)} />
-                        </div>
-                        <div className="rmi-form_grouped_fields">
-                            <input
-                                type="text"
-                                name="emailAddress"
-                                placeholder="Email Address"
-                                className="input-group"
-                                onChange={e => changeHandler(e)}
-                            />
-                            <input
-                                type="text"
-                                name="phoneNumber"
-                                placeholder="Phone Number"
-                                className="input-group"
-                                onChange={e => changeHandler(e)}
-                            />
+                    <div className="footer-column">
+                        <div>
+                            <h2 className="footer-headers">Hours Of Operation</h2>
+                            <hr className="hr1" />
                         </div>
                         <div>
-                            <textarea name='message' placeholder="Enter your message here" className="rmi-form_ask_footer " onChange={e => changeHandler(e)} 
-                            maxLength={200}/>
+                            <ul className="hoo-ul">
+                                <li className="hoo-li">
+                                    <span>
+                                        Monday
+                                    </span>
+                                    <span>
+                                        09:00 AM - 5:00 PM
+                                    </span>
+                                </li>
+                                <li className="hoo-li">
+                                    <span>
+                                        Tuesday
+                                    </span>
+                                    <span>
+                                        09:00 AM - 5:00 PM
+                                    </span>
+                                </li>
+                                <li className="hoo-li">
+                                    <span>
+                                        Wednesday
+                                    </span>
+                                    <span>
+                                        09:00 AM - 5:00 PM
+                                    </span>
+                                </li>
+                                <li className="hoo-li">
+                                    <span>
+                                        Thursday
+                                    </span>
+                                    <span>
+                                        09:00 AM - 5:00 PM
+                                    </span>
+                                </li>
+                                <li className="hoo-li">
+                                    <span>
+                                        Friday
+                                    </span>
+                                    <span>
+                                        09:00 AM - 5:00 PM
+                                    </span>
+                                </li>
+                                <li className="hoo-li">
+                                    <span>
+                                        Saturday
+                                    </span>
+                                    <span>
+                                        BY APPOINTMENT ONLY
+                                    </span>
+                                </li>
+                                <li className="hoo-li">
+                                    <span>
+                                        Sunday
+                                    </span>
+                                    <span>
+                                        BY APPOINTMENT ONLY
+                                    </span>
+                                </li>
+                            </ul>
                         </div>
-                        <button type="submit" className="rmi-form_button">SUBMIT</button>
-                    </form>
+                    </div>
+                    <div className="footer-column">
+                        <div id="footer-mobile">
+                            <div>
+                                <h2 className="footer-headers">Request More Info</h2>
+                                <hr className="hr1" />
+                            </div>
+                            <form className="rmi-form" onSubmit={e => submitHandler(e)}>
+                                <div className="rmi-form_grouped_fields">
+                                    <input
+                                        type="text"
+                                        name="firstName"
+                                        placeholder="First Name"
+                                        className="input-group"
+                                        maxLength={20}
+                                        onChange={e => changeHandler(e)}
+                                    />
+                                    <input
+                                        type="text"
+                                        name="lastName"
+                                        placeholder="Last Name"
+                                        className="input-group"
+                                        maxLength={20}
+                                        onChange={e => changeHandler(e)} />
+                                </div>
+                                <div className="rmi-form_grouped_fields">
+                                    <input
+                                        type="text"
+                                        name="emailAddress"
+                                        placeholder="Email Address"
+                                        className="input-group"
+                                        maxLength={20}
+                                        onChange={e => changeHandler(e)}
+                                    />
+                                    <input
+                                        type="text"
+                                        name="phoneNumber"
+                                        placeholder="Phone Number"
+                                        className="input-group"
+                                        maxLength={20}
+                                        onChange={e => changeHandler(e)}
+                                    />
+                                </div>
+                                <div>
+                                    <textarea name='message' placeholder="Enter your message here" className="rmi-form_ask_footer " onChange={e => changeHandler(e)}
+                                        maxLength={200} />
+                                </div>
+                                <button type="submit" className="rmi-form_button">SUBMIT</button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
-
             </div>
         </footer>
     );

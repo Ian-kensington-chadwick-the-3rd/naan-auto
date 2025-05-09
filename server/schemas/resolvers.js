@@ -5,6 +5,96 @@ const bcrypt = require("bcrypt");
 require('dotenv').config()
 const { S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectsCommand } = require('@aws-sdk/client-s3');
 const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
+const nodeMailer = require('nodemailer');
+
+let transporter = nodeMailer.createTransport({
+    service: 'gmail',
+    auth:{
+      user: process.env.GMAIL_USER,
+      pass: process.env.GMAIL_PASSWORD
+    }
+})
+
+class bucketAlgo {
+  constructor() {
+    this.ipData = new Map()
+    this.intervalDelay = 10 * 60 * 1000;
+  }
+  initIp(ip) {
+    if (this.ipData.has(ip)) return;
+    this.ipData.set(ip, {
+      tokens: 3,
+      lastActivity: Date.now()
+    });
+  }
+
+  plusToken(ip) {
+    const id = setInterval(() => {
+      const currentInfo = this.ipData.get(ip)
+
+      if (!currentInfo) {
+        clearInterval(id)
+        return;
+      }
+      if (currentInfo.tokens >= 3) {
+        clearInterval(id);
+        return;
+      }
+
+      if (this.ipData.has(ip)) {
+        this.ipData.set(ip, {
+          ...currentInfo,
+          tokens: currentInfo.tokens + 1,
+          lastActivity: Date.now()
+        })
+      } else {
+        clearInterval(id)
+      }
+    }, this.intervalDelay);
+  }
+
+  inactiveIp(ip) {
+    const maxUnActivity = 10 * 60 * 1000
+    const ipInfo = this.ipData.get(ip)
+    if (!this.ipData.has(ip)) {
+      this.initIp(ip);
+      return false;
+    }
+    const timeSinceLastActivity = Date.now() - ipInfo.lastActivity;
+    return timeSinceLastActivity > maxUnActivity
+
+  }
+
+  consumeToken(ip) {
+    if (!this.ipData.has(ip)) {
+      this.initIp(ip);
+      return;
+    }
+    const ipInfo = this.ipData.get(ip)
+
+    if (ipInfo.tokens > 0) {
+      this.ipData.set(ip, {
+        ...ipInfo,
+        tokens: ipInfo.tokens - 1,
+        lastActivity: Date.now()
+      })
+      return true;
+    }
+    return false;
+  }
+
+  cleanUpIps() {
+    for (const ips of this.ipData.keys()) {
+      if (this.inactiveIp) {
+        this.ipData.delete(ips);
+      }
+    }
+  }
+}
+
+const newBucketAlgo = new bucketAlgo();
+console.log(newBucketAlgo.plusToken())
+
 
 
 const resolvers = {
@@ -49,6 +139,25 @@ const resolvers = {
       if (minMileage && maxMileage) {
         query.mileage = { $gte: minMileage, $lte: maxMileage }
       }
+      console.log(      minYear,
+        maxYear,
+        minPrice,
+        maxPrice,
+        minMileage,
+        maxMileage,
+        make,
+        model,
+        description,
+        trans,
+        vin,
+        drivetrain,
+        exteriorColor,
+        interiorColor,
+        fuelType,
+        engineType,
+        condition,
+        titleHistory,
+        ownership,)
 
       make && make !== 'all' ? query.make = make : delete query.make;
       model && model !== 'all' ? query.model = model : delete query.model;
@@ -67,7 +176,6 @@ const resolvers = {
 
       const searchResult = await Car.find(query)
 
-      console.log(searchResult)
 
       return searchResult;
 
@@ -149,7 +257,7 @@ const resolvers = {
       const r2AccountId = process.env.R2_ACCOUNT_ID
       const r2BucketName = process.env.R2_BUCKET_NAME
       const baseUrl = ''
-      
+
       // checking if image is an array or single if not upload only one picture
       const processedImgUrls = Array.isArray(imageUrl) ?
         imageUrl.map(key => `${baseUrl}/${key}`) : [`${baseUrl}/${imageUrl}`]
@@ -379,30 +487,84 @@ const resolvers = {
         }
       }
     },
-    sendMessage: async (parent, { firstName, lastName, emailAddress, phoneNumber, message, timeString, dateString }) => {
+    sendMessage: async (parent, { firstName, lastName, emailAddress, phoneNumber, message}, context) => {
 
-      await Message.create({ firstName, lastName, emailAddress, phoneNumber, message, timeString, dateString })
+      const ip = context.ip;
+
+      if (!newBucketAlgo.ipData.has(ip)){
+        newBucketAlgo.initIp(ip);
+        console.log('init token');
+        console.log(newBucketAlgo.ipData.get(ip).tokens);
+      }
+
+      if (!firstName && !lastName && !emailAddress && !phoneNumber && !message) {
+        return 'all fields must be filled out'
+      }
+
+        const tokenconsume = newBucketAlgo.consumeToken(ip) 
+        const timeLimit = newBucketAlgo.intervalDelay
+        console.log(tokenconsume)
+        if (!tokenconsume) {
+          newBucketAlgo.plusToken(ip);
+          return {success:false};
+        }
+
+        
+      const now = new Date();
+
+      const year = now.getFullYear();
+      const month = now.getMonth() + 1;
+      const day = now.getDate();
+
+      const hours = now.getHours();
+      const minutes = now.getMinutes();
+
+      const dateString  = `${month}/${day}/${year}`;
+      const timeString = `${hours}:${minutes}`
+
+        console.log(tokenconsume, 'consume token',timeLimit);
+        console.log(newBucketAlgo.ipData.get(ip).tokens);
+      const apolloMessage = await Message.create({ firstName, lastName, emailAddress, phoneNumber, message, timeString, dateString })
+
+      const emailMessage = {
+        from: `${emailAddress}`,
+        to:"iansills04@gmail.com",
+        subject:`you have one message from ${firstName} ${lastName}`,
+        html:`
+          <h2>You have a new message</h2>
+          <p>From: ${firstName} ${lastName}</p>
+          <p>Email: ${emailAddress}</p>
+          <p>phone: ${phoneNumber}</p>
+          <h3>message:</h3>
+          <p style="font-style: itallic; color:#555;">${message}</p>
+          <p>Time: ${timeString} on ${dateString }</p>
+          <p style='font-size:5px;'>this is an automated message from naan-auto.com</p>
+          `
+      };
+
+      if(apolloMessage){
+        transporter.sendMail(emailMessage, (err,info) => {
+          if(err){
+            console.log(err)
+          } else {
+            console.log(info.response)
+          }
+        })
+      } 
 
       return {
-        firstName,
-        lastName,
-        emailAddress,
-        phoneNumber,
-        message,
-        timeString,
-        dateString
-      }
+        success: true
+      };
 
     },
-    deleteMessage: async (parent, {id}) =>{
-      try{
-      const result = await Message.findByIdAndDelete({_id: id})
-      return result
-      } catch{
-       throw new Error('failed to delete error')
+    deleteMessage: async (parent, { id }) => {
+      try {
+        const result = await Message.findByIdAndDelete({ _id: id })
+        return result
+      } catch {
+        throw new Error('failed to delete error')
       }
     }
-
   },
 };
 

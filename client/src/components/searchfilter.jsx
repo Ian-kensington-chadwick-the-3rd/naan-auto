@@ -13,15 +13,15 @@ const Searchfilter = ({ onData }) => {
     useEffect(() => {
         setfilteredData(data?.searchField || [])
     }, [data]);
-
+    console.log("this mean it work!!!",data)
 
     // if search filter has been used
 
     // ships data to parent component adminForm
     useEffect(() => {
         if (filteredData && hasActiveFilters())
+            console.log(hasActiveFilters())
             onData(filteredData, hasActiveFilters());
-
     }, [filteredData])
 
     // integer form
@@ -54,9 +54,10 @@ const Searchfilter = ({ onData }) => {
 
     const hasActiveFilters = () => {
         const hasIntFilters = Object.values(filterInt).some(val => val > 0)
-        const hasStringFilters = Object.values(filterString).some(val => val !== '' && val !== 'all')
+        const hasStringFilters = Object.values(filterString).some(val => val !== '')
         return hasIntFilters || hasStringFilters;
     }
+
 
 
     if (error) {
@@ -69,6 +70,7 @@ const Searchfilter = ({ onData }) => {
     // this hook fetches the data chosen from the form in filter and int reference the fetchdata function at the top
     useEffect(() => {
         const peanutButterSpread = { ...filterInt, ...filterString }
+        console.log(peanutButterSpread)
         fetchData({ variables: peanutButterSpread })
     }, [filterInt, filterString])
 
@@ -101,9 +103,6 @@ const Searchfilter = ({ onData }) => {
         if (name === 'make' && value === 'all') {
             setMakeFirst(false)
         }
-
-
-
     }
 
     // this hook makes sure that car.make is first chosen before they can search model
@@ -132,9 +131,12 @@ const Searchfilter = ({ onData }) => {
     const getDuplicates = (value) => {
         if (filteredData && filteredData.length === 0) return {};
 
-        const array = filteredData.map((data) => data[value]).filter(val => val !== null && val !== undefined && val !== '');
+        const array = filteredData.map((data) => {
+            const val = data[value]; 
+            return typeof val === 'string' ? val.toLowerCase() : val;
+        }).filter(val => val !== null && val !== undefined);
 
-        console.log(array)
+
         const counts = {};
         for (const element of array) {
             counts[element] = (counts[element] || 0) + 1
@@ -159,18 +161,28 @@ const Searchfilter = ({ onData }) => {
     const mileage = getMinMax('mileage');
 
 
-    const validMakeData = [...new Set(filteredData.map(data => data.make))].filter(val => val !== undefined && val !== null && val !== '')
-    const validModelData = [...new Set(filteredData.map(data => data.model))].filter(val => val !== undefined && val !== null && val !== '')
-    const validTransData = [...new Set(filteredData.map(data => data.trans))].filter(val => val !== undefined && val !== null && val !== '')
-    const validDrivetrainData = [...new Set(filteredData.map(data => data.drivetrain))].filter(val => val !== undefined && val !== null && val !== '')
-    const validExteriorColorData = [...new Set(filteredData.map(data => data.exteriorColor))].filter(val => val !== undefined && val !== null && val !== '')
-    const validInteriorColorData = [...new Set(filteredData.map(data => data.interiorColor))].filter(val => val !== undefined && val !== null && val !== '')
-    const validFuelTypeData = [...new Set(filteredData.map(data => data.fuelType))].filter(val => val !== undefined && val !== null && val !== '')
-    const validEngineTypeData = [...new Set(filteredData.map(data => data.engineType))].filter(val => val !== undefined && val !== null && val !== '')
-    const validOwnershipData = [...new Set(filteredData.map(data => data.ownership))].filter(val => val !== undefined && val !== null && val !== '')
-    const validTitleHistoryData = [...new Set(filteredData.map(data => data.titleHistory))].filter(val => val !== undefined && val !== null && val !== '')
 
-    console.log(validTransData)
+
+    const validMakeData = 
+    [...new Set(filteredData.map(data => typeof data?.make === 'string' ? data.make.toLowerCase() : ''))].filter(val => val);
+    const validModelData = 
+    [...new Set(filteredData.map(data => typeof data?.model === 'string' ? data.model.toLowerCase() : ''))].filter(val => val);
+    const validTransData = 
+    [...new Set(filteredData.map(data => typeof data?.trans === 'string' ? data.trans.toLowerCase() : ''))].filter(val => val);
+    const validDrivetrainData = 
+    [...new Set(filteredData.map(data => typeof data?.drivetrain === 'string' ? data.drivetrain.toLowerCase() : ''))].filter(val => val);
+    const validExteriorColorData = 
+    [...new Set(filteredData.map(data => typeof data?.exteriorColor === 'string' ? data.exteriorColor.toLowerCase() : ''))].filter(val => val);
+    const validInteriorColorData = 
+    [...new Set(filteredData.map(data => typeof data?.interiorColor === 'string' ? data.interiorColor.toLowerCase() : ''))].filter(val => val);
+    const validFuelTypeData = 
+    [...new Set(filteredData.map(data => typeof data?.fuelType === 'string' ? data.fuelType.toLowerCase() : ''))].filter(val => val);
+    const validEngineTypeData = 
+    [...new Set(filteredData.map(data => typeof data?.engineType === 'string' ? data.engineType.toLowerCase() : ''))].filter(val => val);
+    const validOwnershipData = 
+    [...new Set(filteredData.map(data => typeof data?.ownership === 'string' ? data.ownership.toLowerCase() : ''))].filter(val => val);
+    const validTitleHistoryData = 
+    [...new Set(filteredData.map(data => typeof data?.titleHistory === 'string' ? data.titleHistory.toLowerCase() : ''))].filter(val => val);
 
     return (
         <form className="search_filter__form" >
@@ -223,7 +235,6 @@ const Searchfilter = ({ onData }) => {
                         ) : (
                             validModelData.map((data, index) => {
                                 const key = `make-${index}`;
-                                console.log(data)
                                 return (
                                     <option key={key} value={data}>
                                         {`${data} (${modelCount[data]})`}
@@ -350,7 +361,7 @@ const Searchfilter = ({ onData }) => {
                             <option key={1} value='all'>All</option>
                             {validOwnershipData.length <= 0 ? (
                             <option key="no-options" value=''>
-                                no make search options
+                                no ownership search options
                             </option>
                         ) : (
                             validOwnershipData.map((data, index) => {

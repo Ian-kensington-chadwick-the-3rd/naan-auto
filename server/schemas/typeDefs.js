@@ -56,7 +56,7 @@ const typeDefs = `
     phoneNumber: String
     message:String
     dateString: String
-    timeString: String,
+    timeString: String
   }
 
   type Query {
@@ -136,7 +136,7 @@ const typeDefs = `
     deleteCar(carId: ID!, key:[String]!): Car
     signIn(username: String!, passwordInput:String!): AuthResponse
     createPresignedUrl(key:String!): PresignedResponse
-    sendMessage(firstName: String!, lastName:String!, emailAddress:String!, phoneNumber: String!, message:String! timeString: String dateString: String): userMessage
+    sendMessage(firstName: String!, lastName:String!, emailAddress:String!, phoneNumber: String!, message:String!, timeString: String dateString: String): Auth 
     deleteMessage(_id: String!): [userMessage]
   }
 `;

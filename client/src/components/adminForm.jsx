@@ -202,13 +202,8 @@ const AdminForm = () => {
                     {paginatedData.map((car, index) => (
                         <div key={index} className='admin-dashboard__item' >
                             <div>
-                                <SlideShow image={car.imageUrl} index={index} />
-                                <div className="admin-dashboard__imgscrollbar" >
-                                    <img src={car.imageUrl} key={index} style={{ width: '100px', height: '100px' }}
-                                        onClick={() => { showModal(); showImage(car.imageUrl); modalId(car._id); }} />
-                                </div>
+                                <SlideShow image={car.imageUrl} index={index} /> 
                             </div>
-
                             <form className="admin-dashboard___input " onSubmit={(e) => handleFormSubmit(e, car._id, car.imageUrl)}>
                                 <div>
                                     <label>Year:</label>
@@ -354,8 +349,15 @@ const AdminForm = () => {
                                     onChange={e => handleFormChange(e)}
                                     onClick={() => setSelectedCar(car)}
                                 />
-                                <button type="submit" className="rmi-form_button">Update Car</button>
-                                <button type="submit" name="delete" >Delete</button>
+                                <button className="admin-dashboard___btntop" src={car.imageUrl} key={index} 
+                                        onClick={() => { showModal(); showImage(car.imageUrl); modalId(car._id); }} >
+                                            change img index
+                                            </button>
+                                <div className="admin-dashboard___btncontainer">
+                                <button type="submit" className="admin-dashboard___btn">Update Car</button>
+                                <button type="submit" className="admin-dashboard___btn" name="delete" >Delete Car</button>
+                                </div>
+
                             </form>
                     
                         </div>

@@ -1,7 +1,7 @@
 import { Link, useParams } from "react-router-dom";
 import { FIND_CAR } from "../utils/querys";
 import { useQuery } from '@apollo/client'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import GoogleMaps from './../components/googlemaps'
 import play from '../assets/icons8-play-32.png'
 import pause from '../assets/icons8-pause-32.png'
@@ -11,15 +11,13 @@ const InvId = () => {
     const { Id } = useParams();
     const { loading, error, data } = useQuery(FIND_CAR, { variables: { id: Id } });
     const [slideIndex, setSlideIndex] = useState(0);
+
     const cars = data?.findCar || [];
 
-
-    console.log(data)
     let dataImg = data?.findCar[0]?.imageUrl;
-    
+
 
     const arrayLength = cars[0]?.imageUrl?.length;
-    console.log(arrayLength)
     const setIndexForwards = () => {
         setSlideIndex((prevIndex) =>
             prevIndex === arrayLength - 1 ? 0 : prevIndex + 1);
@@ -37,60 +35,138 @@ const InvId = () => {
     const [timerPause, setTimerPause] = useState(false)
 
     useEffect(() => {
-        if(timerPause) return;
+        if (timerPause || arrayLength <= 1) return;
+        console.log(timerPause)
+        const id = setInterval(setIndexForwards, 5000)
 
-        let id = setInterval(setIndexForwards,2000)
-
-        if(timerPause) return clearInterval(id);
         return () => clearInterval(id)
+    }, [arrayLength, timerPause]);
 
-    }, [arrayLength,timerPause]);
 
     const [stickyHeader, setStickyHeader] = useState(false);
 
     useEffect(() => {
         const onScroll = () => {
-            if (window.scrollY >= 200) {
-                setStickyHeader(true); 
+            if (window.scrollY >= 120) {
+                setStickyHeader(true);
             } else {
                 setStickyHeader(false);
             }
         }
-        window.addEventListener('resize',onscroll)
+        window.addEventListener('resize', onscroll)
         window.addEventListener('scroll', onScroll);
-        return () => {window.removeEventListener('click', onScroll); window.removeEventListener('resize',onscroll);}
+        return () => { window.removeEventListener('click', onScroll); window.removeEventListener('resize', onscroll); }
     }, [stickyHeader])
 
     const [tabletAndUnderVw, setTabletAndUnderVw] = useState(false);
 
-    useEffect(()=>{
-        const tabletUnderVw = () =>{
-            if(window.innerWidth <= 768){
+    useEffect(() => {
+        const tabletUnderVw = () => {
+            if (window.innerWidth <= 768) {
                 setTabletAndUnderVw(true);
             } else {
                 setTabletAndUnderVw(false)
             }
         }
-        window.addEventListener('scroll',tabletUnderVw);
-        window.addEventListener('resize',tabletUnderVw);
+        window.addEventListener('scroll', tabletUnderVw);
+        window.addEventListener('resize', tabletUnderVw);
 
-        return () => {window.removeEventListener('scroll',tabletUnderVw); window.removeEventListener('resize',tabletUnderVw);} 
-    },[tabletAndUnderVw])
+        return () => { window.removeEventListener('scroll', tabletUnderVw); window.removeEventListener('resize', tabletUnderVw); }
+    }, [tabletAndUnderVw])
 
     // css conditionals
     const HeaderTabletUnderVw = stickyHeader && tabletAndUnderVw ?
-    `vehicle-info-top position-fixed fixedinfo-invid` : " vehicle-info-top"
+        `vehicle-info-top position-fixed fixedinfo-invid` : " vehicle-info-top"
 
-    const HeaderTabletOverVw = stickyHeader &&  " vehicle-info-top  position-fixed"
-// if sticky header true add 
-    
+    const HeaderTabletOverVw = stickyHeader && " vehicle-info-top  position-fixed"
+    // if sticky header true add 
+
 
     const pictureSpaceTabletUnderVw = stickyHeader && tabletAndUnderVw ? "stickyheadertopspaceundertabletvw picture-container " : "   picture-container  "
 
-    const pictuerSpaceTabletOverVw = stickyHeader && !tabletAndUnderVw ? 
+    const pictuerSpaceTabletOverVw = stickyHeader && !tabletAndUnderVw ?
         "stickyheadertopspaceovertabletvw" : ''
-// add 20vh if tablet and sticky header true
-// else add
+    // add 20vh if tablet and sticky header true
+    // else add
+    const [dragging, setDragging] = useState(false);
+    const startX = useRef(0);
+
+    const pictureRef = useRef(null);
+    const outerPictureRef = useRef(null);
+    const innerPictureRef = useRef([]);
+
+    useEffect(() => {
+        innerPictureRef.current = [];
+    }, [dataImg]);
+
+    const touchStart = (e) => {
+        if (!tabletAndUnderVw) return;
+        setDragging(true);
+        startX.current = e.touches[0].pageX
+        console.log(e.touches[0].pageX)
+    };
+
+    const parentSlider = outerPictureRef.current;
+    const childSlider = pictureRef.current
+    const maxOffset = parentSlider?.offsetWidth - childSlider?.scrollWidth;
+
+    const draggingPic = (e) => {
+        if (!dragging) return;
+        const distance = startX.current - e.touches[0].pageX;
+        const clampedOffset = clamp(-distance, maxOffset, 0)
+        pictureRef.current.style.transform = `translateX(${clampedOffset}px)`
+    };
+
+    const touchEnd = () => {
+        setDragging(false);
+        pictureRef.current.style.transition = 'ease-out .1s'
+    };
+    // maxOffset    0     -distance
+    const clamp = (value, min, max) => Math.max(min, Math.min(max, value))
+
+    const timedSlider = () => {
+        if(dragging) return;
+        if (!pictureRef.current || !innerPictureRef.current || !parentSlider) return;
+        console.log('=== TIMED SLIDER START ===');
+
+        const parentContainer = parentSlider?.offsetWidth;
+        const currentImg = innerPictureRef?.current[slideIndex]
+
+        if (!currentImg) return;
+
+        currentImg.offsetHeight;
+
+        const imgOffsetLeft = currentImg.offsetLeft;
+        const imgWidth = currentImg.offsetWidth;
+
+        let targetOffset = 0;
+
+        if(imgOffsetLeft + imgWidth * 2 > parentContainer){
+            targetOffset = parentContainer - (imgOffsetLeft + imgWidth) * 2
+        } else if (imgOffsetLeft < 0) {
+            targetOffset = -imgOffsetLeft;
+        }
+
+        const clampedOffset = clamp(targetOffset, maxOffset, 0);
+
+        console.log(clampedOffset)
+        if (clampedOffset !== null && clampedOffset !== undefined) {
+            pictureRef.current.style.transform = `translateX(${clampedOffset}px)`
+        }
+    }
+
+    useEffect(() => {
+        if (slideIndex == null) return;
+        console.log(slideIndex)
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                timedSlider();
+            });
+        });
+
+    }, [slideIndex]);
+
+
 
 
     if (loading) return <p>Loading...</p>;
@@ -100,7 +176,7 @@ const InvId = () => {
     return (
         <section>
             <div className="car-details-container">
-                <div className={ `${HeaderTabletUnderVw}  ${HeaderTabletOverVw}`} >
+                <div className={`${HeaderTabletUnderVw}  ${HeaderTabletOverVw}`} >
                     {cars.map((car) => (
                         [<div className="info-top-left"><p >{car.year} {car.make} {car.model} </p> </div>,
                         <div className="info-top-right"><p> ${car.price}</p></div>]
@@ -108,7 +184,7 @@ const InvId = () => {
                 </div>
                 <section className="center-dup">
                     <section>
-                        <div className={`${pictureSpaceTabletUnderVw} ${pictuerSpaceTabletOverVw }`}>
+                        <div className={`${pictureSpaceTabletUnderVw} ${pictuerSpaceTabletOverVw}`}>
                             <div className="slideshow-container">
                                 <div className="slide-wrapper" style={{ transform: `translateX(-${slideIndex * 100}%)` }}>
                                     {dataImg?.map((src, index) => (
@@ -117,19 +193,31 @@ const InvId = () => {
                                 </div>
                                 <button className="slider-button left" onClick={() => setIndexBackwards()}>&#60;</button>
                                 <button className="slider-button right" onClick={() => setIndexForwards()}>&#62;</button>
-                                { !timerPause ?
-                                <img src={pause} className="pause-btn" onClick={() => setTimerPause(true)}></img>
-                                :
-                                <img src={play} className="pause-btn" onClick={()=> setTimerPause(false)}></img>
+                                {!timerPause ?
+                                    <img src={pause} className="pause-btn" onClick={() => setTimerPause(true)}></img>
+                                    :
+                                    <img src={play} className="pause-btn" onClick={() => setTimerPause(false)}></img>
                                 }
                             </div>
-                            <div className="picture-list">
-                                {dataImg?.map((src, index) => (
-                                    <img key={index} src={src} alt={`Car ${index}`} width={'103px'} height={'85px'} className="mini-picture-spacing" onClick={() => jumpToIndex(index)} />
-                                ))}
+                            <div className="picture-list " ref={outerPictureRef} >
+                                <div className="img-wrapper" ref={pictureRef}>
+                                    {dataImg?.map((src, index) => (
+                                        <img key={index}
+                                            src={src}
+                                            alt={`Car ${index}`}
+                                            width={'103px'}
+                                            height={'85px'}
+                                            className={index === slideIndex ? "active  mini-picture-spacing" : "mini-picture-spacing"}
+                                            onClick={() => jumpToIndex(index)}
+                                            onTouchStart={touchStart}
+                                            onTouchMove={draggingPic}
+                                            onTouchEnd={touchEnd}
+                                            ref={el => innerPictureRef.current[index] = el} 
+                                        />
+                                    ))}
+                                </div>
                             </div>
                         </div>
-
                         {cars.map((car, index) => (
                             <section key={index} className="car-info">
 

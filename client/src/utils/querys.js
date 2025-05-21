@@ -237,8 +237,8 @@ query searchField
 }`
 
 export const AUTH_CHECK = gql`
-query AuthCheck($Key: String ){
-        AuthCheck(Key: $Key){
+query AuthCheck{
+        AuthCheck{
             success
         }
 }`

@@ -4,6 +4,19 @@ html {
     padding: 0;
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
     line-height: 1.5rem;
+    scrollbar-gutter: stable;
+
+}
+
+:root{
+    --maincolor: #e95918;
+    --subcolor: rgba(182, 92, 76, 0.585);
+    --bluecolor: blue;
+}
+
+
+.maincolor{
+    color:var(--maincolor)
 }
 
 .parkinsans {
@@ -28,21 +41,18 @@ html {
 }
 
 ::-webkit-scrollbar-thumb {
-    background: orange;
+    background: var(--maincolor);
     border-radius: 5px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: rgb(199, 131, 20);
+    background: var(--subcolor);
 }
 
-/* background-color: #f2f0f0; */
 
 /* background video */
 .app {
-    width: 100vw;
-    min-width:100vw;
-    max-width: 100vw;
+    width: 100%;
     box-sizing: border-box;
     position: relative;
 }
@@ -68,7 +78,6 @@ html {
     position: relative;
     z-index: 1;
 }
-
 
 .flex1 {
     flex: 1;
@@ -111,14 +120,13 @@ html {
 /* header  */
 .header {
     background-color: rgb(255, 255, 255);
-    height: 200px;
+    height: 100%;
     min-width: 100%;
     width: 100%;
-    overflow: hidden;
 }
 
 .header1 {
-    background-color: #e98918;
+    background-color: #e95918;
     color: white;
     display: flex;
     justify-content: space-around;
@@ -136,12 +144,15 @@ html {
     left:0;
     right:0;
     background:white;
-    border-bottom:2px solid orange ;
+    border-bottom:2px solid var(--maincolor) ;
     z-index:5;
     height: 80px;
+    will-change: transform;
+    backface-visibility: hidden;
 }
 .fixedheader img{
-    height:100%
+    height:100%;
+    padding:0;
 }
 
 .footer {
@@ -152,6 +163,7 @@ html {
     display: flex;
     justify-content: space-evenly;
     color: white;
+    border-bottom: 3px solid var(--maincolor);
 }
 
 .footer-width {
@@ -205,8 +217,8 @@ html {
     height: 55px;
     width: 100%;
     color: white;
-    background-color: orange;
-    border: 2px solid orange;
+    background-color: var(--maincolor);
+    border: 2px solid var(--maincolor);
 }
 
 .rmi-form_button:hover {
@@ -244,7 +256,7 @@ html {
 }
 
 .NAAN-AUTO_font:hover {
-    color: orange
+    color: var(--maincolor)
 }
 
 .NAAN-AUTO_font_link {
@@ -252,7 +264,7 @@ html {
 }
 
 .hr1 {
-    background-color: orange;
+    background-color: var(--maincolor);
     margin: 0;
     width: 40px;
     height: 2px;
@@ -285,6 +297,16 @@ html {
     text-align: start;
 }
 
+.bottom-border-container{
+    width:100%;
+    height:150px;
+    background-color: black;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
+
 
 
 
@@ -293,8 +315,9 @@ html {
 }
 
 .carlogo {
-    height: 145px;
+    height: 130px;
     width: 100%;
+    padding:10px;
     border-radius: 15px;
 }
 
@@ -302,6 +325,19 @@ html {
     line-height: 1.5rem;
     font-size: 24px;
     color: rgb(255, 255, 255);
+}
+
+.address-and-phone:hover{
+    color:black;
+}
+
+.fabook{
+    color:white;
+    text-decoration: none;
+}
+
+.fabook:hover{
+    color:black;
 }
 
 .newsreader {
@@ -317,16 +353,16 @@ html {
     align-items: center;
     padding-bottom: 40px;
     padding-top: 40px;
-    font-size: 17px;
+    font-size: 19px;
 }
-
-
 
 .link {
     margin-right: 20px;
     text-decoration: none;
     color: #000000;
-
+    background-color: #0000000a;
+    padding:10px;
+    border-radius: 19px;
 }
 
 .svg {
@@ -362,11 +398,15 @@ html {
     flex-direction: column;
 }
 
-.orangebottom {}
+.orangebottom {
+    border-bottom: 2px solid var(--maincolor);
+    padding-bottom: 50px;
+    color: var(--maincolor);
+}
 
 
 p.orangebottom:hover {
-    border-bottom: 2px orange;
+    border-bottom: 2px var(--maincolor);
 }
 
 .mobiletab{
@@ -382,7 +422,7 @@ p.orangebottom:hover {
     position: absolute;
     width:40px;
     height:7px;
-    background-color: orange;
+    background-color:var(--maincolor);
     border-radius: 10px;
     margin-top: 20px;
 }
@@ -436,7 +476,13 @@ p.orangebottom:hover {
 }
 
 .navtab li{
-    font-size: 20px;
+    font-size: 30px;
+    line-height: 45px;
+}
+
+.urltrue{
+    color:var(--maincolor);
+    border-bottom: 2.5px solid var(--maincolor);
 }
 
 
@@ -538,7 +584,7 @@ p.orangebottom:hover {
 }
 
 .drag-btn-active {
-    background-color: orange;
+    background-color: var(--maincolor);
 }
 
 
@@ -558,7 +604,7 @@ p.orangebottom:hover {
 }
 
 .car-inv-bttm-border {
-    border-bottom: 2px solid orange;
+    border-bottom: 2px solid var(--maincolor);
     padding-bottom: 5px;
     width: 25px
 }
@@ -572,12 +618,14 @@ p.orangebottom:hover {
     border-color: #fffffffd;
 }
 
+
+
 .stickyheadertopspaceundertabletvw{
-    margin-top:30vh;
+    margin-top:37vh;
 }
 
 .stickyheadertopspaceovertabletvw{
-    margin-top:25vh;
+    margin-top:15vh;
 }
 
 .center-container {
@@ -588,12 +636,25 @@ p.orangebottom:hover {
 .picture-list {
     background-color: #f4f4f4;
     text-align: center;
+    transition: transform 0.4s ease-in-out;
+    will-change: transform;
+}
+
+.img-wrapper{
+    width: max-content;
 }
 
 .mini-picture-spacing {
     margin: 8px;
     cursor: pointer;
 }
+
+.mini-picture-spacing.active{
+    border: 1px solid var(--maincolor);
+    box-shadow: 5px 5px 10px
+}
+
+
 
 .car-info {
     background-color: #fffffffd;
@@ -621,10 +682,12 @@ p.orangebottom:hover {
 }
 
 .info-bg {
-    background-image: linear-gradient(to right, rgba(244, 228, 197, 0.585), rgba(242, 195, 109, 0.754));
+    background-image: linear-gradient(to right, rgb(235, 222, 222), var(--maincolor));
     border-radius: 10px;
     height: 100px;
-    width: 150px
+    width: 150px;
+    box-sizing: border-box;
+    word-wrap: break-word;
 }
 
 .info-bg:hover {
@@ -645,10 +708,11 @@ p.orangebottom:hover {
 
 
 .title-bg {
-    background-color: rgb(255, 166, 0);
+    background-color: var(--maincolor);
     width: 60%;
     border-radius: 10px 3px 3px 3px;
-    padding: 5px 10px 0 5px
+    padding: 5px 10px 0 5px;
+    color:white;
 }
 
 
@@ -684,7 +748,7 @@ p.orangebottom:hover {
     margin: 10px;
     font-size: 16px;
     border-radius: 9px;
-    background: -webkit-linear-gradient(rgba(244, 228, 197, 0.585),orange);
+    background: -webkit-linear-gradient(var(--subcolor),var(--maincolor));
     border: none;
     color: white
 }
@@ -696,7 +760,7 @@ p.orangebottom:hover {
 
 .btn-list button:hover {
     background-color: #000000;
-    border-color: orange;
+    border-color: var(--maincolor);
     color: white;
 }
 
@@ -757,7 +821,7 @@ p.orangebottom:hover {
     border-bottom: 2px black solid;
     margin-bottom: 15px;
     display: block;
-    color: orange;
+    color: var(--maincolor);
     text-shadow: 1px 1px black;
 }
 
@@ -779,13 +843,12 @@ p.orangebottom:hover {
 
 .naanautowidget{
     font-size: 50px;
-    
 }
 
 .naanautowidgetphone{
     font-size: 35px;
     padding:10px;
-    background: -webkit-linear-gradient(rgba(244, 228, 197, 0.585),orange);
+    background: -webkit-linear-gradient(rgba(244, 228, 197, 0.585),var(--maincolor));
     border-radius: 10px;
 }
 
@@ -828,7 +891,7 @@ p.orangebottom:hover {
     width: 340px;
     background: white;
     overflow: hidden;
-    padding-bottom: 10px;
+    padding-bottom: 30px;
 }
 
 .card-img {
@@ -892,6 +955,7 @@ p.orangebottom:hover {
 .log-in_container {
     display: grid;
     justify-content: center;
+   
     margin-top: 200px;
     margin-bottom: 200px;
 }
@@ -900,6 +964,7 @@ p.orangebottom:hover {
     display: flex;
     flex-direction: column;
     gap: 20px;
+    width: 500px;
     background-color: white;
     border: 20px solid white;
     border-radius: 20px;
@@ -907,7 +972,7 @@ p.orangebottom:hover {
 
 .log-in_input {
     height: 20px;
-    width: 500px;
+    width: 100%;
     border: 1px solid #ced4da;
 }
 
@@ -915,8 +980,8 @@ p.orangebottom:hover {
     height: 55px;
     width: 100%;
     color: white;
-    background-color: orange;
-    border: 2px solid orange;
+    background-color: var(--maincolor);
+    border: 2px solid var(--maincolor);
 }
 
 .log-in_button:hover {
@@ -1027,14 +1092,14 @@ p.orangebottom:hover {
 
 .contact-us_form_button {
     height: 60px;
-    border: 2px solid orange;
-    background-color: orange;
+    border: 2px solid var(--maincolor);
+    background-color: var(--maincolor);
     border-radius: 20px;
 }
 
 .contact-us_form_button:hover {
-    background-color: black;
-    color: white
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0)
 }
 
 .contact-us_tops_section {
@@ -1048,7 +1113,7 @@ p.orangebottom:hover {
 }
 
 .hr2 {
-    border: 1px solid orange;
+    border: 1px solid var(--maincolor);
 }
 
 
@@ -1134,6 +1199,7 @@ p.orangebottom:hover {
     height: 30px;
     border-radius: 7px;
     border: 1px solid #99a5b1;
+    width:100%;
 }
 
 .search-filter__div {}
@@ -1154,6 +1220,7 @@ p.orangebottom:hover {
 .admin-dashboard___input {
     display: flex;
     flex-direction: column;
+    background-color: white;
     width: 100%;
 }
 
@@ -1233,6 +1300,32 @@ p.orangebottom:hover {
 
 }
 
+.admin-dashboard___btncontainer{
+    display:flex;
+    gap:5px;
+    margin:10px;
+}
+
+.admin-dashboard___btn{
+    all:unset;
+    width:100%;
+    height: 40px;
+    background-color: var(--maincolor);
+    text-align: center;
+    border-radius: 10px;
+}
+
+.admin-dashboard___btntop{
+    all:unset;
+    text-align: center;
+    margin: 10px 10px 0 10px;
+    background-color: var(--maincolor);
+    border-radius: 10px;
+}
+
+.admin-dashboard___btn:hover ,.admin-dashboard___btntop:hover{
+    background-color: #bf8f59;
+}
 
 .slide-wrapper {
     display: flex;
@@ -1315,7 +1408,7 @@ p.orangebottom:hover {
 }
 
 .addcar__description {
-    border: orange solid 1px;
+    border: var(--maincolor) solid 1px;
     border-radius: 6px;
     width: 400px;
     height: 400px;
@@ -1331,7 +1424,7 @@ p.orangebottom:hover {
 }
 
 .addcar__desc-div button:hover {
-    background-color: orange;
+    background-color: var(--maincolor);
 }
 
 .addcar__desc-div textarea {
@@ -1356,7 +1449,7 @@ input[type="file"] {
 }
 
 input[type="file"]:hover {
-    border-color: orange;
+    border-color: var(--maincolor);
 }
 
 .loading {
@@ -1408,7 +1501,7 @@ input[type="file"]:focus {
 }
 
 .custom-field input:focus {
-    border: orange;
+    border: var(--maincolor);
 }
 
 .custom-field .placeholder {
@@ -1433,7 +1526,7 @@ input[type="file"]:focus {
 }
 
 .custom-field input:focus {
-    border-color: orange;
+    border-color:var(--maincolor);
 }
 
 .custom-field .placeholder-up {
@@ -1456,12 +1549,11 @@ input[type="file"]:focus {
     height: 300px;
     background-color: rgb(255, 255, 255);
     border-radius: 10px;
-    border: orange solid 1px;
+    border: var(--maincolor) solid 1px;
 }
 
 .mini-modal .message {
     position: absolute;
-    word-break: break-all;
     top: 0;
     padding: 20px;
 }
@@ -1475,9 +1567,8 @@ input[type="file"]:focus {
 }
 
 .mini-modal .button:hover {
-    background-color: orange
+    background-color: var(--maincolor)
 }
-
 /* mini modal end */
 
 /* pagination button start */
@@ -1497,12 +1588,12 @@ input[type="file"]:focus {
 }
 
 .pagination__btn:hover {
-    background-color: rgb(255, 167, 4);
+    background-color: var(--maincolor);
     border: 1px solid rgb(0, 0, 0);
 }
 
 .active-btn {
-    background-color: orange;
+    background-color: var(--maincolor);
 }
 
 /* pagination button end */
@@ -1538,7 +1629,7 @@ input[type="file"]:focus {
 
 .inventory-child-container_R button {
     all: unset;
-    background-color: orange;
+    background-color: var(--maincolor);
     width: 100%;
     border-radius: 5px;
     height: 50px;
@@ -1552,7 +1643,7 @@ input[type="file"]:focus {
 .inventory-child-container_R button:hover {
     background: rgb(255, 255, 255);
     color: rgb(0, 0, 0);
-    border: 2px solid orange;
+    border: 2px solid var(--maincolor);
 }
 
 .inventory-child-container_R a {
@@ -1604,8 +1695,8 @@ input[type="file"]:focus {
     gap: 5px;
 }
 
-.about-us-testimonial-container img:hover {
-    border: solid orange 1px
+.about-us-testimonial-container:hover .pfp {
+    border: solid var(--maincolor) 2px;
 }
 
 
@@ -1630,7 +1721,7 @@ input[type="file"]:focus {
 }
 
 .nostyle:hover {
-    color: orange;
+    color: var(--maincolor);
 }
 
 .pop-up-message {
@@ -1755,6 +1846,9 @@ input[type="file"]:focus {
     .link-container{
         padding: 0;
     }
+    .link{
+        line-height: 70px;
+    }
 }
 
 @media screen and (max-width: 770px) {
@@ -1829,13 +1923,15 @@ input[type="file"]:focus {
 
 @media screen and (max-width:683px) {
     .carlogo {
-        height: 120px
+        height: 100px;
+        width:267px;
     }
 }
 
 @media screen and (max-width:353px) {
     .carlogo {
-        height: 100px
+        height: 100px;
+        width:230px
     }
 
     .dealer-information {
@@ -1982,6 +2078,8 @@ input[type="file"]:focus {
     }
 }
 
+
+
 @media  screen and (max-width:426px) {
     .picture-container{
         border-width: 3px;
@@ -1990,17 +2088,45 @@ input[type="file"]:focus {
     .vehicle-info-top{
         font-size: 26px;
     }
+    .log-in_form{
+        width:300px;
+    }
+    .mini-modal .container{
+        width:300px;
+    }
+    .picture-list{
+        overflow-y: hidden;
+        overflow-x: hidden;
+        max-height: 100px;
+        text-align: unset;
+    }
+    .img-wrapper{
+        display: flex;
+    }
+}
+
+@media screen and (min-width:426px) {
+    .img-wrapper{
+        width:100%
+    }
+}
+
+
+@media screen and (max-width:375px){
     .address-and-phone{
         font-size: 20px;
     }
 }
 
-
 @media screen and (max-width:320px) {
     .pop-up-message span {
         font-size: 23px;
     }
+    .address-and-phone{
+        font-size: 15px;
+    }
 }
+
 
 
 

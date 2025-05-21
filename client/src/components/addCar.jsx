@@ -7,12 +7,13 @@ import { v4 as uuidv4 } from 'uuid';
 import { useEffect, useState } from 'react'
 import AdminForm from "./adminForm";
 import Loading from "./loading";
+import Modal from "./model";
 
 const AddCarData = () => {
-    const [addCar] = useMutation(ADD_CAR,{
+    const [addCar] = useMutation(ADD_CAR, {
         refetchQueries: [
-            {query: GET_CARS},
-            {query: SEARCH_FIELD}
+            { query: GET_CARS },
+            { query: SEARCH_FIELD }
         ]
     });
     const [createPresignedUrl] = useMutation(PRESIGNED_URL);
@@ -20,7 +21,7 @@ const AddCarData = () => {
     if (addCar.error) return <p>Error: {addCar.error.message}</p>;
 
     const [loadingCss, setLoadingCss] = useState(false);
-
+    const [miniModal, setMiniModal] = useState(false)
     // if validation 
     const [validation, setValidation] = useState({})
     // sets our form
@@ -79,7 +80,11 @@ const AddCarData = () => {
         }))
     }
 
-    const [miniModal, setMiniModal] = useState(false)
+
+    const capitalizeFirstLetter = (string) =>{
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+
     // parses form input for backend
     const handleInputChange = (e) => {
         e.preventDefault()
@@ -97,21 +102,22 @@ const AddCarData = () => {
         } else {
             setForm((prev) => ({
                 ...prev,
-                [name]: value
+                [name]: capitalizeFirstLetter(value)
             }));
         }
     }
     const [pictureInvalid, setPictureInvalid] = useState([]);
     const [carUploadSuccess, setCarUploadSuccess] = useState(false);
     async function formHandler(e) {
-        e.preventDefault();
-        if(!form.imageUrl || form.imageUrl.length === 0){
-            setValidation({imageUrl: 'Please upload at least on image'})
-            return;
-        }
 
         setValidation({});
         const missingFields = {};
+
+        e.preventDefault();
+        if (!form.imageUrl || form.imageUrl.length === 0) {
+            setMiniModal(true);
+            missingFields.img = 'please select at least one image'
+        }
 
         if (!form.year) {
             missingFields.year = 'please input value for year';
@@ -150,82 +156,84 @@ const AddCarData = () => {
             setValidation(missingFields);
             return;
         }
-        
+
         setLoadingCss(true);
 
-     
-        try{
 
-        
-        let invalidImages = 0;
-        let processedCount = 0;
-        await new Promise((resolve,reject) =>{
+        try {
 
-       
-        const files =  Array.from(form.imageUrl);
 
-        files.forEach((file, index) => {
-        const reader = new FileReader();
-        const img = new Image();
-        console.log(index)
-        reader.onload = (event) => {
-            img.src = event.target.result;
-        };
-    
-        img.onload = () => {
-        const ratio = img.width / img.height;
-        const expected = 4 / 3
-        const tolerance = 0.01
-        
-        console.log(`Image dimensions: ${img.width}px × ${img.height}px`);     
-        const notFourThreeRatio = img.width / img.height
+            let invalidImages = 0;
+            let processedCount = 0;
+            await new Promise((resolve, reject) => {
 
-        if(Math.abs(ratio - expected) > tolerance) {
-            setPictureInvalid((prev) => [...prev, form.imageUrl[index].name]);
+
+                const files = Array.from(form.imageUrl);
+
+                files.forEach((file, index) => {
+                    const reader = new FileReader();
+                    const img = new Image();
+                    console.log(index)
+                    reader.onload = (event) => {
+                        img.src = event.target.result;
+                    };
+
+                    img.onload = () => {
+                        const ratio = img.width / img.height;
+                        const expected = 4 / 3
+                        const tolerance = 0.01
+
+                        console.log(`Image dimensions: ${img.width}px × ${img.height}px`);
+                        const notFourThreeRatio = img.width / img.height
+
+                        if (Math.abs(ratio - expected) > tolerance) {
+                            setPictureInvalid((prev) => [...prev, form.imageUrl[index].name]);
+                            setMiniModal(true);
+                            setCarUploadSuccess(false);
+                            setLoadingCss(false);
+                            invalidImages++;
+                            console.log('img does not equal 4:3 ratio', notFourThreeRatio, form.imageUrl[index].name);
+                        }
+                        processedCount++;
+
+                        if (processedCount === files.length) {
+                            if (invalidImages > 0) {
+                                setMiniModal(true);
+                                setCarUploadSuccess(false);
+                                setLoadingCss(false);
+                                reject(new Error('Some images have invalid aspect ratios'));
+                            } else {
+                                resolve();
+                            }
+                        }
+                    };
+                    reader.onerror = (error) => {
+                        console.error(error);
+                        processedCount++;
+                        if (processedCount === files.length) {
+                            if (invalidImages > 0) {
+                                setMiniModal(true);
+                                setCarUploadSuccess(false);
+                                setLoadingCss(false);
+                                reject(new Error('Some images have invalid aspect ratios'));
+                            } else {
+                                resolve();
+                            }
+                        }
+                    }
+                    reader.readAsDataURL(file);
+                })
+            });
+            if (invalidImages > 0) return;
+        } catch (err) {
+            console.log(err)
             setMiniModal(true);
             setCarUploadSuccess(false);
             setLoadingCss(false);
-            invalidImages++;
-            console.log('img does not equal 4:3 ratio', notFourThreeRatio, form.imageUrl[index].name);
-        } 
-            processedCount++;
-
-            if(processedCount === files.length){
-                if(invalidImages > 0){
-                    setMiniModal(true);
-                    setCarUploadSuccess(false);
-                    setLoadingCss(false);
-                    reject(new Error('Some images have invalid aspect ratios'));
-                }else {
-                resolve();
-            }
-            } 
-        };
-        reader.onerror = (error) =>{
-            console.error(error);
-            processedCount++;
-            if(processedCount === files.length){
-                if(invalidImages > 0){
-                    setMiniModal(true);
-                    setCarUploadSuccess(false);
-                    setLoadingCss(false);
-                    reject(new Error('Some images have invalid aspect ratios'));
-                } else {
-                    resolve();
-            }
-            }
         }
-        
-        reader.readAsDataURL(file);
-    })
-});
-} catch (err){
-    console.log(err)
-}
 
         const picture = form.imageUrl;
         var uploadImageUrl = [];
-        
         try {
             for (const img of picture) {
                 console.log('reached img of pic')
@@ -320,32 +328,44 @@ const AddCarData = () => {
         }
 
     }
-
     useEffect(()=>{
-        if(carUploadSuccess === false){
+        console.log(Object.keys(validation))
+        if(Object.keys(validation).length > 0){
+            window.scrollTo({top:0, behavior:'smooth'})
+        }
+    },[validation])
+
+    useEffect(() => {
+        if (carUploadSuccess === false) {
             console.log(carUploadSuccess)
             setLoadingCss(false)
         }
-    },[carUploadSuccess])
+    }, [carUploadSuccess])
 
     // we get event.target.name if useState name === form name 
-
+    console.log(pictureInvalid)
     return (
         <div className="addcar__parent-container">
-            {miniModal && <div className="mini-modal"> 
+            {miniModal && <div className="mini-modal">
                 <div className="container">
                     <div className="message">
-                        {pictureInvalid === true && <span>
-                        img<br/> 
-                        <ul style={{color:'red'}}>{pictureInvalid}</ul> does not equal 4:3 ratio.
-                        <br/> 
-                        ratio is width(px) / height(px). === 1.333 in order for the website to display a clean picture with no gaps or stretching the ratio must equal 4:3 this also helps for mobile responsiveness.
-                        
-                        </span>}
-                        <br/>
-                        {carUploadSuccess === true ? <span style={{color:'green'}}>car upload success!✔️</span> : <span style={{color:'red'}}>car upload falure!❌</span>}
-                        </div>
-                    <button type="button" className="button" onClick={() => {setMiniModal(false); setCarUploadSuccess(false);setPictureInvalid([])}}>X</button>
+                        {pictureInvalid.length > 0 ? <span>
+                            img
+                            <ul style={{ color: 'red' }}>{pictureInvalid.map((data, i) => { return <li key={i}>{data}</li> })}</ul>
+                            does not equal 4:3 ratio.
+                            <br />
+                            ratio is width(px) / height(px). === 1.333 in order for the website to display a clean picture with no gaps or stretching the ratio must equal 4:3 this also helps for mobile responsiveness.
+                        </span> : <span>{validation.img}</span>}
+                        <br />
+                        {carUploadSuccess ?
+                            <span style={{ color: 'green' }}>car upload success!✔️</span> :
+                            <span style={{ color: 'red' }}>car upload falure!❌</span>
+                        }
+                    </div>
+                    <button type="button" className="button" onClick={() => {
+                        setMiniModal(false);
+                        setCarUploadSuccess(false); setPictureInvalid([])
+                    }}>X</button>
                 </div>
             </div>}
             {loadingCss && <Loading className={'loading'} />}
@@ -363,7 +383,7 @@ const AddCarData = () => {
 
                     <label className="custom-field addcar__grid-col-start" >
                         <input
-                            type="text"
+                            type="number"
                             name="year"
                             value={form.year}
                             onChange={handleInputChange}
@@ -371,7 +391,7 @@ const AddCarData = () => {
                             onFocus={() => handleFocus('year')}
                             onBlur={() => handleBlur('year')} />
                         <span className={`placeholder ${focus.year || form.year || validation.year ? 'placeholder-up' : ''}`}
-                        style={validation.year && { color: 'red' }}>
+                            style={validation.year && { color: 'red' }}>
                             {!validation.year ? 'Year!' : validation.year}
                         </span>
                     </label>
@@ -434,7 +454,7 @@ const AddCarData = () => {
                     </label>
 
                     <label className="custom-field">
-                        <input type="text"
+                        <input type="number"
                             name="price"
                             value={form.price}
                             onChange={handleInputChange}
@@ -442,7 +462,7 @@ const AddCarData = () => {
                             onFocus={() => handleFocus('price')}
                             onBlur={() => handleBlur('price')} />
                         <span className={`placeholder ${focus.price || form.price || validation.price ? 'placeholder-up' : ''}`}
-                        style={validation.price && { color: 'red' }}>
+                            style={validation.price && { color: 'red' }}>
                             {!validation.price ? 'Price!' : validation.price}
                         </span>
                     </label>

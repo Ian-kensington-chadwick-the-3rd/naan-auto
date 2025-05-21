@@ -356,24 +356,6 @@ const Searchfilter = ({ onData }) => {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                     <h2>Vehicle History</h2>
                     <div className="search_filter__group ">
-                        <select className='search-filter__style' name='ownership' value={filterString.ownership === undefined ? '' : filterString.ownership} style={{ width: '100%', height: '30px' }}>
-                            <option key={0} value='' disabled hidden>Ownership</option>
-                            <option key={1} value='all'>All</option>
-                            {validOwnershipData.length <= 0 ? (
-                            <option key="no-options" value=''>
-                                no ownership search options
-                            </option>
-                        ) : (
-                            validOwnershipData.map((data, index) => {
-                                const key = `make-${index}`;
-                                return (
-                                    <option key={key} value={data}>
-                                        {`${data} (${ownershipCount[data]})`}
-                                    </option>
-                                );
-                            })
-                        )}
-                        </select>
                         <input type="text" name="vin" placeholder="vin" className='search-filter__style' />
                     </div>
                     <div >
@@ -396,7 +378,25 @@ const Searchfilter = ({ onData }) => {
                         )}
                         </select>
                     </div>
-
+                    <select className='search-filter__style' name='ownership' value={filterString.ownership === undefined ? '' : filterString.ownership} style={{ width: '100%', height: '30px' }}>
+                        
+                            <option key={0} value='' disabled hidden>Ownership</option>
+                            <option key={1} value='all'>All</option>
+                            {validOwnershipData.length <= 0 ? (
+                            <option key="no-options" value=''>
+                                no ownership search options
+                            </option>
+                        ) : (
+                            validOwnershipData.map((data, index) => {
+                                const key = `make-${index}`;
+                                return (
+                                    <option key={key} value={data}>
+                                        {`${data} (${ownershipCount[data]})`}
+                                    </option>
+                                );
+                            })
+                        )}
+                        </select>
                 </div>
             </div>
         </form>

@@ -144,10 +144,10 @@ const contactUs = () => {
                         </div>
                         <div>
                            <p className="contact-us_description_font parkinsans">
-                              We’re here to assist you with all your automotive needs!
+                              Looking for answers or just excited to start your car-buying journey?
                            </p>
                            <p className="contact-us_description_font parkinsans">
-                              Whether you’re curious about our inventory, need info on financing, or just want to talk about your dream car — fill out the form, and our friendly team at Naan Auto of Pensacola will be happy to assist you!
+                           We're here to make the process easy and enjoyable. From finding the perfect vehicle to exploring financing solutions, at Naan-auto we are not just a team we are a family. Simply fill out the form, and we’ll be in touch to help you get started!
                            </p>
 
                         </div>
@@ -231,14 +231,14 @@ const contactUs = () => {
                            <h3>Phone Number</h3>
                            <div>
                               <img src={ringingGif} style={{ width: '30px', height: '30px', paddingRight: '5px' }} alt="phone ringing gif" />
-                              <span style={{ color: 'orange' }}>406-250-2747</span>
+                              <span className="maincolor">850-861-5000</span>
                            </div>
                         </div>
                         <div className="contact-us_company_info contact-us_font">
                            <h3>Address</h3>
                            <div style={{ display: 'flex' }}>
                               <img src={mapMarker} style={{ width: '30px', height: '30px', paddingRight: '5px' }} alt="map marker gif" />
-                              <span style={{ color: 'orange' }} >8520 N Palafox St Pensicola FL, 32534</span>
+                              <span className="maincolor" >8520 N Palafox St Pensicola FL, 32534</span>
                            </div>
                         </div>
                         <div>

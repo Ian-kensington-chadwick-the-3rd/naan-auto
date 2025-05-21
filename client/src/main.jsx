@@ -11,6 +11,7 @@ import ContactUs from './pages/contactUs.jsx';
 import AboutUs from './pages/AboutUs.jsx';
 import Login from "./pages/Login.jsx";
 import ProtectedRoute from "./components/protectedRoute";
+import Extra from './pages/extra'
 const Dashboard = lazy(()=> import('./pages/adminDashboard.jsx'))
 
 const router = createBrowserRouter([
@@ -42,6 +43,10 @@ const router = createBrowserRouter([
             {
                 path: 'contactUs',
                 element: <ContactUs/>
+            },
+            {
+                path: 'extra',
+                element: <Extra/>
             },
             {
                 path:'protectedRoute',

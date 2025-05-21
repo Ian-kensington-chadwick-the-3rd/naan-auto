@@ -7,6 +7,7 @@ const { S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectsCommand } = r
 const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
 const nodeMailer = require('nodemailer');
 
+
 let transporter = nodeMailer.createTransport({
     service: 'gmail',
     auth:{
@@ -184,14 +185,13 @@ const resolvers = {
     Login: async () => {
       return Password.find()
     },
-    AuthCheck: async (parent, { Key }) => {
-      try {
-        if (!Key) {
+    AuthCheck: async (parent, ___ , context ) => {
+       console.log("user",context.user)
+      try { 
+       
+        if (!context.user) {
           throw new Error('token is not provided')
         }
-        const jwtSecretKey = process.env.JWT_SECRET_KEY
-
-        jwt.verify(Key, jwtSecretKey)
 
         return { success: true }
 
@@ -243,12 +243,12 @@ const resolvers = {
         titleHistory,
         ownership,
       }, context) => {
-
+        console.log(context.user)
       if (!context || !context.user) {
         console.error("Authentication failed: Context or user not found.");
         throw new Error("Authentication required.");
       }
-
+    
       // Check if user ID exists
       if (!context.user.id) {
         console.error("Authentication failed: User ID not found.");
@@ -308,8 +308,9 @@ const resolvers = {
       titleHistory,
       ownership
     }, context) => {
+      console.log(context.user)
 
-      if (!context || !context.user) {
+      if (!context.user) {
         throw new Error('not logged in at update car')
       }
 
@@ -367,31 +368,40 @@ const resolvers = {
 
       // https://pub-50ee404c2cfc48dd970fc6470185d232.r2.dev/cars/064cb9da-fa7d-4b1b-99d0-4fb15e703bf5.jpg
 
+      const validKeys = key.filter(k => {
+        try{
+          new URL(k);
+          return true;
+        } catch {
+          return false;
+        }
+      }).map(k => {
+        // Extract just the filename from the URL by creating a new url constructer then by accessing the instance property 'pathname' 
+        // which returns /cars/064cb9da-fa7d-4b1b-99d0-4fb15e703bf5.jpg then is splits by '/' => ['', 'cars', '064cb9da-fa7d-4b1b-99d0-4fb15e703bf5.jpg']
+        // last but not least i access the filename by using the last index of the array
+        const pathParts = new URL(k).pathname.split('/');
+        const filename = pathParts[pathParts.length - 1];
+        // Create the correct key with your bucket structure
+        return { Key: `cars/${filename}` };
+      })
+    
+      if(validKeys.length > 0){
       const command = new DeleteObjectsCommand({
         Bucket: bucketName,
         Delete: {
-          Objects: key.map(k => {
-            // Extract just the filename from the URL by creating a new url constructer then by accessing the instance property 'pathname' 
-            // which returns /cars/064cb9da-fa7d-4b1b-99d0-4fb15e703bf5.jpg then is splits by '/' => ['', 'cars', '064cb9da-fa7d-4b1b-99d0-4fb15e703bf5.jpg']
-            // last but not least i access the filename by using the last index of the array
-            const pathParts = new URL(k).pathname.split('/');
-            const filename = pathParts[pathParts.length - 1];
-
-            // Create the correct key with your bucket structure
-            return { Key: `cars/${filename}` };
-          })
-
+          Objects: validKeys
         }
       })
-
       try {
-        console.log(command)
+        console.log("command",command)
         const response = await client.send(command);
-        console.log(response)
+        console.log("res",response)
       } catch (err) {
         console.error(err, 'err at deleting picture from r2 database')
       }
-
+  } else {
+    console.log('no valid urls')
+  }
       try {
         const car = await Car.findOneAndDelete({
           _id: carId,
@@ -404,7 +414,7 @@ const resolvers = {
         console.error(err, 'error at deleting car from mongo db')
       }
     },
-    signIn: async (parent, { username, passwordInput }, context) => {
+    signIn: async (parent, { username, passwordInput }, {res, user}) => {
 
       try {
         var randomId = uuidv4();
@@ -437,6 +447,14 @@ const resolvers = {
 
         var token = jwt.sign({ id: randomId, username: Admin.username }, process.env.JWT_SECRET_KEY, { expiresIn: "1h" })
         console.log(Admin.username)
+
+        res.cookie('token', token,{
+          signed:false,
+          httpOnly:true,
+          secure: true,
+          sameSite: 'strict',
+          maxAge: 3600000
+        })
 
         return {
           user: {

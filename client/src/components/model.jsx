@@ -7,7 +7,7 @@ const Modal = ({ showModal, closeModal, img, id }) => {
     if (!showModal) return null
 
     const [image, setImage] = useState([])
-    const [draggedIndex,setDraggedIndex] = useState(null)
+    const [draggedIndex, setDraggedIndex] = useState(null)
 
     useEffect(() => {
         setImage(img)
@@ -16,48 +16,58 @@ const Modal = ({ showModal, closeModal, img, id }) => {
 
     const [updateImgIndex] = useMutation(UPDATE_CAR)
 
-    const dragStartHandler = (index) =>{
+    const dragStartHandler = (index) => {
         setDraggedIndex(index)
     }
 
     const dragOverHandler = (e) => {
-        e.preventDefault()
+        if(e.cancelable){
+            e.preventDefault();
+        }
     }
 
-    const dropHandler = (dropIndex) =>{
-    if(draggedIndex !== null && dropIndex !== null){
-        const newImages = [...image]
-        const [draggedImage] = newImages.splice(draggedIndex,1)
-        newImages.splice(dropIndex, 0, draggedImage)
-        setImage(newImages)
-        setDraggedIndex(null)
-    }
+    const dropHandler = (dropIndex) => {
+        if (draggedIndex !== null && dropIndex !== null) {
+            const newImages = [...image]
+            const [draggedImage] = newImages.splice(draggedIndex, 1)
+            newImages.splice(dropIndex, 0, draggedImage)
+            setImage(newImages)
+            setDraggedIndex(null)
+        }
     }
 
-    const submitHandler = (e) =>{
-        e.preventDefault();  
+    const submitHandler = (e) => {
+        e.preventDefault();
         updateImgIndex({
             variables: {
                 _id: id,
                 imageUrl: image
             }
         })
-        
+
     }
 
-
+    console.log(draggedIndex)
     return (
         <div style={modalBackground}>
             <button type="button" onClick={closeModal} style={{ position: 'absolute', right: '10px', top: '10px' }}>X</button>
             <div style={imageDirection} >
-                {image.map((image,index) => (
-                    <div onDragStart={() => dragStartHandler(index)} onDrop={() => dropHandler(index)} onDragOver={(e) => dragOverHandler(e)} key={index} >
+                {image.map((image, index) => (
+                    <div onDragStart={() => dragStartHandler(index)}
+                        onDrop={() => dropHandler(index)}
+                        onDragOver={(e) => dragOverHandler(e)} 
+                        onTouchStart={() => {dragStartHandler(index);console.log('touched',index)}}
+                        onTouchMove={(e) => {dragOverHandler(e);console.log('touchmove')}}
+                        onTouchEnd={() => {dropHandler(index);console.log('touchEnd')}}
+                        key={index}>
                         <img style={imageStyle} src={image} draggable={true}></img>
                     </div>
-                    
+
                 ))}
             </div>
-                    <button onClick={e => submitHandler(e)}>submit</button>
+            <div style={buttonContainer}>
+                <button  onClick={e => submitHandler(e)}>submit</button>
+            </div>
         </div>
     )
 }
@@ -80,8 +90,13 @@ const modalBackground = {
     zIndex: 2
 };
 
-const imageDirection ={
-    display:'flex',
-    justifyContent:'center',
-    padding:'10px'
+const imageDirection = {
+    display: 'flex',
+    justifyContent: 'center',
+    padding: '10px'
 };
+
+const buttonContainer = {
+    display: 'flex',
+    justifyContent: 'center',
+}

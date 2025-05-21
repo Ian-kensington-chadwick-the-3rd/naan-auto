@@ -99,15 +99,15 @@ const footer = () => {
                             </div>
                             <div className="contact-info_text">
                                 <Link to='/inventory' className="NAAN-AUTO_font_link contactinfo_push">
-                                    <span className="montserrat-underline NAAN-AUTO_font" onClick={()=> window.scrollTo({top:0,behavior:'smooth'})}>NAAN-AUTO</span>
+                                    <span className="montserrat-underline NAAN-AUTO_font" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>NAAN-AUTO</span>
                                 </Link>
                                 <div className="contact-info_flex">
                                     <img src={phone} className="contact-info_icon" />
-                                    <span>406-250-2747</span>
+                                    <span>850-861-5000</span>
                                 </div>
                                 <div className="contact-info_flex">
                                     <img src={placemarker} className="contact-info_icon" />
-                                    <span className="contactinfo-font">8520 N Palafox St Pensicola FL, 32534</span>
+                                    <span className="contactinfo-font">4327 Gulf Breeze Parkway, Gulf Breeze FL</span>
                                 </div>
                                 <div className="contact-info_flex">
                                     <img src={email} className="contact-info_icon" />
@@ -118,7 +118,7 @@ const footer = () => {
                     </div>
                     <div className="footer-column">
                         <div>
-                            <h2 className="footer-headers">Hours Of Operation</h2>
+                            <h2 className="footer-headers">Operating Hours</h2>
                             <hr className="hr1" />
                         </div>
                         <div>
@@ -234,6 +234,21 @@ const footer = () => {
                     </div>
                 </div>
             </div>
+            <section className="bottom-border-container">
+                <div>
+                    <span>
+                        Made with ❤️ by
+                    </span>
+                    <span>
+                        <a href={'https://www.linkedin.com/in/ian-sills-668497291/'}>
+                            ian
+                        </a>
+                    </span>
+                    <span>
+                        credits
+                    </span>
+                </div>
+            </section>
         </footer>
     );
 }

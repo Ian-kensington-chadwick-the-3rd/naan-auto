@@ -3,14 +3,14 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { GET_CARS, GET_USER, DELETE_CAR } from '../utils/querys';
 import { Helmet } from 'react-helmet';
-import speedo from '../assets/icons8-speedometer-50.png'
+import speedo from '../assets/odometer.png'
 import Searchfilter from '../components/searchfilter';
 import Pagination from '../components/pagination';
 import SlideShow from '../components/slideshow';
-import exteriorColor from '../assets/icons8-car-32 (1).png'
-import interiorColor from '../assets/icons8-seat-32.png'
-import gearBox from '../assets/icons8-gearbox-32.png'
-import enginePng from '../assets/icons8-engine-32 (1).png'
+import exteriorColor from '../assets/carprofile.png'
+import interiorColor from '../assets/seatcar.png'
+import gearBox from '../assets/gearbox.png'
+import enginePng from '../assets/engine.png'
 
 const Inv = () => {
 

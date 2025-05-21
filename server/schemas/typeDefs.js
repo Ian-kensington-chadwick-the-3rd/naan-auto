@@ -89,7 +89,7 @@ const typeDefs = `
       titleHistory: String
       ownership: String
     ) : [Car]
-      AuthCheck(Key: String) : Auth
+      AuthCheck : Auth
       getMessage: [userMessage]
   }
 

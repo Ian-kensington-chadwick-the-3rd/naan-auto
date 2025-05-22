@@ -299,15 +299,21 @@ html {
 
 .bottom-border-container{
     width:100%;
-    height:150px;
+    height:100px;
     background-color: black;
     display:flex;
-    justify-content: center;
+    justify-content:space-around;
     align-items: center;
     color: white;
 }
 
+.bottom-border-container div{
+    color:white;
+}
 
+.bottom-border-container div:hover{
+    color: var(--maincolor);
+}
 
 
 .outlet {
@@ -1755,6 +1761,24 @@ input[type="file"]:focus {
     align-items: center;
     text-align: center;
 }
+
+.terms-and-conditions-container{
+    width:100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.terms-and-conditions-background{   
+    background-color: white;
+    width:800px;
+    padding:20px;
+    margin:10px;
+    border-radius: 15px;
+}
+
+
+
 
 @keyframes slide-down-message {
     from {

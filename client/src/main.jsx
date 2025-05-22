@@ -11,7 +11,10 @@ import ContactUs from './pages/contactUs.jsx';
 import AboutUs from './pages/AboutUs.jsx';
 import Login from "./pages/Login.jsx";
 import ProtectedRoute from "./components/protectedRoute";
-import Extra from './pages/extra'
+import Credits from './pages/credits'
+import TermsAndConditions from "./pages/tandc";
+import SiteMap from "./pages/sitemap";
+import PrivacyPolicy from "./pages/privacypolicy";
 const Dashboard = lazy(()=> import('./pages/adminDashboard.jsx'))
 
 const router = createBrowserRouter([
@@ -45,8 +48,20 @@ const router = createBrowserRouter([
                 element: <ContactUs/>
             },
             {
-                path: 'extra',
-                element: <Extra/>
+                path: 'credits',
+                element: <Credits/>
+            },
+            {
+                path:'termsandconditions',
+                element: <TermsAndConditions/>
+            },
+            {
+                path:'sitemap',
+                element: <SiteMap/>
+            },
+            {
+                path:'privacypolicy',
+                element: <PrivacyPolicy/>
             },
             {
                 path:'protectedRoute',

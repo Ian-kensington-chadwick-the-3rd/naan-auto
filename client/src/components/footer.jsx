@@ -236,17 +236,28 @@ const footer = () => {
             </div>
             <section className="bottom-border-container">
                 <div>
-                    <span>
-                        Made with ❤️ by
-                    </span>
-                    <span>
-                        <a href={'https://www.linkedin.com/in/ian-sills-668497291/'}>
-                            ian
-                        </a>
-                    </span>
-                    <span>
+                    <Link className="nostyle" to='/termsandconditions' onClick={()=> scrollTo({top:0, behavior:'smooth'})}>
+                        <div>
+                            Terms & Conditions
+                        </div>
+                    </Link>
+                    <Link className="nostyle" to='/privacypolicy' onClick={()=> scrollTo({top:0, behavior:'smooth'})} >
+                        <div>
+                            Privacy Policy
+                        </div>
+                    </Link>
+                </div>
+                <div>
+                    <Link className="nostyle" to={'/credits'} onClick={()=> scrollTo({top:0, behavior:'smooth'})} >
+                    <div>
                         credits
-                    </span>
+                    </div>
+                    </Link>
+                    <Link className="nostyle" to={'/sitemap'} onClick={()=> scrollTo({top:0, behavior:'smooth'})} >
+                    <div>
+                        Sitemap
+                    </div>
+                    </Link>
                 </div>
             </section>
         </footer>

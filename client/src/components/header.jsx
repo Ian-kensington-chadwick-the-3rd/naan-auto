@@ -134,8 +134,19 @@ const Header = () => {
                     login: false,
                     dashboard: true,
                 })
+                break;
+            default:
+                setUrlLocation({
+                    inventory: false,
+                    contactUs: false,
+                    aboutUs: false,
+                    login: false,
+                    dashboard: false,
+                })
         }
     }, [urlpathname])
+
+
 
     const directions = 'https://www.google.com/maps/place/4327+Gulf+Breeze+Pkwy,+Gulf+Breeze,+FL+32563/@30.3929444,-87.0454237,17z/data=!3m1!4b1!4m6!3m5!1s0x8890db5d648dea2b:0xf659fe1011b45078!8m2!3d30.3929398!4d-87.0428434!16s%2Fg%2F11f54xlgyw?entry=ttu&g_ep=EgoyMDI1MDUxNS4wIKXMDSoASAFQAw%3D%3D';
 

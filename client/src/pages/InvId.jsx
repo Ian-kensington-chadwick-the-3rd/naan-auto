@@ -127,7 +127,6 @@ const InvId = () => {
     const timedSlider = () => {
         if(dragging) return;
         if (!pictureRef.current || !innerPictureRef.current || !parentSlider) return;
-        console.log('=== TIMED SLIDER START ===');
 
         const parentContainer = parentSlider?.offsetWidth;
         const currentImg = innerPictureRef?.current[slideIndex]

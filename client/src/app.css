@@ -1460,7 +1460,7 @@ input[type="file"]:hover {
 
 .loading {
     position: absolute;
-    bottom: 9px;
+    top: 200px;
     z-index: 3;
     width: 800px;
     height: 800px
@@ -2020,6 +2020,7 @@ input[type="file"]:focus {
 
     .contact-us_form_form {
         padding-left: 0;
+        padding-right:0;
     }
 
     .pop-up-message span {

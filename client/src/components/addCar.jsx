@@ -81,7 +81,7 @@ const AddCarData = () => {
     }
 
 
-    const capitalizeFirstLetter = (string) =>{
+    const capitalizeFirstLetter = (string) => {
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
 
@@ -108,10 +108,11 @@ const AddCarData = () => {
     }
     const [pictureInvalid, setPictureInvalid] = useState([]);
     const [carUploadSuccess, setCarUploadSuccess] = useState(false);
+    const missingFields = {};
+
     async function formHandler(e) {
 
         setValidation({});
-        const missingFields = {};
 
         e.preventDefault();
         if (!form.imageUrl || form.imageUrl.length === 0) {
@@ -162,7 +163,6 @@ const AddCarData = () => {
 
         try {
 
-
             let invalidImages = 0;
             let processedCount = 0;
             await new Promise((resolve, reject) => {
@@ -176,8 +176,20 @@ const AddCarData = () => {
                     console.log(index)
                     reader.onload = (event) => {
                         img.src = event.target.result;
+                        img.file = file;
                     };
 
+                    const fileExtension = file.name.split('.').pop().toLowerCase();
+
+                    if (file.type === 'image/heic' || fileExtension === 'heic') {
+                        setMiniModal(true);
+                        setCarUploadSuccess(false);
+                        setLoadingCss(false);
+
+                        validation.img = '.heic img type not accepted by any browsers'
+                        setValidation(validation)
+                        return;
+                    }
                     img.onload = () => {
                         const ratio = img.width / img.height;
                         const expected = 4 / 3
@@ -230,6 +242,7 @@ const AddCarData = () => {
             setMiniModal(true);
             setCarUploadSuccess(false);
             setLoadingCss(false);
+            if (invalidImages > 0) return;
         }
 
         const picture = form.imageUrl;
@@ -328,12 +341,12 @@ const AddCarData = () => {
         }
 
     }
-    useEffect(()=>{
+    useEffect(() => {
         console.log(Object.keys(validation))
-        if(Object.keys(validation).length > 0){
-            window.scrollTo({top:0, behavior:'smooth'})
+        if (Object.keys(validation).length > 0) {
+            window.scrollTo({ top: 0, behavior: 'smooth' })
         }
-    },[validation])
+    }, [validation])
 
     useEffect(() => {
         if (carUploadSuccess === false) {

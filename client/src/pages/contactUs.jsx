@@ -56,7 +56,7 @@ const contactUs = () => {
 
       const emptyForm = !form.firstName && !form.lastName && !form.message && !form.phoneNumber && !form.emailAddress 
       if(emptyForm){
-         setClientMessage('please fill out each input.');
+         setClientMessage('you can not send an empty form');
          setSuccessMessage(false);
          popUpMessage();
          return;
@@ -75,6 +75,14 @@ const contactUs = () => {
          popUpMessage();
          return;
       };
+
+      const fillOutEveryField = !form.firstName || !form.lastName || !form.message || !form.phoneNumber || !form.emailAddress
+      if(fillOutEveryField){
+         setClientMessage('please fill out each input.');
+         setSuccessMessage(false);
+         popUpMessage();
+         return;
+      }
 
       const {data} = await sendMessage({
          variables: { ...form }

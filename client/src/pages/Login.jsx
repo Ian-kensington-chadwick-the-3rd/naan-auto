@@ -12,7 +12,7 @@ const login = () => {
         passwordInput: ''
     })
 
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (loggedInSuccess === true) {
@@ -44,8 +44,6 @@ const login = () => {
                     passwordInput: formData.passwordInput
                 }
             })
-            console.log(data)
-            localStorage.setItem('token', data.signIn.token)
             console.log(data.signIn.success)
             if (data.signIn.success === true) {
                 setLoggedInSuccess(true)

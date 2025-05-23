@@ -74,6 +74,10 @@ html {
     
 }
 
+.no-scroll {
+    overflow: hidden;
+  }
+
 .content-container {
     position: relative;
     z-index: 1;
@@ -1831,7 +1835,7 @@ input[type="file"]:focus {
 }
 
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 867px) {
     .card {
         max-width: 350px;
     }

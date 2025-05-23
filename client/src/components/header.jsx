@@ -24,6 +24,14 @@ const Header = () => {
     const [tabletAndUnderVw, setTabletAndUnderVw] = useState(false);
     const [mobileTabActive, setMobileTabActive] = useState(false);
 
+    useEffect(() => {
+        if (mobileTabActive) {
+            document.body.classList.add('no-scroll');
+        } else {
+            document.body.classList.remove('no-scroll');
+        }
+    }, [mobileTabActive]);
+
 
     useEffect(() => {
         console.log(window.innerWidth)

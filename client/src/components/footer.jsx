@@ -41,9 +41,6 @@ const footer = () => {
 
     }
 
-    useEffect(() => {
-        console.log(validationErrors)
-    }, [validationErrors])
 
     const submitHandler = async (e) => {
         e.preventDefault();

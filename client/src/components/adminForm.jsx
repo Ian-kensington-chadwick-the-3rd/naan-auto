@@ -22,9 +22,7 @@ const AdminForm = () => {
         refetch();
     }, [refetch])
 
-    useEffect(() => {
-        console.log("this is refetch", refetch)
-    }, [data])
+
 
     // will have the ability to update cars delete cars and create cars
     const [selectedCar, setSelectedCar] = useState(null)
@@ -47,7 +45,7 @@ const AdminForm = () => {
         titleHistory: '',
         ownership: ''
     })
-    console.log(data)
+
 
 
 
@@ -72,7 +70,6 @@ const AdminForm = () => {
                 titleHistory: selectedCar.titleHistory || '',
                 ownership: selectedCar.ownership || ''
             })
-            console.log(form)
         }
     }, [selectedCar])
 
@@ -110,7 +107,6 @@ const AdminForm = () => {
     const handleFormSubmit = async (e, carId, imageUrl) => {
         e.preventDefault();
         const submitButtonName = e.nativeEvent.submitter.name;
-        console.log(submitButtonName)
         if (submitButtonName === 'delete') {
             await carDelete(e, carId, imageUrl)
         }
@@ -140,9 +136,7 @@ const AdminForm = () => {
 
     const [searchData, setSearchData] = useState([]);
     const [usedSearch, setUsedSearch] = useState(false)
-    useEffect(() => {
-        console.log(usedSearch)
-    }, [usedSearch])
+
     const handleSearchData = (data, usedSearch) => {
         setSearchData(data)
         setUsedSearch(usedSearch)
@@ -152,12 +146,12 @@ const AdminForm = () => {
 
     const showModal = () => {
         setModal(true);
-        console.log(modal)
+
     }
 
     const closeModal = () => {
         setModal(false);
-        console.log(modal)
+  
     }
 
     const [modalImage, setModalImage] = useState()
@@ -177,7 +171,6 @@ const AdminForm = () => {
 
     // page equals 1 staring slice 0, 10 page equals 2 next slice if page 
 
-    console.log(data?.Cars, "this is DATA CARSSSSS")
     const data1 = usedSearch === true ? searchData : (data?.Cars || []);
     const [paginatedData, setPaginatedData] = useState([])
 

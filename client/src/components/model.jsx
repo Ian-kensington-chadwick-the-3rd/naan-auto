@@ -9,10 +9,6 @@ const Modal = ({ showModal, closeModal, img, id }) => {
     const [image, setImage] = useState([])
     const [draggedIndex, setDraggedIndex] = useState(null)
 
-    useEffect(() => {
-        setImage(img)
-        console.log(img, "imagessan")
-    }, [img])
 
     const [updateImgIndex] = useMutation(UPDATE_CAR)
 
@@ -47,7 +43,6 @@ const Modal = ({ showModal, closeModal, img, id }) => {
 
     }
 
-    console.log(draggedIndex)
     return (
         <div style={modalBackground}>
             <button type="button" onClick={closeModal} style={{ position: 'absolute', right: '10px', top: '10px' }}>X</button>
@@ -56,9 +51,9 @@ const Modal = ({ showModal, closeModal, img, id }) => {
                     <div onDragStart={() => dragStartHandler(index)}
                         onDrop={() => dropHandler(index)}
                         onDragOver={(e) => dragOverHandler(e)} 
-                        onTouchStart={() => {dragStartHandler(index);console.log('touched',index)}}
-                        onTouchMove={(e) => {dragOverHandler(e);console.log('touchmove')}}
-                        onTouchEnd={() => {dropHandler(index);console.log('touchEnd')}}
+                        onTouchStart={() => {dragStartHandler(index)}}
+                        onTouchMove={(e) => {dragOverHandler(e)}}
+                        onTouchEnd={() => {dropHandler(index)}}
                         key={index}>
                         <img style={imageStyle} src={image} draggable={true}></img>
                     </div>

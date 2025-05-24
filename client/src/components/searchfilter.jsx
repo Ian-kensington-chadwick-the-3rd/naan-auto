@@ -13,14 +13,13 @@ const Searchfilter = ({ onData }) => {
     useEffect(() => {
         setfilteredData(data?.searchField || [])
     }, [data]);
-    console.log("this mean it work!!!",data)
+  
 
     // if search filter has been used
 
     // ships data to parent component adminForm
     useEffect(() => {
         if (filteredData && hasActiveFilters())
-            console.log(hasActiveFilters())
             onData(filteredData, hasActiveFilters());
     }, [filteredData])
 
@@ -61,7 +60,7 @@ const Searchfilter = ({ onData }) => {
 
 
     if (error) {
-        console.log("we got a problem", error)
+        console.error("we got a problem", error)
     }
 
     // get queried data and set the final use hook to give data to /inventory page

@@ -8,7 +8,7 @@ const Messages = () => {
     const { loading, data, error } = useQuery(GET_MESSAGE)
 
     const [messages, setMessages] = useState([])
-    console.log(data)
+   
 
     useEffect(() => {
         if (data && data.getMessage) {
@@ -16,11 +16,11 @@ const Messages = () => {
         }
     }, [data])
 
-    console.log(messages)
+
     if (loading) return <p>Loading messages...</p>;
     if (error) return <p>Error loading messages.</p>;
 
-console.log(data)
+
     return (
         <div className='message__container'>
             {messages?.map((message, i) => {

@@ -23,7 +23,7 @@ const ProtectedRoute = () =>{
         return <div>loading...</div>
     }
     const isAuthenticated = data?.AuthCheck?.success;
-    console.log(data?.AuthCheck?.success)
+
 
     // we not letting anything through 
     if(error || !isAuthenticated || isAuthenticated === undefined || isAuthenticated === null || isAuthenticated === false){

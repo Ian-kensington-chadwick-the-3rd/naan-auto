@@ -173,7 +173,6 @@ const AddCarData = () => {
                 files.forEach((file, index) => {
                     const reader = new FileReader();
                     const img = new Image();
-                    console.log(index)
                     reader.onload = (event) => {
                         img.src = event.target.result;
                         img.file = file;
@@ -249,7 +248,6 @@ const AddCarData = () => {
         var uploadImageUrl = [];
         try {
             for (const img of picture) {
-                console.log('reached img of pic')
                 const uniqueKey = `cars/${uuidv4()}.jpg`;
                 const { data } = await createPresignedUrl({
                     variables: { key: uniqueKey }
@@ -342,7 +340,6 @@ const AddCarData = () => {
 
     }
     useEffect(() => {
-        console.log(Object.keys(validation))
         if (Object.keys(validation).length > 0) {
             window.scrollTo({ top: 0, behavior: 'smooth' })
         }
@@ -350,13 +347,13 @@ const AddCarData = () => {
 
     useEffect(() => {
         if (carUploadSuccess === false) {
-            console.log(carUploadSuccess)
+            console.log("car success is ==>",carUploadSuccess)
             setLoadingCss(false)
         }
     }, [carUploadSuccess])
 
     // we get event.target.name if useState name === form name 
-    console.log(pictureInvalid)
+
     return (
         <div className="addcar__parent-container">
             {miniModal && <div className="mini-modal">

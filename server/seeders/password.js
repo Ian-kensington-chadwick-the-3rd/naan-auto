@@ -20,7 +20,7 @@ const seedDataBase = async () => {
         const randomId = uuidv4()
         const salt = await bcrypt.genSalt(saltRounds);
         const hash = await bcrypt.hash(myEnvPassword, salt);
-        await User.create({Username: adminUserName, Admin: randomId })
+        await User.create({username: adminUserName, admin: randomId })
         await Password.create({ Password: hash });
         
         console.log("database seeded successfully!!!!")

@@ -12,7 +12,7 @@ import interiorColor from '../assets/seatcar.png'
 import gearBox from '../assets/gearbox.png'
 import enginePng from '../assets/engine.png'
 
-const Inv = () => {
+const Inventory = () => {
 
     const { data: userData } = useQuery(GET_USER)
     const { loading: carLoading, error: carError, data: carData } = useQuery(GET_CARS);
@@ -202,7 +202,7 @@ const Inv = () => {
 
 }
 
-export default Inv;
+export default Inventory;
 
 
 

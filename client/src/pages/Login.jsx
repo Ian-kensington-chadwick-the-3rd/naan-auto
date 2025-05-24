@@ -26,12 +26,10 @@ const login = () => {
     const handleChange = (e) => {
         const name = e.target.name
         const value = e.target.value
-        console.log(name, value)
         setFormData((data) => ({
             ...data,
             [name]: value
         }))
-        console.log(formData)
     }
 
 
@@ -44,7 +42,6 @@ const login = () => {
                     passwordInput: formData.passwordInput
                 }
             })
-            console.log(data.signIn.success)
             if (data.signIn.success === true) {
                 setLoggedInSuccess(true)
             }

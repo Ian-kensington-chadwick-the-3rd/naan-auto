@@ -10,11 +10,11 @@ import InvId from './pages/InvId.jsx';
 import ContactUs from './pages/contactUs.jsx';
 import AboutUs from './pages/AboutUs.jsx';
 import Login from "./pages/Login.jsx";
-import ProtectedRoute from "./components/protectedRoute";
-import Credits from './pages/credits'
-import TermsAndConditions from "./pages/tandc";
-import SiteMap from "./pages/sitemap";
-import PrivacyPolicy from "./pages/privacypolicy";
+import ProtectedRoute from "./components/protectedRoute.jsx";
+import Credits from './pages/credits.jsx'
+import TermsAndConditions from "./pages/tandc.jsx";
+import SiteMap from "./pages/sitemap.jsx";
+import PrivacyPolicy from "./pages/privacypolicy.jsx";
 const Dashboard = lazy(()=> import('./pages/adminDashboard.jsx'))
 
 const router = createBrowserRouter([

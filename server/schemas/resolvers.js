@@ -94,7 +94,7 @@ class bucketAlgo {
 }
 
 const newBucketAlgo = new bucketAlgo();
-console.log(newBucketAlgo.plusToken())
+
 
 
 
@@ -173,7 +173,7 @@ const resolvers = {
       titleHistory && titleHistory !== 'all' ? query.titleHistory = titleHistory : delete query.titleHistory;
       ownership && ownership !== 'all' ? query.ownership = ownership : delete query.ownership;
 
-      console.log("this is query", query)
+     
 
       const searchResult = await Car.find(query)
 
@@ -186,7 +186,7 @@ const resolvers = {
       return Password.find()
     },
     AuthCheck: async (parent, ___ , context ) => {
-       console.log("user",context.user)
+      
       try { 
        
         if (!context.user) {
@@ -198,7 +198,6 @@ const resolvers = {
       } catch (e) {
         console.error("invalid token at authcheck", e.message)
         return { success: false }
-
       }
     },
     User: async (parent, data, context) => {
@@ -333,9 +332,9 @@ const resolvers = {
       if (condition) query.condition = condition;
       if (titleHistory) query.titleHistory = titleHistory;
       if (ownership) query.ownership = ownership;
-      console.log(_id)
+
       try {
-        console.log(query)
+
 
         const result = await Car.findByIdAndUpdate(
           { _id },
@@ -348,7 +347,7 @@ const resolvers = {
       }
     },
     deleteCar: async (parent, { carId, key }, context) => {
-      console.log("this is context", context)
+
       if (!context.user) {
         throw new Error("user not authenicated")
       }
@@ -393,14 +392,14 @@ const resolvers = {
         }
       })
       try {
-        console.log("command",command)
+       
         const response = await client.send(command);
-        console.log("res",response)
+       
       } catch (err) {
         console.error(err, 'err at deleting picture from r2 database')
       }
   } else {
-    console.log('no valid urls')
+    console.error('no valid urls')
   }
       try {
         const car = await Car.findOneAndDelete({
@@ -446,7 +445,7 @@ const resolvers = {
 
 
         var token = jwt.sign({ id: randomId, username: Admin.username }, process.env.JWT_SECRET_KEY, { expiresIn: "1h" })
-        console.log(Admin.username)
+
 
         res.cookie('token', token,{
           signed:false,
@@ -511,8 +510,6 @@ const resolvers = {
 
       if (!newBucketAlgo.ipData.has(ip)){
         newBucketAlgo.initIp(ip);
-        console.log('init token');
-        console.log(newBucketAlgo.ipData.get(ip).tokens);
       }
 
       if (!firstName && !lastName && !emailAddress && !phoneNumber && !message) {
@@ -521,7 +518,6 @@ const resolvers = {
 
         const tokenconsume = newBucketAlgo.consumeToken(ip) 
         const timeLimit = newBucketAlgo.intervalDelay
-        console.log(tokenconsume)
         if (!tokenconsume) {
           newBucketAlgo.plusToken(ip);
           return {success:false};
@@ -540,8 +536,6 @@ const resolvers = {
       const dateString  = `${month}/${day}/${year}`;
       const timeString = `${hours}:${minutes}`
 
-        console.log(tokenconsume, 'consume token',timeLimit);
-        console.log(newBucketAlgo.ipData.get(ip).tokens);
       const apolloMessage = await Message.create({ firstName, lastName, emailAddress, phoneNumber, message, timeString, dateString })
 
       const emailMessage = {

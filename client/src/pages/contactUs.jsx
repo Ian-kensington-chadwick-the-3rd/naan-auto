@@ -107,14 +107,14 @@ const contactUs = () => {
       }, 3000)
    }
 
-   const clickAble = () =>{
-      setTimeout(()=>{
-         return true;
-      },3000)
-      return false;
-   }
+   // const clickAble = () =>{
+   //    setTimeout(()=>{
+   //       return true;
+   //    },3000)
+   //    return false;
+   // }
 
-   console.log(clickAble())
+   // console.log(clickAble())
 
    return (
       <div>

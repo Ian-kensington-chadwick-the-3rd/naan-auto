@@ -36,7 +36,6 @@ const InvId = () => {
 
     useEffect(() => {
         if (timerPause || arrayLength <= 1) return;
-        console.log(timerPause)
         const id = setInterval(setIndexForwards, 5000)
 
         return () => clearInterval(id)
@@ -103,7 +102,6 @@ const InvId = () => {
         if (!tabletAndUnderVw) return;
         setDragging(true);
         startX.current = e.touches[0].pageX
-        console.log(e.touches[0].pageX)
     };
 
     const parentSlider = outerPictureRef.current;
@@ -147,8 +145,6 @@ const InvId = () => {
         }
 
         const clampedOffset = clamp(targetOffset, maxOffset, 0);
-
-        console.log(clampedOffset)
         if (clampedOffset !== null && clampedOffset !== undefined) {
             pictureRef.current.style.transform = `translateX(${clampedOffset}px)`
         }
@@ -156,7 +152,6 @@ const InvId = () => {
 
     useEffect(() => {
         if (slideIndex == null) return;
-        console.log(slideIndex)
         requestAnimationFrame(() => {
             requestAnimationFrame(() => {
                 timedSlider();

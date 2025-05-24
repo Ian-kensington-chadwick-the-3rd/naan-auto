@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from '@apollo/client'
+import { useQuery } from '@apollo/client'
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { GET_CARS, GET_USER, DELETE_CAR } from '../utils/querys';
@@ -21,25 +21,24 @@ const Inventory = () => {
     const [searchData, setSearchData] = useState([]);
     const [usedSearch, setUsedSearch] = useState(false)
     const handleSearchData = (data, usedSearch) => {
-        console.log('data', data)
-        const value = lowerCaseObject(data)
-        console.log("value", value)
+        // const value = lowerCaseObject(data)
+        // console.log("value", value)
         setSearchData(data)
         setUsedSearch(usedSearch)
     }
 
-    const lowerCaseObject = (obj) => {
-        let result = {};
-        // getting object key in outer loop then we need to use that key to access inner loop
-        for (const outerKey in obj) {
-            // setting key then setting value
-            let innerObj = obj[outerKey]
-            for (const innerKey in innerObj) {
-            let value = innerObj[innerKey]
-            return value
-            }
-        }
-    }
+    // const lowerCaseObject = (obj) => {
+    //     let result = {};
+    //     // getting object key in outer loop then we need to use that key to access inner loop
+    //     for (const outerKey in obj) {
+    //         // setting key then setting value
+    //         let innerObj = obj[outerKey]
+    //         for (const innerKey in innerObj) {
+    //         let value = innerObj[innerKey]
+    //         return value
+    //         }
+    //     }
+    // }
 
     // how to access an object [0].key gets value
 
@@ -52,20 +51,9 @@ const Inventory = () => {
         }
     }, [userData])
 
-    useEffect(() => {
-        console.log(carData)
-        console.log(searchData)
-    }, [carData])
-
-
-    console.log("this is data =>", carData);
-
-    useEffect(() => {
-        console.log(usedSearch)
-    }, [usedSearch])
 
     const data1 = usedSearch === true ? searchData : (carData?.Cars || []);
-    console.log(data1)
+  
 
     const [paginatedData, setPaginatedData] = useState([]);
     const [carCountEnd, setCarCountEnd] = useState(0);
@@ -79,15 +67,6 @@ const Inventory = () => {
         setCarCountStart((page - 1) * 15 + 1)
         setTotalCars(total)
     }
-
-
-
-    useEffect(() => {
-        console.log("ccarcountend!!!!!!!", carCountEnd)
-        console.log('carcountstart', carCountStart)
-        console.log(paginatedData)
-        console.log(totalCars)
-    }, [carCountEnd, paginatedData])
 
     if (carLoading) return 'loading...';
     if (carError) return `Error!!!! ${carError.message}`;
@@ -187,9 +166,6 @@ const Inventory = () => {
                                         <p style={{ paddingLeft: '15px', overflow: 'clip', width: '100%' }}> {car.description}
                                         </p>
                                     </div>
-                                    {loggedIn ? (
-                                        <button onClick={() => handleCarDelete(car)}>delete car</button>) :
-                                        ('')}
                                 </div>
                             ))}
                         </div>

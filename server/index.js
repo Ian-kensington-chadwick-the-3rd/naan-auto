@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const { ApolloServer } = require('@apollo/server');
 const { expressMiddleware } = require('@apollo/server/express4');
@@ -8,7 +9,6 @@ const db = require('./config/connection');
 const jwt = require('jsonwebtoken');
 const PORT = process.env.PORT || 3001;
 const app = express();
-require('dotenv').config();
 const cookieParser = require('cookie-parser')
 
 const getUserFromToken = (token) => {

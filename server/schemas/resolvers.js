@@ -254,9 +254,9 @@ const resolvers = {
         console.error("Authentication failed: User ID not found.");
         throw new Error("Authentication denied.");
       }
-      const r2AccountId = process.env.R2_ACCOUNT_ID
-      const r2BucketName = process.env.R2_BUCKET_NAME
-      const baseUrl = ''
+      const r2AccountId = process.env.R2_ACCOUNT_ID;
+      const r2BucketName = process.env.R2_BUCKET_NAME;
+      const baseUrl = process.env.R2_TEMP_URL;
 
       // checking if image is an array or single if not upload only one picture
       const processedImgUrls = Array.isArray(imageUrl) ?

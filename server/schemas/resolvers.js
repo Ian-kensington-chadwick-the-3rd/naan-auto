@@ -1,8 +1,8 @@
+require('dotenv').config()
 const { Car, Password, User, Message } = require('../models/carschema.js')
 const jwt = require("jsonwebtoken");
 const { v4: uuidv4 } = require('uuid');
 const bcrypt = require("bcrypt");
-require('dotenv').config()
 const { S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectsCommand } = require('@aws-sdk/client-s3');
 const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
 const nodeMailer = require('nodemailer');

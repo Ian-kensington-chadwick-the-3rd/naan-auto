@@ -8,7 +8,7 @@ import Error from './pages/error.jsx';
 import Inventory from './pages/inventory.jsx';
 import InvId from './pages/InvId.jsx';
 import ContactUs from './pages/contactUs.jsx';
-import AboutUs from './pages/AboutUs.jsx';
+import AboutUs from './pages/aboutUs.jsx';
 import Login from "./pages/Login.jsx";
 import ProtectedRoute from "./components/protectedRoute.jsx";
 import Credits from './pages/credits.jsx'

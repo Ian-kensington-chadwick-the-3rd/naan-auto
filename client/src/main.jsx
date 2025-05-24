@@ -5,7 +5,7 @@ import {Navigate} from 'react-router-dom'
 import './app.css';
 import App from './app.jsx';
 import Error from './pages/error.jsx';
-import Inventory from './pages/Inventory.jsx';
+import Inventory from './pages/inventory.jsx';
 import InvId from './pages/InvId.jsx';
 import ContactUs from './pages/contactUs.jsx';
 import AboutUs from './pages/AboutUs.jsx';

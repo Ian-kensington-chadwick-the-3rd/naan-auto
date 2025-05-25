@@ -11,9 +11,12 @@ import { Outlet } from 'react-router-dom';
 import Header from './components/header'
 import Footer from './components/footer'
 import videoBackground from './assets/whitebg.mp4'
+// '/graphql'
+
+
 
 const httpLink = createHttpLink({
-  uri: '/graphql',
+  uri: 'https://naan-auto.onrender.com/graphql',
   credentials:'include',
 });
 

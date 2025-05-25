@@ -10,19 +10,20 @@ const jwt = require('jsonwebtoken');
 const PORT = process.env.PORT || 3001;
 const app = express();
 const cookieParser = require('cookie-parser')
+const cors = require('cors')
 
 const getUserFromToken = (token) => {
     try {
-        if(token === null){
+        if (token === null) {
             throw new Error('token is null')
         }
         const jwtSecretKey = process.env.JWT_SECRET_KEY
-        const verifiedToken = jwt.verify(token, jwtSecretKey) 
+        const verifiedToken = jwt.verify(token, jwtSecretKey)
         return verifiedToken
     } catch (e) {
-        console.error("index.js invalid token",e.message)
+        console.error("index.js invalid token", e.message)
         return null;
-        
+
     }
 };
 
@@ -39,21 +40,28 @@ const startApolloServer = async () => {
 
     app.use(express.urlencoded({ extended: false }));
     app.use(express.json());
-    app.use(cookieParser())
+    app.use(cookieParser());
+    app.use(cors({
+        origin: [
+            'https://naan-auto.vercel.app',
+            'http://localhost:3000',
+        ],
+        credentials: true,
+    }))
 
+    app.use('/graphql', expressMiddleware(server, {
 
-    app.use('/graphql', expressMiddleware(server,{ 
-        context: async ({ req , res}) => { 
+        context: async ({ req, res }) => {
             // const token = req?.headers?.authorization || ""
             const token = req.cookies.token
             const userDecoded = getUserFromToken(token);
 
-            const rawIp = req.headers['x-forwarded-for']?.split(',')[0] || 
-            req.socket?.remoteAddress || null;
+            const rawIp = req.headers['x-forwarded-for']?.split(',')[0] ||
+                req.socket?.remoteAddress || null;
             const ip = rawIp === '::1' ? '127.0.0.1' : rawIp;
 
 
-            return { user:userDecoded , ip, req, res};
+            return { user: userDecoded, ip, req, res };
         }
     }))
 

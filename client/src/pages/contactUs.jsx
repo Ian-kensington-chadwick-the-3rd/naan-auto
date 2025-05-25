@@ -223,7 +223,7 @@ const contactUs = () => {
                                  onChange={(e) => onChangeHandler(e)}
                               />
                            </div>
-                           <button onClick={clickAble}  type="submit" className="contact-us_form_button">SUBMIT</button>
+                           <button  type="submit" className="contact-us_form_button">SUBMIT</button>
                         </form>
                      </section>
                   </div>

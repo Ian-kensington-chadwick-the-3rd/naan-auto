@@ -450,7 +450,7 @@ const resolvers = {
           signed: false,
           httpOnly: true,
           secure: true,
-          sameSite: 'strict',
+          sameSite: 'none',
           maxAge: 3600000
         })
 

@@ -134,7 +134,7 @@ const typeDefs = `
         ownership: String
       ): Car
     deleteCar(carId: ID!, key:[String]!): Car
-    signIn(username: String!, passwordInput:String!): AuthResponse
+    signIn(usernameInput: String!, passwordInput:String!): AuthResponse
     createPresignedUrl(key:String!): PresignedResponse
     sendMessage(firstName: String!, lastName:String!, emailAddress:String!, phoneNumber: String!, message:String!, timeString: String dateString: String): Auth 
     deleteMessage(_id: String!): [userMessage]

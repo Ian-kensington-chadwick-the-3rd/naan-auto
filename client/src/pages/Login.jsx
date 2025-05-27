@@ -8,7 +8,7 @@ const login = () => {
     const [signIn] = useMutation(SIGN_IN)
     const [loggedInSuccess, setLoggedInSuccess] = useState(false)
     const [formData, setFormData] = useState({
-        username: '',
+        usernameInput: '',
         passwordInput: ''
     })
 
@@ -38,7 +38,7 @@ const login = () => {
         try {
             const { data } = await signIn({
                 variables: {
-                    username: formData.username,
+                    usernameInput: formData.usernameInput,
                     passwordInput: formData.passwordInput
                 }
             })
@@ -60,8 +60,8 @@ const login = () => {
 
                 <label htmlFor='usernameId' className="">
                     <input type="text"
-                        value={formData.username}
-                        name="username"
+                        value={formData.usernameInput}
+                        name="usernameInput"
                         onChange={handleChange}
                         placeholder="Username"
                         className="log-in_input"></input>

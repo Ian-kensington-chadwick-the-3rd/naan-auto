@@ -2,82 +2,85 @@ const mongoose = require('mongoose')
 const { Schema } = mongoose;
 
 const carSchema = new Schema({
-    year:{
+    year: {
         type: Number,
         required: true
     },
-    make:{
+    make: {
         type: String,
-        required:true
+        required: true
     },
-    model:{
+    model: {
         type: String,
-        required:true
+        required: true
     },
-    mileage:{
+    mileage: {
         type: Number,
-        required:true
+        required: true
     },
-    description:{
-        type: String,        
+    description: {
+        type: String,
     },
-    trans:{
+    trans: {
         type: String
     },
-    imageUrl:{
+    imageUrl: {
         type: [String]
     },
-    price:{
+    price: {
         type: Number
     },
     vin: {
         type: String
     },
-    drivetrain:{
+    drivetrain: {
         type: String
     },
-    exteriorColor:{
+    exteriorColor: {
         type: String
     },
-    interiorColor:{
+    interiorColor: {
         type: String
     },
-    fuelType:{
+    fuelType: {
         type: String
     },
     engineType: {
         type: String
     },
-    condition:{
+    condition: {
         type: String
     },
-    titleHistory:{
+    titleHistory: {
         type: String
     },
-    ownership:{
-        type: String
-}
-});
-
-const Car = mongoose.model('Car',carSchema);
-
-
-const passwordSchema = new Schema({
-    password:{
+    ownership: {
         type: String
     }
-})
+});
 
-const Password = mongoose.model('Password',passwordSchema);
+const Car = mongoose.model('Car', carSchema);
+
+
+// const passwordSchema = new Schema({
+//     password:{
+//         type: String
+//     }
+// })
+
+// const Password = mongoose.model('Password',passwordSchema);
 
 const userSchema = new Schema({
-    username:{
+    username: {
         type: String,
         required: true
     },
-    admin:{
+    admin: {
         type: String,
         required: true
+    },
+    password: {
+        type: String
     }
 });
 
@@ -85,34 +88,34 @@ const User = mongoose.model('User', userSchema);
 
 
 const userMessage = new Schema({
-    firstName:{
+    firstName: {
         type: String,
         required: true
     },
-    lastName:{
-        type:String,
+    lastName: {
+        type: String,
         required: true
     },
-    emailAddress:{
-        type:String,
+    emailAddress: {
+        type: String,
         required: true
     },
-    phoneNumber:{
-        type:String,
-        required:true
+    phoneNumber: {
+        type: String,
+        required: true
     },
-    message:{
-        type:String,
-        required:true
+    message: {
+        type: String,
+        required: true
     },
-    timeString:{
-        type:String
+    timeString: {
+        type: String
     },
-    dateString:{
-        type:String
+    dateString: {
+        type: String
     }
 })
 
 const Message = mongoose.model('Message', userMessage)
 
-module.exports = { Car, Password, User, Message };
+module.exports = { Car,  User, Message };

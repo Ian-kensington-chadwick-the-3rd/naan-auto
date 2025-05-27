@@ -1,5 +1,5 @@
 require('dotenv').config()
-const { Car, Password, User, Message } = require('../models/carschema.js')
+const { Car, User, Message } = require('../models/carschema.js')
 const jwt = require("jsonwebtoken");
 const { v4: uuidv4 } = require('uuid');
 const bcrypt = require("bcrypt");
@@ -9,11 +9,11 @@ const nodeMailer = require('nodemailer');
 
 
 let transporter = nodeMailer.createTransport({
-    service: 'gmail',
-    auth:{
-      user: process.env.GMAIL_USER,
-      pass: process.env.GMAIL_PASSWORD
-    }
+  service: 'gmail',
+  auth: {
+    user: process.env.GMAIL_USER,
+    pass: process.env.GMAIL_PASSWORD
+  }
 })
 
 class bucketAlgo {
@@ -140,7 +140,7 @@ const resolvers = {
       if (minMileage && maxMileage) {
         query.mileage = { $gte: minMileage, $lte: maxMileage }
       }
-      console.log(      minYear,
+      console.log(minYear,
         maxYear,
         minPrice,
         maxPrice,
@@ -173,7 +173,7 @@ const resolvers = {
       titleHistory && titleHistory !== 'all' ? query.titleHistory = titleHistory : delete query.titleHistory;
       ownership && ownership !== 'all' ? query.ownership = ownership : delete query.ownership;
 
-     
+
 
       const searchResult = await Car.find(query)
 
@@ -182,13 +182,13 @@ const resolvers = {
 
 
     },
-    Login: async () => {
-      return Password.find()
-    },
-    AuthCheck: async (parent, ___ , context ) => {
-      
-      try { 
-       
+    // Login: async () => {
+    //   return Password.find()
+    // },
+    AuthCheck: async (parent, ___, context) => {
+
+      try {
+
         if (!context.user) {
           throw new Error('token is not provided')
         }
@@ -242,12 +242,12 @@ const resolvers = {
         titleHistory,
         ownership,
       }, context) => {
-        console.log(context.user)
+      console.log(context.user)
       if (!context || !context.user) {
         console.error("Authentication failed: Context or user not found.");
         throw new Error("Authentication required.");
       }
-    
+
       // Check if user ID exists
       if (!context.user.id) {
         console.error("Authentication failed: User ID not found.");
@@ -368,7 +368,7 @@ const resolvers = {
       // https://pub-50ee404c2cfc48dd970fc6470185d232.r2.dev/cars/064cb9da-fa7d-4b1b-99d0-4fb15e703bf5.jpg
 
       const validKeys = key.filter(k => {
-        try{
+        try {
           new URL(k);
           return true;
         } catch {
@@ -383,24 +383,24 @@ const resolvers = {
         // Create the correct key with your bucket structure
         return { Key: `cars/${filename}` };
       })
-    
-      if(validKeys.length > 0){
-      const command = new DeleteObjectsCommand({
-        Bucket: bucketName,
-        Delete: {
-          Objects: validKeys
+
+      if (validKeys.length > 0) {
+        const command = new DeleteObjectsCommand({
+          Bucket: bucketName,
+          Delete: {
+            Objects: validKeys
+          }
+        })
+        try {
+
+          const response = await client.send(command);
+
+        } catch (err) {
+          console.error(err, 'err at deleting picture from r2 database')
         }
-      })
-      try {
-       
-        const response = await client.send(command);
-       
-      } catch (err) {
-        console.error(err, 'err at deleting picture from r2 database')
+      } else {
+        console.error('no valid urls')
       }
-  } else {
-    console.error('no valid urls')
-  }
       try {
         const car = await Car.findOneAndDelete({
           _id: carId,
@@ -413,13 +413,13 @@ const resolvers = {
         console.error(err, 'error at deleting car from mongo db')
       }
     },
-    signIn: async (parent, { username, passwordInput }, {res, user}) => {
+    signIn: async (parent, { usernameInput, passwordInput }, { res, user }) => {
 
       try {
         var randomId = uuidv4();
-        const Admin = await User.findOne({ username }).exec();
+        const Admin = await User.findOne({ username: usernameInput }).exec();
 
-        if (!Admin) {
+        if (!Admin.username) {
           return {
             user: null,
             token: null,
@@ -429,9 +429,8 @@ const resolvers = {
         }
 
 
-        const hashedPassword = await Password.findOne().exec();
-
-        const match = await bcrypt.compare(passwordInput, hashedPassword.password)
+        const hashedPassword = Admin.password
+        const match = await bcrypt.compare(passwordInput, hashedPassword)
 
         if (!match) {
           return {
@@ -441,15 +440,15 @@ const resolvers = {
             message: "Password incorrect authentication denied!😡"
           }
         }
-
+ 
 
 
         var token = jwt.sign({ id: randomId, username: Admin.username }, process.env.JWT_SECRET_KEY, { expiresIn: "1h" })
 
 
-        res.cookie('token', token,{
-          signed:false,
-          httpOnly:true,
+        res.cookie('token', token, {
+          signed: false,
+          httpOnly: true,
           secure: true,
           sameSite: 'strict',
           maxAge: 3600000
@@ -504,11 +503,11 @@ const resolvers = {
         }
       }
     },
-    sendMessage: async (parent, { firstName, lastName, emailAddress, phoneNumber, message}, context) => {
+    sendMessage: async (parent, { firstName, lastName, emailAddress, phoneNumber, message }, context) => {
 
       const ip = context.ip;
 
-      if (!newBucketAlgo.ipData.has(ip)){
+      if (!newBucketAlgo.ipData.has(ip)) {
         newBucketAlgo.initIp(ip);
       }
 
@@ -516,14 +515,14 @@ const resolvers = {
         return 'all fields must be filled out'
       }
 
-        const tokenconsume = newBucketAlgo.consumeToken(ip) 
-        const timeLimit = newBucketAlgo.intervalDelay
-        if (!tokenconsume) {
-          newBucketAlgo.plusToken(ip);
-          return {success:false};
-        }
+      const tokenconsume = newBucketAlgo.consumeToken(ip)
+      const timeLimit = newBucketAlgo.intervalDelay
+      if (!tokenconsume) {
+        newBucketAlgo.plusToken(ip);
+        return { success: false };
+      }
 
-        
+
       const now = new Date();
 
       const year = now.getFullYear();
@@ -533,36 +532,36 @@ const resolvers = {
       const hours = now.getHours();
       const minutes = now.getMinutes();
 
-      const dateString  = `${month}/${day}/${year}`;
+      const dateString = `${month}/${day}/${year}`;
       const timeString = `${hours}:${minutes}`
 
       const apolloMessage = await Message.create({ firstName, lastName, emailAddress, phoneNumber, message, timeString, dateString })
 
       const emailMessage = {
         from: `${emailAddress}`,
-        to:"iansills04@gmail.com",
-        subject:`you have one message from ${firstName} ${lastName}`,
-        html:`
+        to: "iansills04@gmail.com",
+        subject: `you have one message from ${firstName} ${lastName}`,
+        html: `
           <h2>You have a new message</h2>
           <p>From: ${firstName} ${lastName}</p>
           <p>Email: ${emailAddress}</p>
           <p>phone: ${phoneNumber}</p>
           <h3>message:</h3>
           <p style="font-style: itallic; color:#555;">${message}</p>
-          <p>Time: ${timeString} on ${dateString }</p>
+          <p>Time: ${timeString} on ${dateString}</p>
           <p style='font-size:5px;'>this is an automated message from naan-auto.com</p>
           `
       };
 
-      if(apolloMessage){
-        transporter.sendMail(emailMessage, (err,info) => {
-          if(err){
+      if (apolloMessage) {
+        transporter.sendMail(emailMessage, (err, info) => {
+          if (err) {
             console.log(err)
           } else {
             console.log(info.response)
           }
         })
-      } 
+      }
 
       return {
         success: true

@@ -108,8 +108,8 @@ export const ADD_CAR = gql`
     }`
 
 export const SIGN_IN = gql`
-mutation signIn($username: String!, $passwordInput: String!){
-    signIn(username: $username, passwordInput: $passwordInput){
+mutation signIn($usernameInput: String!, $passwordInput: String!){
+    signIn(usernameInput: $usernameInput, passwordInput: $passwordInput){
         success
         message
     }

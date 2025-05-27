@@ -13,10 +13,10 @@ import Footer from './components/footer'
 import videoBackground from './assets/whitebg.mp4'
 // '/graphql'
 
-
-
+const url = import.meta.env.VITE_GRAPHQL_URI || '/graphql'
+// https://naan-auto.onrender.com/graphql
 const httpLink = createHttpLink({
-  uri: 'https://naan-auto.onrender.com/graphql',
+  uri: url,
   credentials:'include',
 });
 

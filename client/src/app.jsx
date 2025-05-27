@@ -12,8 +12,9 @@ import Header from './components/header'
 import Footer from './components/footer'
 import videoBackground from './assets/whitebg.mp4'
 // '/graphql'
-console.log(url )
+
 const url = import.meta.env.VITE_GRAPHQL_URI || '/graphql'
+console.log(url )
 const httpLink = createHttpLink({
   uri: url,
   credentials:'include',

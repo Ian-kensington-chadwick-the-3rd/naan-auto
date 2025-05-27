@@ -479,14 +479,24 @@ const resolvers = {
       const bucketName = process.env.R2_BUCKET_NAME
 
 
+      if (!accountId || !accessKey || !secretKey || !bucketName) {
+        console.error('Missing R2 environment variables');
+        return {
+          success: false,
+          presignedUrl: null,
+          message: 'Server configuration error: Missing R2 credentials'
+        };
+      }
+
       const client = new S3Client({
-        region: 'us-east-1',
+        region: 'auto',
         endpoint: `https://${accountId}.r2.cloudflarestorage.com`,
         credentials: {
           accessKeyId: accessKey,
           secretAccessKey: secretKey
         },
       });
+
       const command = new PutObjectCommand({ Bucket: bucketName, Key: key })
       try {
         const signedUrl = await getSignedUrl(client, command, { expiresIn: 3600 });

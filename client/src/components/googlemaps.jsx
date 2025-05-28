@@ -8,7 +8,7 @@ export default function GoogleMaps({ className , size }) {
           className={size}
           frameBorder="0"
           referrerPolicy="no-referrer-when-downgrade"
-          src="https://www.google.com/maps/embed/v1/place?key=???&q=place_id:ChIJ61gCy5iVkIgRbB7xpqp-zK4"
+          src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBMcB7BUE0pjhCr9meRESVzuyn3zqxxROw&q=place_id:ChIJK-qNZF3bkIgReFC0ERD-WfY"
           allowFullScreen
         />
       </div>

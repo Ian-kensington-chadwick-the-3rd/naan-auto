@@ -44,6 +44,9 @@ const startApolloServer = async () => {
     app.use(cors({
         origin: [
             'https://naan-auto.vercel.app',
+            'https://naanauto.com/inventory',
+            'https://naanauto.com',
+            'https://www.naanauto.com',
             'http://localhost:3000',
         ],
         credentials: true,

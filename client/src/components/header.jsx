@@ -34,7 +34,7 @@ const Header = () => {
 
 
     useEffect(() => {
-        console.log(window.innerWidth)
+       
         const tabletUnderVw = () => {
             if (window.innerWidth <= 768) {
                 setTabletAndUnderVw(true);
@@ -59,7 +59,6 @@ const Header = () => {
     useEffect(() => {
         const onScroll = () => {
             if (window.scrollY >= 120 && tabletAndUnderVw === true) {
-                console.log(window.scrollY)
                 setStickyHeader(true);
             } else {
                 setStickyHeader(false);

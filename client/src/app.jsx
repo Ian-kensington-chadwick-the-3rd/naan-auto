@@ -14,7 +14,7 @@ import videoBackground from './assets/whitebg.mp4'
 // '/graphql'
 
 const url = import.meta.env.VITE_GRAPHQL_URI || '/graphql'
-console.log(url )
+
 const httpLink = createHttpLink({
   uri: url,
   credentials:'include',

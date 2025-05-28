@@ -478,7 +478,7 @@ const resolvers = {
       const secretKey = process.env.R2_SECRET_ACCESS_KEY
       const bucketName = process.env.R2_BUCKET_NAME
 
-
+    console.log("env ===============>>>>>>>>>>>>>>>>>>>>>>",accountId,accessKey ,secretKey,bucketName)
       if (!accountId || !accessKey || !secretKey || !bucketName) {
         console.error('Missing R2 environment variables');
         return {

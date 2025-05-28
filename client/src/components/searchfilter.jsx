@@ -69,7 +69,6 @@ const Searchfilter = ({ onData }) => {
     // this hook fetches the data chosen from the form in filter and int reference the fetchdata function at the top
     useEffect(() => {
         const peanutButterSpread = { ...filterInt, ...filterString }
-        console.log(peanutButterSpread)
         fetchData({ variables: peanutButterSpread })
     }, [filterInt, filterString])
 

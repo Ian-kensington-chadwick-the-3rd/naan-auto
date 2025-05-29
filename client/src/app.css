@@ -116,6 +116,16 @@ html {
     color: black;
 }
 
+.nostylewhite{
+    list-style: none;
+    text-decoration: none;
+    color: white;
+}
+
+.nostylewhite:hover{
+    color:var(--maincolor);
+};
+
 .noclick {
     pointer-events: none;
 }
@@ -340,6 +350,8 @@ html {
 .address-and-phone:hover{
     color:black;
 }
+
+
 
 .fabook{
     color:white;
@@ -896,7 +908,6 @@ p.orangebottom:hover {
 }
 
 .card {
-    height: 100%;
     max-height: 600px;
     width: 340px;
     background: white;
@@ -918,6 +929,8 @@ p.orangebottom:hover {
     /* -webkit-text-stroke-width: px;
     -webkit-text-stroke-color: orange; */
 }
+
+
 
 .favicon {
     height: 25px;

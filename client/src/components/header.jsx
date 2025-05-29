@@ -5,12 +5,11 @@ import naanAutoLogo from '../assets/naannewlogo.jpg'
 import LeftArrowIcon from "./arrow";
 import { AUTH_CHECK } from "../utils/querys";
 import { useQuery } from '@apollo/client';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 
 const Header = () => {
 
     const [isAdmin, setIsAdmin] = useState(false);
-    const Key = localStorage.getItem('token');
 
     const { data } = useQuery(AUTH_CHECK);
     useEffect(() => {
@@ -34,7 +33,7 @@ const Header = () => {
 
 
     useEffect(() => {
-       
+
         const tabletUnderVw = () => {
             if (window.innerWidth <= 768) {
                 setTabletAndUnderVw(true);
@@ -166,12 +165,12 @@ const Header = () => {
                             4327 Gulf Breeze Parkway, Gulf Breeze FL |
                         </span>
                     </a>
-                    <span className="address-and-phone" style={{ marginLeft: '4px' }}>
-                        call us at
-                    </span>
-                    <span className="satisfy-regular" style={{ marginLeft: '6px' }} >
-                        850-861-5000
-                    </span>
+                    <a className="nostyle" style={{ marginLeft: '4px' }} href="tel:+18508615000">
+                        <span className="address-and-phone">
+                            call us at
+                            850-861-5000
+                        </span>
+                    </a>
 
                 </div>
                 <div>

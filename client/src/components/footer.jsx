@@ -82,7 +82,11 @@ const footer = () => {
 
 
 
+const mapLink = 'https://www.google.com/maps/place/4327+Gulf+Breeze+Pkwy,+Gulf+Breeze,+FL+32563/@30.3929444,-87.0454237,17z/data=!3m1!4b1!4m6!3m5!1s0x8890db5d648dea2b:0xf659fe1011b45078!8m2!3d30.3929398!4d-87.0428434!16s%2Fg%2F11f54xlgyw?entry=ttu&g_ep=EgoyMDI1MDUyNi4wIKXMDSoASAFQAw%3D%3D';
 
+const phoneLink = 'tel:+18508615000';
+
+const emailLink = 'mailto:naanauto@gmail.com';
 
     return (
         <footer >
@@ -98,17 +102,17 @@ const footer = () => {
                                 <Link to='/inventory' className="NAAN-AUTO_font_link contactinfo_push">
                                     <span className="montserrat-underline NAAN-AUTO_font" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>NAAN-AUTO</span>
                                 </Link>
-                                <div className="contact-info_flex">
-                                    <img src={phone} className="contact-info_icon" />
-                                    <span>850-861-5000</span>
+                                <div className="contact-info_flex ">
+                                    <img src={phone} className="contact-info_icon " />
+                                    <a href={phoneLink} className="nostylewhite">850-861-5000</a>
                                 </div>
                                 <div className="contact-info_flex">
                                     <img src={placemarker} className="contact-info_icon" />
-                                    <span className="contactinfo-font">4327 Gulf Breeze Parkway, Gulf Breeze FL</span>
+                                    <a href={mapLink} className="contactinfo-font nostylewhite">4327 Gulf Breeze Parkway, Gulf Breeze FL</a>
                                 </div>
                                 <div className="contact-info_flex">
                                     <img src={email} className="contact-info_icon" />
-                                    <span>naanauto@gmail.com</span>
+                                    <a href={emailLink} className="nostylewhite">naanauto@gmail.com</a>
                                 </div>
                             </div>
                         </div>

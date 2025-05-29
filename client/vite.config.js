@@ -1,13 +1,9 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import viteCompression from 'vite-plugin-compression';
-
 
 export default defineConfig({
-    plugins: [
-        react()
-
-    ],
+    plugins: [react()],
+    base:'/',
     server: {
         port: 3000,
         open: true,
@@ -19,20 +15,5 @@ export default defineConfig({
             }
         }
     },
-    build: {
-        // Enable compression in the production build
-        rollupOptions: {
-            output: {
-                // Here, Vite should handle text compression automatically in production
-            },
-        },
-    },
-
-
-})        // viteCompression({
-        //     algorithm: 'brotliCompress',
-        //     ext: '.br',
-        //     threshold: 1024,
-        //     deleteOriginFile:false,
-        //     filter: /\.(js|mjs|json|css|html|svg|webp)$/i,
-        // }),
+    
+})     

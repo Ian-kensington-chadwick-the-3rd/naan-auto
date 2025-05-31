@@ -253,7 +253,7 @@ const resolvers = {
         console.error("Authentication failed: User ID not found.");
         throw new Error("Authentication denied.");
       }
-      const baseUrl = 'images.naanauto.com';
+      const baseUrl = 'https://images.naanauto.com';
 
       // checking if image is an array or single if not upload only one picture
       const processedImgUrls = Array.isArray(imageUrl) ?

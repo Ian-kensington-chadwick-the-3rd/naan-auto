@@ -253,9 +253,7 @@ const resolvers = {
         console.error("Authentication failed: User ID not found.");
         throw new Error("Authentication denied.");
       }
-      const r2AccountId = process.env.R2_ACCOUNT_ID;
-      const r2BucketName = process.env.R2_BUCKET_NAME;
-      const baseUrl = process.env.R2_TEMP_URL;
+      const baseUrl = 'images.naanauto.com';
 
       // checking if image is an array or single if not upload only one picture
       const processedImgUrls = Array.isArray(imageUrl) ?
@@ -269,7 +267,6 @@ const resolvers = {
         mileage,
         description,
         trans,
-        // will change below rates are limited change to custom domain once bought http//:${r2AccountId}.r2.cloudflarestorage.com/${r2BucketName}/${imageUrl} => http//:cnd.customdomain.com something like that
         imageUrl: processedImgUrls,
         price,
         vin,

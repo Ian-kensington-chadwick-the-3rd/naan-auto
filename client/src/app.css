@@ -591,7 +591,6 @@ p.orangebottom:hover {
     display: flex;
     justify-content: center;
     gap: 4px;
-    padding: 10px
 }
 
 .drag-btn {
@@ -886,6 +885,9 @@ p.orangebottom:hover {
     border-radius: 20px;
 }
 
+.description-box p{
+    font-weight:600;
+}
 
 
 .google-api {
@@ -908,11 +910,13 @@ p.orangebottom:hover {
 }
 
 .card {
+    height: 100%;
     max-height: 600px;
     width: 340px;
     background: white;
     overflow: hidden;
     padding-bottom: 30px;
+    box-sizing: border-box;
 }
 
 .card-img {
@@ -1299,7 +1303,7 @@ p.orangebottom:hover {
 }
 
 .admin-dashboard__slideshow-container {
-    height: 300px;
+    height:255px;
     width: 340px;
     overflow: hidden;
     position: relative;
@@ -1363,6 +1367,37 @@ p.orangebottom:hover {
 
 .spacing-top {
     margin-top: 25px
+}
+
+.admin-dashboard___modal-background{
+    position: fixed;
+    top: 50%;
+    left:50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    border-radius: 8px;
+    width: 800px;
+    height: 800px;
+    z-index: 2;
+}
+
+.admin-dashboard___image-direction{
+    display: flex;
+    justify-content: center;
+    padding:10px;
+    margin-top: 200px;
+    max-width: 800px;
+    flex-wrap: wrap;
+}
+
+.admin-dashboard___btn-container{
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.deleteimg{
+    position: absolute;
 }
 
 /* addCar page */
@@ -1671,6 +1706,11 @@ input[type="file"]:focus {
 
 .inventory-child-container_R a {
     text-decoration: none;
+}
+
+.inventory-rippleloading{
+    height:100vh;
+    width:100vw;
 }
 
 /* contactUs.jsx */

@@ -1,14 +1,13 @@
 import { useQuery } from '@apollo/client'
 import { useEffect, useState } from 'react'
 import { GET_MESSAGE } from '../utils/querys'
-
+import Ripple from './loading'
 
 // going to have the ability to mark as read and delete
 const Messages = () => {
     const { loading, data, error } = useQuery(GET_MESSAGE)
 
     const [messages, setMessages] = useState([])
-   
 
     useEffect(() => {
         if (data && data.getMessage) {
@@ -17,7 +16,7 @@ const Messages = () => {
     }, [data])
 
 
-    if (loading) return <p>Loading messages...</p>;
+    if (loading) return<Ripple className='inventory-rippleloading'/>;
     if (error) return <p>Error loading messages.</p>;
 
 

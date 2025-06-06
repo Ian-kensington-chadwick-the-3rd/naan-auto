@@ -5,6 +5,7 @@ import Searchfilter from "./searchfilter";
 import Modal from "./model";
 import SlideShow from "./slideshow";
 import Pagination from "./pagination";
+import Ripple from './loading'
 
 const AdminForm = () => {
     const { loading, data, error, refetch } = useQuery(GET_CARS);
@@ -181,7 +182,7 @@ const AdminForm = () => {
 
 
 
-    if (loading) return 'loading... cars';
+    if (loading) return <Ripple className='inventory-rippleloading'/>;
     if (error) return 'error with loading cars', error;
 
     return (

@@ -1,24 +1,24 @@
 import { useState, useRef, useEffect } from 'react'
 
-const SlideShow = ({ image = [], id, index, onDragStatusChange }) => {
+const SlideShow = ({ image = [], onDragStatusChange }) => {
     const arrayLength = image.length;
+    const noMoreThanSeven = image.slice(0,8)
     const [wasDragged, setWasDragged] = useState(false);
     const [slideIndex, setSlideIndex] = useState(0);
     const [dragging, setDragging] = useState(false);
     let startX = useRef(0);
     let totalDraggedDistance = useRef(0);
     let slideWrapperRef = useRef(null);
-
+    
     const dragThreshold = 10;
-
     const setIndexForwards = () => {
         setSlideIndex((prevIndex) =>
-            prevIndex === arrayLength - 1 ? 0 : prevIndex + 1);
+            prevIndex === noMoreThanSeven.length - 1 ? 0 : prevIndex + 1);
     }
-
+    
     const setIndexBackwards = () => {
         setSlideIndex((prevIndex) =>
-            prevIndex === 0 ? arrayLength - 1 : prevIndex - 1);
+            prevIndex === 0 ? noMoreThanSeven.length - 1 : prevIndex - 1);
     }
 
     const getClientX = (e) => {
@@ -138,7 +138,7 @@ const SlideShow = ({ image = [], id, index, onDragStatusChange }) => {
                     onTouchEnd={(e) => mouseUpAction(e)}
                     ref={slideWrapperRef}
                 >
-                    {image.slice(0, 5).map((img, index) => {
+                    {image.slice(0, 8).map((img, index) => {
                         return (
                             <img
                                 src={img}
@@ -150,7 +150,7 @@ const SlideShow = ({ image = [], id, index, onDragStatusChange }) => {
                 </div>  
                 {arrayLength > 1 ?
                 <div className={'dragbuttons-container'}>
-                    {image.slice(0, 5).map((__, index) => {
+                    {image.slice(0, 8).map((__, index) => {
                         return (
                             <button key={index} className={slideIndex === index ? 'drag-btn-active drag-btn':'drag-btn'} />
                         )

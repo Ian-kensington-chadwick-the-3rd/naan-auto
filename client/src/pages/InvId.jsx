@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react'
 import GoogleMaps from './../components/googlemaps'
 import play from '../assets/icons8-play-32.png'
 import pause from '../assets/icons8-pause-32.png'
+import Ripple from '../components/loading.jsx'
 
 const InvId = () => {
     // use the useParams hook to extract data from the specific id 
@@ -16,7 +17,7 @@ const InvId = () => {
 
     let dataImg = data?.findCar[0]?.imageUrl;
 
-
+    console.log(cars)
     const arrayLength = cars[0]?.imageUrl?.length;
     const setIndexForwards = () => {
         setSlideIndex((prevIndex) =>
@@ -163,7 +164,7 @@ const InvId = () => {
 
 
 
-    if (loading) return <p>Loading...</p>;
+    if (loading) return <Ripple/>;
     if (error) return <p>Error: {error.message}</p>;
 
 
@@ -289,7 +290,7 @@ const InvId = () => {
 
                         <div className="description-box">
                             <h2 className="car-description">Description</h2>
-                            <p>{cars[0].Description}</p>
+                            <p className="">{cars[0].description}</p>
                         </div>
                         <div style={{ marginBottom: '50px' }}>
                             <GoogleMaps className='google-api' />
@@ -309,8 +310,8 @@ const InvId = () => {
                                 <Link className="nostyle" to={'/aboutUs'}>
                                     <span className="montserrat-underline naanautowidget">NAAN-AUTO</span>
                                 </Link>
-                                <span className="naanautowidgetphone parkinsans">406-407-5950</span>
-                                <span className="naanautowidgetaddress">8520 N Palafox St Pensicola FL, 32534</span>
+                                <span className="naanautowidgetphone parkinsans">850-861-5000</span>
+                                <span className="naanautowidgetaddress">4327 Gulf Breeze Parkway, Gulf Breeze FL</span>
                             </div>
                         </div>
                     </section>

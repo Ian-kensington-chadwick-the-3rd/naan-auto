@@ -11,6 +11,7 @@ import exteriorColor from '../assets/carprofile.png'
 import interiorColor from '../assets/seatcar.png'
 import gearBox from '../assets/gearbox.png'
 import enginePng from '../assets/engine.png'
+import Ripple from '../components/loading.jsx'
 
 const Inventory = () => {
 
@@ -68,7 +69,7 @@ const Inventory = () => {
         setTotalCars(total)
     }
 
-    if (carLoading) return 'loading...';
+    if(carLoading) return <Ripple className='inventory-rippleloading'/>;
     if (carError) return `Error!!!! ${carError.message}`;
 
     // to splice we are going to give a page index of 0 which will splice from array 0 - 10 items. next page index is going to be 1 * 10 which will equal index 10 in the next index of 10 b

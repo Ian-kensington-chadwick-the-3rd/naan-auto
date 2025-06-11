@@ -18,6 +18,7 @@ const typeDefs = `
     condition: String
     titleHistory: String
     ownership: String
+    sold: Boolean
   }
 
   type Login {
@@ -112,6 +113,7 @@ const typeDefs = `
       condition: String
       titleHistory: String
       ownership: String
+      sold: Boolean
       ): Car
       updateCar(
         _id: String
@@ -132,12 +134,14 @@ const typeDefs = `
         condition: String
         titleHistory: String
         ownership: String
+        sold: Boolean
       ): Car
     deleteCar(carId: ID!, key:[String]!): Car
     signIn(usernameInput: String!, passwordInput:String!): AuthResponse
     createPresignedUrl(key:String!): PresignedResponse
     sendMessage(firstName: String!, lastName:String!, emailAddress:String!, phoneNumber: String!, message:String!, timeString: String dateString: String): Auth 
     deleteMessage(_id: String!): [userMessage]
+    deleteImage(url: String!): PresignedResponse
   }
 `;
 

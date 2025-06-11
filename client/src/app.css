@@ -798,7 +798,7 @@ p.orangebottom:hover {
     margin: 30px auto;
     width: 100%;
     line-height: 1.5rem;
-    z-index: 1; 
+    z-index: 999; 
     box-sizing: border-box;
 }
 
@@ -1327,6 +1327,18 @@ p.orangebottom:hover {
 
 }
 
+.sold{
+    position: absolute;
+    left: 50%;
+    top:50%;
+    transform: translate(-50%,-50%);
+    z-index: 1;
+    font-size: 50px;
+    color: var(--maincolor);
+    font-weight: 800;
+    pointer-events: none;
+}
+
 .admin-dashboard___btncontainer{
     display:flex;
     gap:5px;
@@ -1398,6 +1410,7 @@ p.orangebottom:hover {
 
 .deleteimg{
     position: absolute;
+    transform: translate(-25px,2px);
 }
 
 /* addCar page */

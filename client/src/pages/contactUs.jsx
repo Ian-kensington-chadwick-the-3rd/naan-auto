@@ -54,8 +54,8 @@ const contactUs = () => {
    const submitFormHandler = async (e) => {
       e.preventDefault();
 
-      const emptyForm = !form.firstName && !form.lastName && !form.message && !form.phoneNumber && !form.emailAddress 
-      if(emptyForm){
+      const emptyForm = !form.firstName && !form.lastName && !form.message && !form.phoneNumber && !form.emailAddress
+      if (emptyForm) {
          setClientMessage('you can not send an empty form');
          setSuccessMessage(false);
          popUpMessage();
@@ -69,7 +69,7 @@ const contactUs = () => {
          form.emailAddress === previousForm.current.emailAddress &&
          form.message === previousForm.current.message;
 
-      if(sameInput) {
+      if (sameInput) {
          setClientMessage('you cant send the same message twice')
          setSuccessMessage(false);
          popUpMessage();
@@ -77,26 +77,26 @@ const contactUs = () => {
       };
 
       const fillOutEveryField = !form.firstName || !form.lastName || !form.message || !form.phoneNumber || !form.emailAddress
-      if(fillOutEveryField){
+      if (fillOutEveryField) {
          setClientMessage('please fill out each input.');
          setSuccessMessage(false);
          popUpMessage();
          return;
       }
 
-      const {data} = await sendMessage({
+      const { data } = await sendMessage({
          variables: { ...form }
       })
-   
+
       if (data?.sendMessage?.success) {
          setSuccessMessage(true)
-         previousForm.current = {...form}
- 
+         previousForm.current = { ...form }
+
          setClientMessage('message sent')
       } else {
          setSuccessMessage(false)
          setClientMessage('message not sent')
-      }  
+      }
       popUpMessage();
    }
 
@@ -135,8 +135,8 @@ const contactUs = () => {
          {showPopUp &&
             <section className="pop-up-message ">
                {successMessage ?
-                  <div className="popup-center"><span style={{color:'green'}}>{clientMessage}</span><img src={successfullMessage} /></div> :
-                  <div className="popup-center"><span style={{color:'red'}}>{clientMessage}</span><img src={unsuccessfullMessage}/></div>
+                  <div className="popup-center"><span style={{ color: 'green' }}>{clientMessage}</span><img src={successfullMessage} /></div> :
+                  <div className="popup-center"><span style={{ color: 'red' }}>{clientMessage}</span><img src={unsuccessfullMessage} /></div>
                }
 
             </section>}
@@ -155,7 +155,7 @@ const contactUs = () => {
                               Looking for answers or just excited to start your car-buying journey?
                            </p>
                            <p className="contact-us_description_font parkinsans">
-                           We're here to make the process easy and enjoyable. From finding the perfect vehicle to exploring financing solutions, at Naan-auto we are not just a team we are a family. Simply fill out the form, and we’ll be in touch to help you get started!
+                              We're here to make the process easy and enjoyable. From finding the perfect vehicle to exploring financing solutions, at Naan-auto we are not just a team we are a family. Simply fill out the form, and we’ll be in touch to help you get started!
                            </p>
 
                         </div>
@@ -223,7 +223,7 @@ const contactUs = () => {
                                  onChange={(e) => onChangeHandler(e)}
                               />
                            </div>
-                           <button  type="submit" className="contact-us_form_button">SUBMIT</button>
+                           <button type="submit" className="contact-us_form_button">SUBMIT</button>
                         </form>
                      </section>
                   </div>
@@ -260,7 +260,7 @@ const contactUs = () => {
                                     Monday
                                  </span>
                                  <span>
-                                    09:00 AM - 5:00 PM
+                                    11:00 AM - 5:00 PM
                                  </span>
                               </li>
                               <li className="contact-us_opening_hours_spacing">
@@ -268,7 +268,7 @@ const contactUs = () => {
                                     Tuesday
                                  </span>
                                  <span>
-                                    09:00 AM - 5:00 PM
+                                    12:00 PM - 5:00 PM
                                  </span>
                               </li>
                               <li className="contact-us_opening_hours_spacing">
@@ -276,7 +276,7 @@ const contactUs = () => {
                                     Wednesday
                                  </span>
                                  <span>
-                                    09:00 AM - 5:00 PM
+                                    11:00 AM - 5:00 PM
                                  </span>
                               </li>
                               <li className="contact-us_opening_hours_spacing">
@@ -284,7 +284,7 @@ const contactUs = () => {
                                     Thursday
                                  </span>
                                  <span>
-                                    09:00 AM - 5:00 PM
+                                    11:00 AM - 5:00 PM
                                  </span>
                               </li>
                               <li className="contact-us_opening_hours_spacing">
@@ -292,7 +292,7 @@ const contactUs = () => {
                                     Friday
                                  </span>
                                  <span>
-                                    09:00 AM - 5:00 PM
+                                    11:00 AM - 5:00 PM
                                  </span>
                               </li>
                               <li className="contact-us_opening_hours_spacing">

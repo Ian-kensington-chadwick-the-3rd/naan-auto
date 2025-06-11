@@ -129,7 +129,7 @@ const emailLink = 'mailto:naanauto@gmail.com';
                                         Monday
                                     </span>
                                     <span>
-                                        09:00 AM - 5:00 PM
+                                        11:00 AM - 5:00 PM
                                     </span>
                                 </li>
                                 <li className="hoo-li">
@@ -137,7 +137,7 @@ const emailLink = 'mailto:naanauto@gmail.com';
                                         Tuesday
                                     </span>
                                     <span>
-                                        09:00 AM - 5:00 PM
+                                        12:00 PM - 5:00 PM
                                     </span>
                                 </li>
                                 <li className="hoo-li">
@@ -145,7 +145,7 @@ const emailLink = 'mailto:naanauto@gmail.com';
                                         Wednesday
                                     </span>
                                     <span>
-                                        09:00 AM - 5:00 PM
+                                        11:00 AM - 5:00 PM
                                     </span>
                                 </li>
                                 <li className="hoo-li">
@@ -153,7 +153,7 @@ const emailLink = 'mailto:naanauto@gmail.com';
                                         Thursday
                                     </span>
                                     <span>
-                                        09:00 AM - 5:00 PM
+                                        11:00 AM - 5:00 PM
                                     </span>
                                 </li>
                                 <li className="hoo-li">
@@ -161,7 +161,7 @@ const emailLink = 'mailto:naanauto@gmail.com';
                                         Friday
                                     </span>
                                     <span>
-                                        09:00 AM - 5:00 PM
+                                        11:00 AM - 5:00 PM
                                     </span>
                                 </li>
                                 <li className="hoo-li">

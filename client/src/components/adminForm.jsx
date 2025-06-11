@@ -23,8 +23,7 @@ const AdminForm = () => {
         refetch();
     }, [refetch])
 
-
-
+   
     // will have the ability to update cars delete cars and create cars
     const [selectedCar, setSelectedCar] = useState(null)
     const [form, setForm] = useState({
@@ -44,9 +43,9 @@ const AdminForm = () => {
         engineType: '',
         condition: '',
         titleHistory: '',
-        ownership: ''
+        ownership: '',
+        sold: false
     })
-
 
 
 
@@ -69,12 +68,15 @@ const AdminForm = () => {
                 engineType: selectedCar.engineType || '',
                 condition: selectedCar.condition || '',
                 titleHistory: selectedCar.titleHistory || '',
-                ownership: selectedCar.ownership || ''
+                ownership: selectedCar.ownership || '',
+                sold: selectedCar.sold || false 
             })
         }
     }, [selectedCar])
-
-    const carUpdate = async (e, _id) => {
+        
+    const carUpdate = async (_id) => {
+        
+       
         try {
             const result = await updateCar({
                 variables: {
@@ -111,10 +113,13 @@ const AdminForm = () => {
         if (submitButtonName === 'delete') {
             await carDelete(e, carId, imageUrl)
         }
-        else {
-            await carUpdate(e, carId)
+        if(submitButtonName === 'update'){
+           
+            await carUpdate(carId)
         }
-    }
+            
+        }
+    
 
 
     const handleFormChange = (e) => {
@@ -147,12 +152,10 @@ const AdminForm = () => {
 
     const showModal = () => {
         setModal(true);
-
     }
 
     const closeModal = () => {
         setModal(false);
-  
     }
 
     const [modalImage, setModalImage] = useState()
@@ -165,8 +168,25 @@ const AdminForm = () => {
         setImageId(id)
     }
 
+    const setSold = async (car) => {
+        const newSoldStatus = !car.sold;
+     
 
-
+        try{
+            console.log(newSoldStatus)
+        const result = await updateCar({
+            variables: {
+                _id: car._id,
+                sold: newSoldStatus 
+            }
+        });
+        console.log(result)
+    } catch(e){
+        console.error(e)
+        console.log(result)
+    }
+    }
+    // grabs id then uses id to update form information
     
 
 
@@ -176,14 +196,17 @@ const AdminForm = () => {
     const [paginatedData, setPaginatedData] = useState([])
 
 
-    const handlePaginatedData = (paginatedData) =>{
+    const handlePaginatedData = (paginatedData) => {
         setPaginatedData(paginatedData)
     }
 
+    const soldData = paginatedData.map((car, i)=> car.sold)
 
-
-    if (loading) return <Ripple className='inventory-rippleloading'/>;
-    if (error) return 'error with loading cars', error;
+  
+    
+   
+    if (loading) return <Ripple className='inventory-rippleloading' />;
+    if (error) return <div>{error}</div>;
 
     return (
         <div className="flex spacing-top">
@@ -195,8 +218,9 @@ const AdminForm = () => {
                 <div className="container">
                     {paginatedData.map((car, index) => (
                         <div key={index} className='admin-dashboard__item' >
-                            <div>
-                                <SlideShow image={car.imageUrl} index={index} /> 
+                            <div style={{position:'relative'}}>
+                                {car.sold === true && <span className="sold">SOLD</span>}
+                                <SlideShow image={car.imageUrl} index={index} />
                             </div>
                             <form className="admin-dashboard___input " onSubmit={(e) => handleFormSubmit(e, car._id, car.imageUrl)}>
                                 <div>
@@ -343,23 +367,27 @@ const AdminForm = () => {
                                     onChange={e => handleFormChange(e)}
                                     onClick={() => setSelectedCar(car)}
                                 />
-                                <button className="admin-dashboard___btntop" src={car.imageUrl} key={index} 
-                                        onClick={() => { showModal(); showImage(car.imageUrl); modalId(car._id); }} >
-                                            change img index
-                                            </button>
+                                <button
+                                    className="admin-dashboard___btntop"
+                                    src={car.imageUrl}
+                                    key={index}
+                                    onClick={() => {
+                                        showModal();
+                                        showImage(car.imageUrl);
+                                        modalId(car._id);
+                                    }}
+                                >img customization
+                                </button>
+                                <button className="admin-dashboard___btntop" type="button" onClick={() => {setSold(car)}}>Mark as Sold</button>
                                 <div className="admin-dashboard___btncontainer">
-                                <button type="submit" className="admin-dashboard___btn">Update Car</button>
-                                <button type="submit" className="admin-dashboard___btn" name="delete" >Delete Car</button>
+                                    <button type="button" className="admin-dashboard___btn" >Update Car</button>
+                                    <button type="submit" className="admin-dashboard___btn" name="delete">Delete Car</button>
                                 </div>
-
                             </form>
-                    
                         </div>
-
                     ))}
-
                 </div>
-                        <Pagination data={ data1 } handlePaginatedData={handlePaginatedData}/>
+                <Pagination data={data1} handlePaginatedData={handlePaginatedData} />
             </div>
         </div>
     )

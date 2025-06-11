@@ -54,7 +54,7 @@ const Inventory = () => {
 
 
     const data1 = usedSearch === true ? searchData : (carData?.Cars || []);
-  
+
 
     const [paginatedData, setPaginatedData] = useState([]);
     const [carCountEnd, setCarCountEnd] = useState(0);
@@ -69,7 +69,7 @@ const Inventory = () => {
         setTotalCars(total)
     }
 
-    if(carLoading) return <Ripple className='inventory-rippleloading'/>;
+    if (carLoading) return <Ripple className='inventory-rippleloading' />;
     if (carError) return `Error!!!! ${carError.message}`;
 
     // to splice we are going to give a page index of 0 which will splice from array 0 - 10 items. next page index is going to be 1 * 10 which will equal index 10 in the next index of 10 b
@@ -119,9 +119,12 @@ const Inventory = () => {
 
                                 <div key={car._id} ref={carRef} style={{ textDecoration: 'none' }} className='card'>
 
-                                    <div >
+                                    <div style={{ position: 'relative' }}>
+                                        {car.sold === true && <span className='sold'>SOLD</span>}
                                         <Link to={`/inventory/${car._id}`}
+
                                             draggable={false}>
+
                                             <SlideShow
                                                 image={car.imageUrl}
                                             />

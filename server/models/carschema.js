@@ -56,6 +56,9 @@ const carSchema = new Schema({
     },
     ownership: {
         type: String
+    },
+    sold:{
+        type: Boolean
     }
 });
 

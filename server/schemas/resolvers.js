@@ -3,7 +3,7 @@ const { Car, User, Message } = require('../models/carschema.js')
 const jwt = require("jsonwebtoken");
 const { v4: uuidv4 } = require('uuid');
 const bcrypt = require("bcrypt");
-const { S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectsCommand } = require('@aws-sdk/client-s3');
+const { S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectsCommand, DeleteObjectCommand } = require('@aws-sdk/client-s3');
 const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
 const nodeMailer = require('nodemailer');
 
@@ -253,7 +253,7 @@ const resolvers = {
         console.error("Authentication failed: User ID not found.");
         throw new Error("Authentication denied.");
       }
-      const baseUrl = 'https://pub-50ee404c2cfc48dd970fc6470185d232.r2.dev';
+      const baseUrl = 'https://images.naanauto.com';
 
       // checking if image is an array or single if not upload only one picture
       const processedImgUrls = Array.isArray(imageUrl) ?
@@ -302,7 +302,8 @@ const resolvers = {
       engineType,
       condition,
       titleHistory,
-      ownership
+      ownership,
+      sold
     }, context) => {
       console.log(context.user)
 
@@ -312,27 +313,28 @@ const resolvers = {
 
       const query = {};
 
-      if (year) query.year = year;
-      if (make) query.make = make;
-      if (model) query.model = model;
-      if (mileage) query.mileage = mileage;
-      if (description) query.description = description;
-      if (trans) query.trans = trans;
-      if (imageUrl) query.imageUrl = imageUrl;
+      if (year !== undefined && year !== null) query.year = year;
+      if (make !== undefined && make !== null) query.make = make;
+      if (model !== undefined && model !== null) query.model = model;
+      if (mileage !== undefined && mileage !== null) query.mileage = mileage;
+      if (description !== undefined && description !== null) query.description = description;
+      if (trans !== undefined && trans !== null) query.trans = trans;
+      if (imageUrl !== undefined && imageUrl !== null) query.imageUrl = imageUrl;
       if (price) query.price = price;
-      if (vin) query.vin = vin;
-      if (drivetrain) query.drivetrain = drivetrain;
-      if (exteriorColor) query.exteriorColor = exteriorColor;
-      if (interiorColor) query.interiorColor = interiorColor;
-      if (fuelType) query.fuelType = fuelType;
-      if (engineType) query.engineType = engineType;
-      if (condition) query.condition = condition;
-      if (titleHistory) query.titleHistory = titleHistory;
-      if (ownership) query.ownership = ownership;
+      if (vin !== undefined && vin !== null) query.vin = vin;
+      if (drivetrain !== undefined && description !== null) query.drivetrain = drivetrain;
+      if (exteriorColor !== undefined && exteriorColor !== null) query.exteriorColor = exteriorColor;
+      if (interiorColor !== undefined && interiorColor !== null) query.interiorColor = interiorColor;
+      if (fuelType !== undefined && fuelType !== null) query.fuelType = fuelType;
+      if (engineType !== undefined && engineType !== null) query.engineType = engineType;
+      if (condition !== undefined && condition !== null) query.condition = condition;
+      if (titleHistory !== undefined && titleHistory !== null) query.titleHistory = titleHistory;
+      if (ownership !== undefined && ownership !== null) query.ownership = ownership;
+      if (sold !== undefined && sold !== null) query.sold = sold
 
       try {
-
-
+        console.log(sold)
+        console.log('this is query ===>>>>',query)
         const result = await Car.findByIdAndUpdate(
           { _id },
           { $set: query },
@@ -390,7 +392,7 @@ const resolvers = {
         })
         try {
 
-          const response = await client.send(command);
+          await client.send(command);
 
         } catch (err) {
           console.error(err, 'err at deleting picture from r2 database')
@@ -437,7 +439,7 @@ const resolvers = {
             message: "Password incorrect authentication denied!😡"
           }
         }
- 
+
 
 
         var token = jwt.sign({ id: randomId, username: Admin.username }, process.env.JWT_SECRET_KEY, { expiresIn: "1h" })
@@ -475,7 +477,7 @@ const resolvers = {
       const secretKey = process.env.R2_SECRET_ACCESS_KEY
       const bucketName = process.env.R2_BUCKET_NAME
 
-    console.log("env ===============>>>>>>>>>>>>>>>>>>>>>>",accountId,accessKey ,secretKey,bucketName)
+      console.log("env ===============>>>>>>>>>>>>>>>>>>>>>>", accountId, accessKey, secretKey, bucketName)
       if (!accountId || !accessKey || !secretKey || !bucketName) {
         console.error('Missing R2 environment variables');
         return {
@@ -581,6 +583,48 @@ const resolvers = {
         return result
       } catch {
         throw new Error('failed to delete error')
+      }
+    },
+    deleteImage: async (parent, { url }) => {
+      console.log(url)
+      const accountId = process.env.R2_ACCOUNT_ID
+      const accessKey = process.env.R2_ACCESS_KEY_ID
+      const secretKey = process.env.R2_SECRET_ACCESS_KEY
+      const bucketName = process.env.R2_BUCKET_NAME
+
+      const client = new S3Client({
+        region: 'us-east-1',
+        endpoint: `https://${accountId}.r2.cloudflarestorage.com`,
+        credentials: {
+          accessKeyId: accessKey,
+          secretAccessKey: secretKey
+        },
+      });
+
+      try {
+
+        const pathParts = new URL(url).pathname.split('/')
+        const fileName = pathParts[pathParts.length - 1]
+
+        const command = new DeleteObjectCommand({
+          Bucket: bucketName,
+          Key: `cars/${fileName}` 
+        })
+
+        const res = await client.send(command);
+        console.log(res)
+        return {
+          success: true,
+          presignedUrl: fileName,
+          message: 'car picture deletion success!'
+        }
+
+      } catch (err) {
+        return {
+          success: false,
+          presignedUrl: null,
+          message: err
+        }
       }
     }
   },

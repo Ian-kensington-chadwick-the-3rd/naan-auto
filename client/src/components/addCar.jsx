@@ -167,7 +167,6 @@ const AddCarData = () => {
             let processedCount = 0;
             await new Promise((resolve, reject) => {
 
-
                 const files = Array.from(form.imageUrl);
 
                 files.forEach((file, index) => {

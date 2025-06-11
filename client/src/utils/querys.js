@@ -21,6 +21,7 @@ export const GET_CARS = gql`
             condition
             titleHistory
             ownership
+            sold
         }
     }`
 
@@ -45,6 +46,7 @@ export const FIND_CAR = gql`
             condition
             titleHistory
             ownership
+            sold
         }
     }`
 
@@ -262,6 +264,7 @@ mutation updateCar(
     $condition: String
     $titleHistory: String
     $ownership: String
+    $sold: Boolean
 ) {
     updateCar(
         _id: $_id
@@ -282,6 +285,7 @@ mutation updateCar(
         condition: $condition
         titleHistory: $titleHistory
         ownership: $ownership
+        sold: $sold
     ) {
         _id
         year
@@ -301,6 +305,7 @@ mutation updateCar(
         condition
         titleHistory
         ownership
+        sold
     }
 }
 `
@@ -337,3 +342,13 @@ export const GET_MESSAGE = gql`
                 dateString
             }
     }`
+
+export const DELETE_IMG = gql`
+    mutation deleteImage($url: String!){
+                deleteImage(url: $url){
+                    success
+                    presignedUrl
+                    message
+                }
+    }
+`

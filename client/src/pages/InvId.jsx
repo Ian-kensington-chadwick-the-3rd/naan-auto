@@ -17,7 +17,6 @@ const InvId = () => {
 
     let dataImg = data?.findCar[0]?.imageUrl;
 
-    console.log(cars)
     const arrayLength = cars[0]?.imageUrl?.length;
     const setIndexForwards = () => {
         setSlideIndex((prevIndex) =>
@@ -108,11 +107,14 @@ const InvId = () => {
     const parentSlider = outerPictureRef.current;
     const childSlider = pictureRef.current
     const maxOffset = parentSlider?.offsetWidth - childSlider?.scrollWidth;
-
+    let temp = 0;
     const draggingPic = (e) => {
         if (!dragging) return;
         const distance = startX.current - e.touches[0].pageX;
-        const clampedOffset = clamp(-distance, maxOffset, 0)
+        temp += distance
+        console.log(temp)
+        const clampedOffset = clamp(-temp, maxOffset, 0)
+    
         pictureRef.current.style.transform = `translateX(${clampedOffset}px)`
     };
 
@@ -120,7 +122,7 @@ const InvId = () => {
         setDragging(false);
         pictureRef.current.style.transition = 'ease-out .1s'
     };
-    // maxOffset    0     -distance
+    //             distance, maxOffset, 0
     const clamp = (value, min, max) => Math.max(min, Math.min(max, value))
 
     const timedSlider = () => {
@@ -139,7 +141,7 @@ const InvId = () => {
 
         let targetOffset = 0;
 
-        if(imgOffsetLeft + imgWidth * 2 > parentContainer){
+        if(imgOffsetLeft + imgWidth  > parentContainer){
             targetOffset = parentContainer - (imgOffsetLeft + imgWidth) * 2
         } else if (imgOffsetLeft < 0) {
             targetOffset = -imgOffsetLeft;
@@ -161,7 +163,7 @@ const InvId = () => {
 
     }, [slideIndex]);
 
-
+    
 
 
     if (loading) return <Ripple/>;
@@ -180,8 +182,9 @@ const InvId = () => {
                 <section className="center-dup">
                     <section>
                         <div className={`${pictureSpaceTabletUnderVw} ${pictuerSpaceTabletOverVw}`}>
-                            <div className="slideshow-container">
-                                <div className="slide-wrapper" style={{ transform: `translateX(-${slideIndex * 100}%)` }}>
+                            <div className="slideshow-container"> 
+                            {cars[0].sold === true && <span className="sold" style={{zIndex:'1',fontSize:'100px'}}>SOLD</span>}
+                                <div className="slide-wrapper" style={{ transform: `translateX(-${slideIndex * 100}%)`, position:'relative' }}>
                                     {dataImg?.map((src, index) => (
                                         <img key={index} src={src} alt={`Car ${index}`} />
                                     ))}
@@ -208,6 +211,7 @@ const InvId = () => {
                                             onTouchMove={draggingPic}
                                             onTouchEnd={touchEnd}
                                             ref={el => innerPictureRef.current[index] = el} 
+                                            draggable={false}
                                         />
                                     ))}
                                 </div>

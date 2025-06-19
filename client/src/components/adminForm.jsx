@@ -110,6 +110,7 @@ const AdminForm = () => {
     const handleFormSubmit = async (e, carId, imageUrl) => {
         e.preventDefault();
         const submitButtonName = e.nativeEvent.submitter.name;
+        console.log(submitButtonName)
         if (submitButtonName === 'delete') {
             await carDelete(e, carId, imageUrl)
         }
@@ -380,7 +381,7 @@ const AdminForm = () => {
                                 </button>
                                 <button className="admin-dashboard___btntop" type="button" onClick={() => {setSold(car)}}>Mark as Sold</button>
                                 <div className="admin-dashboard___btncontainer">
-                                    <button type="button" className="admin-dashboard___btn" >Update Car</button>
+                                    <button type="submit" className="admin-dashboard___btn" name="update">Update Car</button>
                                     <button type="submit" className="admin-dashboard___btn" name="delete">Delete Car</button>
                                 </div>
                             </form>

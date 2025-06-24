@@ -246,7 +246,7 @@ const contactUs = () => {
                            <h3>Address</h3>
                            <div style={{ display: 'flex' }}>
                               <img src={mapMarker} style={{ width: '30px', height: '30px', paddingRight: '5px' }} alt="map marker gif" />
-                              <span className="maincolor" >8520 N Palafox St Pensicola FL, 32534</span>
+                              <span className="maincolor" >4327 Gulf Breeze Parkway, Gulf Breeze FL</span>
                            </div>
                         </div>
                         <div>

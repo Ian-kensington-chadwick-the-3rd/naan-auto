@@ -1331,12 +1331,15 @@ p.orangebottom:hover {
     position: absolute;
     left: 50%;
     top:50%;
-    transform: translate(-50%,-50%);
+    transform: translate(-50%,-50%) rotate(-30deg);
     z-index: 1;
-    font-size: 50px;
+    font-size: 120px;
     color: var(--maincolor);
     font-weight: 800;
     pointer-events: none;
+    text-shadow: 0 1px 0 #17202A, 0 2px 0 #17202A,
+    0 7px 0 #17202A, 0 8px 0 #17202A,
+    0 11px 0 #17202A, 0 12px 0 #17202A;
 }
 
 .admin-dashboard___btncontainer{

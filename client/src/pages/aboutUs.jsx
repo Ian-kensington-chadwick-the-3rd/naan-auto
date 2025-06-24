@@ -32,7 +32,6 @@ const AboutUs = () => {
                      <p className="about-us_text parkinsans">We know that buying a car isnt just a transaction its about saftey, reliablity, and finding something that fits your lifestyle. Thats why we treat every customer like family, offering personalized service, dependable vehicles, and honest advice you can count on.</p>
                      <span>- Jason and Stephanie</span>
                   </div>
-
                </div>
             </section>
             <section className="about-us_background_r flex1">
@@ -48,7 +47,6 @@ const AboutUs = () => {
                                  Justin Redd
                               </span>
                            </a>
-                           <span>2/22/22</span>
                         </div>
                      </div>
                      <div>
@@ -72,7 +70,6 @@ const AboutUs = () => {
                                  thedream craftlife
                               </span>
                            </a>
-                           <span>2/22/22</span>
                         </div>
                      </div>
                      <div>
@@ -96,7 +93,6 @@ const AboutUs = () => {
                                  Kandi Firestone
                               </span>
                            </a>
-                           <span>2/22/22</span>
                         </div>
                      </div>
                      <div>
@@ -127,7 +123,6 @@ const AboutUs = () => {
                                  Tatum Salter
                               </span>
                            </a>
-                           <span>2/22/22</span>
                         </div>
                      </div>
                      <div>
@@ -152,7 +147,6 @@ const AboutUs = () => {
                                  Terry Manley
                               </span>
                            </a>
-                           <span>2/22/22</span>
                         </div>
                      </div>
                      <div>

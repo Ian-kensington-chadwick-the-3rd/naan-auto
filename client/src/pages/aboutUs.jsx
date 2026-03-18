@@ -16,6 +16,7 @@ const AboutUs = () => {
             <meta property="og:site_name" content="Naan Auto" />
             <meta property="og:type" content="website" />
             <meta property="og:url" content="https://naanauto.com/aboutUs" />
+            <link rel="canonical" href="https://naanauto.com/aboutUs" />
             <meta property="og:image" content="https://naanauto.com/logo.PNG" />
             <link rel="preload" href="./assets/pexelsfinal.webp" as="image" />
             <meta name="twitter:card" content="summary_large_image" />

@@ -126,6 +126,7 @@ const contactUs = () => {
             <meta property="og:site_name" content="Naan Auto" />
             <meta property="og:type" content="website" />
             <meta property="og:url" content="https://naanauto.com/contactUs" />
+            <link rel="canonical" href="https://naanauto.com/contactUs" />
             <meta property="og:image" content="https://naanauto.com/logo.PNG" />
             <link rel="preload" href="./assets/rowancomp.webp" as="image" />
             <meta name="twitter:card" content="summary_large_image" />

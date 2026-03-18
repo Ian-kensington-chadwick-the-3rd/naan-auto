@@ -85,6 +85,7 @@ const Inventory = () => {
                 <meta property='og:site_name' content='Naan Auto' />
                 <meta property="og:type" content="website" />
                 <meta property="og:url" content="https://naanauto.com/inventory" />
+                <link rel="canonical" href="https://naanauto.com/inventory" />
                 <meta property="og:image" content="https://naanauto.com/logo.PNG" />
 
                 <meta name='twitter:card' content='summary_large_image' />

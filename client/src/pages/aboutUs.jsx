@@ -9,17 +9,19 @@ const AboutUs = () => {
    return (
       <div>
          <Helmet>
-            <title>About Us - testimonials | Naan Auto</title>
-            <meta name='description' content='Learn more about what naan-auto is really about and our customers experiences' />
-            <meta property='og:title' content='Welcome to Naan Auto - Learn More About Us' />
-            <meta property='og:site_name' content='Naan Auto' />
+            <title>About Us | Naan Auto - Used Car Dealership in Gulf Breeze, FL</title>
+            <meta name="description" content="Learn about Naan Auto, a family-owned used car dealership in Gulf Breeze, FL serving Pensacola and the surrounding area. Honest, trustworthy service with no gimmicks." />
+            <meta property="og:title" content="About Naan Auto - Family-Owned Used Car Dealer in Gulf Breeze, FL" />
+            <meta property="og:description" content="Family-owned used car dealership in Gulf Breeze, FL. Jason and Stephanie are committed to honest, trustworthy service for customers in Pensacola and beyond." />
+            <meta property="og:site_name" content="Naan Auto" />
             <meta property="og:type" content="website" />
             <meta property="og:url" content="https://naanauto.com/aboutUs" />
-            <link rel="preload" href='./assets/pexelsfinal.webp' as="image" />
-            <meta name='twitter:card' content='summary_large_image' />
-            <meta name="twitter:title" content="Welcome to Naan Auto - Learn More About Us" />
-            <meta name="twitter:description" content="See how we’re redefining car buying through trust and family-first values." />
-            <meta name="twitter:image" content="https://yourdomain.com/images/about-banner.jpg" />
+            <meta property="og:image" content="https://naanauto.com/logo.PNG" />
+            <link rel="preload" href="./assets/pexelsfinal.webp" as="image" />
+            <meta name="twitter:card" content="summary_large_image" />
+            <meta name="twitter:title" content="About Naan Auto - Family-Owned Used Car Dealer in Gulf Breeze, FL" />
+            <meta name="twitter:description" content="Family-owned used car dealership in Gulf Breeze, FL. Honest, trustworthy service with no gimmicks." />
+            <meta name="twitter:image" content="https://naanauto.com/logo.PNG" />
          </Helmet>
 
          <section className='about-us-headerpic' alt='about us header picture' />

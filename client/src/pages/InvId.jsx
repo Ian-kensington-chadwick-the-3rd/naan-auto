@@ -2,6 +2,7 @@ import { Link, useParams } from "react-router-dom";
 import { FIND_CAR } from "../utils/querys";
 import { useQuery } from '@apollo/client'
 import { useEffect, useRef, useState } from 'react'
+import { Helmet } from 'react-helmet'
 import GoogleMaps from './../components/googlemaps'
 import play from '../assets/icons8-play-32.png'
 import pause from '../assets/icons8-pause-32.png'
@@ -170,8 +171,21 @@ const InvId = () => {
     if (error) return <p>Error: {error.message}</p>;
 
 
+    const car = cars[0];
+
     return (
         <section>
+            {car && (
+                <Helmet>
+                    <title>{car.year} {car.make} {car.model} - Used Cars Gulf Breeze FL | Naan Auto</title>
+                    <meta name="description" content={`${car.year} ${car.make} ${car.model} for sale at Naan Auto in Gulf Breeze, FL. ${car.mileage} miles, ${car.trans}, ${car.exteriorColor}. Serving Pensacola and surrounding areas.`} />
+                    <meta property="og:title" content={`${car.year} ${car.make} ${car.model} | Naan Auto - Gulf Breeze, FL`} />
+                    <meta property="og:description" content={`${car.year} ${car.make} ${car.model} for sale at Naan Auto in Gulf Breeze, FL. ${car.mileage} miles, ${car.trans}.`} />
+                    <meta property="og:type" content="website" />
+                    <meta property="og:site_name" content="Naan Auto" />
+                    <meta property="og:image" content={car.imageUrl?.[0] || "https://naanauto.com/logo.PNG"} />
+                </Helmet>
+            )}
             <div className="car-details-container">
                 <div className={`${HeaderTabletUnderVw}  ${HeaderTabletOverVw}`} >
                     {cars.map((car) => (

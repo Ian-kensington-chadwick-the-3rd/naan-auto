@@ -78,17 +78,19 @@ const Inventory = () => {
     return (
         <div>
             <Helmet>
-                <title>Inventory | Naan Auto</title>
-                <meta name='description' content='current inventory for naan-auto' />
-                <meta property='og:title' content='Welcome to Naan Auto - Inventory' />
+                <title>Used Cars for Sale in Gulf Breeze, FL | Naan Auto</title>
+                <meta name='description' content='Browse quality used cars, trucks, and SUVs for sale at Naan Auto in Gulf Breeze, FL. Serving Pensacola and the surrounding area. Honest pricing, no gimmicks.' />
+                <meta property='og:title' content='Used Car Inventory - Naan Auto | Gulf Breeze, FL' />
+                <meta property='og:description' content='Browse quality used cars, trucks, and SUVs for sale at Naan Auto in Gulf Breeze, FL. Serving Pensacola and the surrounding area.' />
                 <meta property='og:site_name' content='Naan Auto' />
                 <meta property="og:type" content="website" />
-                <meta property="og:url" content="https://naanauto.com/contactUs" />
+                <meta property="og:url" content="https://naanauto.com/inventory" />
+                <meta property="og:image" content="https://naanauto.com/logo.PNG" />
 
                 <meta name='twitter:card' content='summary_large_image' />
-                <meta name="twitter:title" content="Welcome to Naan Auto - check out our inventory" />
-                <meta name="twitter:description" content="naan-auto current inventory" />
-                <meta name="twitter:image" content="https://yourdomain.com/images/about-banner.jpg" />
+                <meta name="twitter:title" content="Used Cars for Sale in Gulf Breeze, FL | Naan Auto" />
+                <meta name="twitter:description" content="Browse quality used cars, trucks, and SUVs at Naan Auto in Gulf Breeze, FL. Honest pricing, no gimmicks." />
+                <meta name="twitter:image" content="https://naanauto.com/logo.PNG" />
             </Helmet>
             <div className='space'>
                 {loggedIn ? (

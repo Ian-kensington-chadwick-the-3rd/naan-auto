@@ -119,18 +119,19 @@ const contactUs = () => {
    return (
       <div>
          <Helmet>
-            <title>Contact Us | Naan Auto</title>
-            <meta name='description' content='contact us to find out more info about our inventory' />
-            <meta property='og:title' content='Welcome to Naan Auto - contact us' />
-            <meta property='og:site_name' content='Naan Auto' />
+            <title>Contact Us | Naan Auto - Used Car Dealer in Gulf Breeze, FL</title>
+            <meta name="description" content="Contact Naan Auto, your local used car dealership in Gulf Breeze, FL. Call 850-861-5000 or send us a message. Serving Pensacola and surrounding areas." />
+            <meta property="og:title" content="Contact Naan Auto - Used Car Dealer in Gulf Breeze, FL" />
+            <meta property="og:description" content="Get in touch with Naan Auto in Gulf Breeze, FL. Call 850-861-5000 or send us a message. Serving Pensacola and surrounding areas." />
+            <meta property="og:site_name" content="Naan Auto" />
             <meta property="og:type" content="website" />
             <meta property="og:url" content="https://naanauto.com/contactUs" />
-            <link rel="preload" href='./assets/rowancomp.webp' as="image" />
-            <meta name='twitter:card' content='summary_large_image' />
-            <meta name="twitter:title" content="Welcome to Naan Auto - contact us" />
-            <meta name="twitter:description" content="contact us to find out more info about our inventory." />
-            <meta name="twitter:image" content="https://yourdomain.com/images/about-banner.jpg" />
-
+            <meta property="og:image" content="https://naanauto.com/logo.PNG" />
+            <link rel="preload" href="./assets/rowancomp.webp" as="image" />
+            <meta name="twitter:card" content="summary_large_image" />
+            <meta name="twitter:title" content="Contact Naan Auto - Used Car Dealer in Gulf Breeze, FL" />
+            <meta name="twitter:description" content="Get in touch with Naan Auto in Gulf Breeze, FL. Call 850-861-5000 or send us a message." />
+            <meta name="twitter:image" content="https://naanauto.com/logo.PNG" />
          </Helmet>
          {showPopUp &&
             <section className="pop-up-message ">

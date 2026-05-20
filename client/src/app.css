@@ -1701,6 +1701,12 @@ p.orangebottom:hover {
     flex-shrink: 0;
 }
 
+.admin-dashboard__list-wrapper {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
 .admin-dashboard__accordion-list {
     display: flex;
     flex-direction: column;
@@ -3167,6 +3173,10 @@ p.orangebottom:hover {
 
     .admin-dashboard__slideshow-container {
         width: 100%;
+    }
+
+    .admin-dashboard__list-wrapper {
+        padding: 0 12px;
     }
 
     .inventory-topbar-container {

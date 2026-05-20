@@ -205,7 +205,7 @@ const AdminForm = () => {
     return (
         <div className="flex spacing-top">
             <Modal showModal={modal} closeModal={closeModal} img={modalImage} id={imageId} />
-            <div>
+            <div className="admin-dashboard__list-wrapper">
                 <div className="admin-dashboard__accordion-list">
                     {paginatedData.map((car, index) => (
                         <div key={index} className='admin-dashboard__accordion'>

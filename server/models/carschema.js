@@ -57,6 +57,9 @@ const carSchema = new Schema({
     ownership: {
         type: String
     },
+    trim: {
+        type: String
+    },
     sold:{
         type: Boolean
     }
@@ -116,6 +119,10 @@ const userMessage = new Schema({
     },
     dateString: {
         type: String
+    },
+    isRead: {
+        type: Boolean,
+        default: false
     }
 })
 

@@ -181,7 +181,7 @@ const Header = () => {
             </div>
             <div className={stickyHeader ? "bottomnavbarcontainer fixedheader" : 'bottomnavbarcontainer'}>
 
-                <Link to='/inventory' onClick={() => scrollTo({ top: 0, behavior: 'smooth' })} >
+                <Link to='/' onClick={() => scrollTo({ top: 0, behavior: 'smooth' })} >
                     <img className="carlogo" src={naanAutoLogo}>
                     </img>
                 </Link>

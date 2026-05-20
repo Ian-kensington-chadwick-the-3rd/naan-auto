@@ -18,6 +18,7 @@ const typeDefs = `
     condition: String
     titleHistory: String
     ownership: String
+    trim: String
     sold: Boolean
   }
 
@@ -51,6 +52,7 @@ const typeDefs = `
 
 
   type userMessage{
+    _id: ID
     firstName: String
     lastName:String
     emailAddress:String
@@ -58,6 +60,7 @@ const typeDefs = `
     message:String
     dateString: String
     timeString: String
+    isRead: Boolean
   }
 
   type Query {
@@ -89,6 +92,7 @@ const typeDefs = `
       condition: String
       titleHistory: String
       ownership: String
+      trim: String
     ) : [Car]
       AuthCheck : Auth
       getMessage: [userMessage]
@@ -113,6 +117,7 @@ const typeDefs = `
       condition: String
       titleHistory: String
       ownership: String
+      trim: String
       sold: Boolean
       ): Car
       updateCar(
@@ -134,6 +139,7 @@ const typeDefs = `
         condition: String
         titleHistory: String
         ownership: String
+        trim: String
         sold: Boolean
       ): Car
     deleteCar(carId: ID!, key:[String]!): Car
@@ -141,6 +147,7 @@ const typeDefs = `
     createPresignedUrl(key:String!): PresignedResponse
     sendMessage(firstName: String!, lastName:String!, emailAddress:String!, phoneNumber: String!, message:String!, timeString: String dateString: String): Auth 
     deleteMessage(_id: String!): [userMessage]
+    markMessageRead(_id: String!): userMessage
     deleteImage(url: String!): PresignedResponse
   }
 `;

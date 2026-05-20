@@ -11,6 +11,7 @@ import { setContext } from "@apollo/client/link/context";
 import { Outlet } from 'react-router-dom';
 import Header from './components/header'
 import Footer from './components/footer'
+import FloatingCall from './components/floatingCall'
 import videoBackground from './assets/whitebg.mp4'
 // '/graphql'
 
@@ -80,12 +81,13 @@ function App() {
         <script type="application/ld+json">{JSON.stringify(schemaMarkup)}</script>
       </Helmet>
       <div className='app'>
-        <video autoPlay muted loop className='video-background' type='video/mp4'>
-          <source src={videoBackground} />
+        <video autoPlay muted loop playsInline className='video-background'>
+          <source src={videoBackground} type='video/mp4' />
         </video>
         <Header />
         <Outlet />
         <Footer />
+        <FloatingCall />
       </div>
 
     </ApolloProvider>

@@ -58,7 +58,7 @@ const InvId = () => {
         return () => { window.removeEventListener('click', onScroll); window.removeEventListener('resize', onscroll); }
     }, [stickyHeader])
 
-    const [tabletAndUnderVw, setTabletAndUnderVw] = useState(false);
+    const [tabletAndUnderVw, setTabletAndUnderVw] = useState(window.innerWidth <= 768);
 
     useEffect(() => {
         const tabletUnderVw = () => {
@@ -88,8 +88,10 @@ const InvId = () => {
         "stickyheadertopspaceovertabletvw" : ''
     // add 20vh if tablet and sticky header true
     // else add
-    const [dragging, setDragging] = useState(false);
-    const startX = useRef(0);
+    const draggingRef = useRef(false);
+    const startXRef = useRef(0);
+    const startOffsetRef = useRef(0);
+    const offsetRef = useRef(0);
 
     const pictureRef = useRef(null);
     const outerPictureRef = useRef(null);
@@ -97,62 +99,58 @@ const InvId = () => {
 
     useEffect(() => {
         innerPictureRef.current = [];
+        offsetRef.current = 0;
+        if (pictureRef.current) {
+            pictureRef.current.style.transition = 'none';
+            pictureRef.current.style.transform = 'translateX(0px)';
+        }
     }, [dataImg]);
 
     const touchStart = (e) => {
         if (!tabletAndUnderVw) return;
-        setDragging(true);
-        startX.current = e.touches[0].pageX
+        draggingRef.current = true;
+        startXRef.current = e.touches[0].pageX;
+        startOffsetRef.current = offsetRef.current;
     };
 
-    const parentSlider = outerPictureRef.current;
-    const childSlider = pictureRef.current
-    const maxOffset = parentSlider?.offsetWidth - childSlider?.scrollWidth;
-    let temp = 0;
     const draggingPic = (e) => {
-        if (!dragging) return;
-        const distance = startX.current - e.touches[0].pageX;
-        temp += distance
-        console.log(temp)
-        const clampedOffset = clamp(-temp, maxOffset, 0)
-    
-        pictureRef.current.style.transform = `translateX(${clampedOffset}px)`
+        if (!draggingRef.current || !pictureRef.current || !outerPictureRef.current) return;
+        const delta = e.touches[0].pageX - startXRef.current;
+        const parentWidth = outerPictureRef.current.offsetWidth;
+        const stripWidth = pictureRef.current.scrollWidth;
+        const maxOffset = Math.min(0, parentWidth - stripWidth);
+        const newOffset = Math.max(maxOffset, Math.min(0, startOffsetRef.current + delta));
+        offsetRef.current = newOffset;
+        pictureRef.current.style.transition = 'none';
+        pictureRef.current.style.transform = `translateX(${newOffset}px)`;
     };
 
     const touchEnd = () => {
-        setDragging(false);
-        pictureRef.current.style.transition = 'ease-out .1s'
+        draggingRef.current = false;
+        if (pictureRef.current) {
+            pictureRef.current.style.transition = 'transform 0.15s ease-out';
+        }
     };
-    //             distance, maxOffset, 0
-    const clamp = (value, min, max) => Math.max(min, Math.min(max, value))
 
     const timedSlider = () => {
-        if(dragging) return;
-        if (!pictureRef.current || !innerPictureRef.current || !parentSlider) return;
+        if (draggingRef.current) return;
+        if (!pictureRef.current || !outerPictureRef.current) return;
 
-        const parentContainer = parentSlider?.offsetWidth;
-        const currentImg = innerPictureRef?.current[slideIndex]
-
+        const parentWidth = outerPictureRef.current.offsetWidth;
+        const stripWidth = pictureRef.current.scrollWidth;
+        const maxOffset = Math.min(0, parentWidth - stripWidth);
+        const currentImg = innerPictureRef.current[slideIndex];
         if (!currentImg) return;
-
-        currentImg.offsetHeight;
 
         const imgOffsetLeft = currentImg.offsetLeft;
         const imgWidth = currentImg.offsetWidth;
+        const targetOffset = -(imgOffsetLeft - (parentWidth / 2) + (imgWidth / 2));
+        const clamped = Math.max(maxOffset, Math.min(0, targetOffset));
 
-        let targetOffset = 0;
-
-        if(imgOffsetLeft + imgWidth  > parentContainer){
-            targetOffset = parentContainer - (imgOffsetLeft + imgWidth) * 2
-        } else if (imgOffsetLeft < 0) {
-            targetOffset = -imgOffsetLeft;
-        }
-
-        const clampedOffset = clamp(targetOffset, maxOffset, 0);
-        if (clampedOffset !== null && clampedOffset !== undefined) {
-            pictureRef.current.style.transform = `translateX(${clampedOffset}px)`
-        }
-    }
+        offsetRef.current = clamped;
+        pictureRef.current.style.transition = 'transform 0.3s ease';
+        pictureRef.current.style.transform = `translateX(${clamped}px)`;
+    };
 
     useEffect(() => {
         if (slideIndex == null) return;
@@ -161,7 +159,6 @@ const InvId = () => {
                 timedSlider();
             });
         });
-
     }, [slideIndex]);
 
     
@@ -177,30 +174,94 @@ const InvId = () => {
         <section>
             {car && (
                 <Helmet>
-                    <title>{car.year} {car.make} {car.model} - Used Cars Gulf Breeze FL | Naan Auto</title>
-                    <meta name="description" content={`${car.year} ${car.make} ${car.model} for sale at Naan Auto in Gulf Breeze, FL. ${car.mileage} miles, ${car.trans}, ${car.exteriorColor}. Serving Pensacola and surrounding areas.`} />
+                    <script type="application/ld+json">{JSON.stringify({
+                        "@context": "https://schema.org",
+                        "@type": "BreadcrumbList",
+                        "itemListElement": [
+                            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://naanauto.com" },
+                            { "@type": "ListItem", "position": 2, "name": "Inventory", "item": "https://naanauto.com/inventory" },
+                            { "@type": "ListItem", "position": 3, "name": `${car.year} ${car.make} ${car.model}`, "item": `https://naanauto.com/inventory/${car._id}` }
+                        ]
+                    })}</script>
+                    <script type="application/ld+json">{JSON.stringify({
+                        "@context": "https://schema.org",
+                        "@type": "Vehicle",
+                        "name": `${car.year} ${car.make} ${car.model}`,
+                        "brand": { "@type": "Brand", "name": car.make },
+                        "model": car.model,
+                        "vehicleModelDate": String(car.year),
+                        "mileageFromOdometer": { "@type": "QuantitativeValue", "value": car.mileage, "unitCode": "SMI" },
+                        "driveWheelConfiguration": car.drivetrain,
+                        "vehicleTransmission": car.trans,
+                        "fuelType": car.fuelType,
+                        "color": car.exteriorColor,
+                        "vehicleInteriorColor": car.interiorColor,
+                        "vehicleIdentificationNumber": car.vin,
+                        "description": car.description,
+                        "image": car.imageUrl?.[0] || "https://naanauto.com/logo.PNG",
+                        "offers": {
+                            "@type": "Offer",
+                            "price": car.price,
+                            "priceCurrency": "USD",
+                            "availability": car.sold ? "https://schema.org/SoldOut" : "https://schema.org/InStock",
+                            "url": `https://naanauto.com/inventory/${car._id}`,
+                            "seller": {
+                                "@type": "AutoDealer",
+                                "name": "Naan Auto",
+                                "address": {
+                                    "@type": "PostalAddress",
+                                    "streetAddress": "4327 Gulf Breeze Parkway",
+                                    "addressLocality": "Gulf Breeze",
+                                    "addressRegion": "FL",
+                                    "postalCode": "32563",
+                                    "addressCountry": "US"
+                                }
+                            }
+                        }
+                    })}</script>
+                    <title>{`${car.year} ${car.make} ${car.model}${car.trim ? ` ${car.trim}` : ''} - Used Cars Gulf Breeze FL | Naan Auto`}</title>
+                    <meta name="description" content={`${car.year} ${car.make} ${car.model}${car.trim ? ` ${car.trim}` : ''} for sale at Naan Auto in Gulf Breeze, FL. ${car.mileage} miles, ${car.trans}, ${car.exteriorColor}. Serving Pensacola, Navarre, Fort Walton Beach, Destin, Niceville, Crestview, and the Florida Panhandle.`} />
+                    <meta name="keywords" content={`${car.year} ${car.make} ${car.model}${car.trim ? ` ${car.trim}` : ''} for sale, used ${car.make} Gulf Breeze FL, used ${car.make} Pensacola, used cars Navarre FL, used cars Fort Walton Beach, used cars Destin FL, used cars Niceville FL, used cars Crestview FL, used cars Freeport FL, Florida Panhandle used cars`} />
+                    <meta name="robots" content="index, follow" />
+                    <meta name="author" content="Naan Auto" />
+                    <meta name="theme-color" content="#e95918" />
+                    <meta name="geo.region" content="US-FL" />
+                    <meta name="geo.placename" content="Gulf Breeze, Florida" />
+                    <meta name="geo.position" content="30.3929398;-87.0428434" />
+                    <meta name="ICBM" content="30.3929398, -87.0428434" />
                     <meta property="og:title" content={`${car.year} ${car.make} ${car.model} | Naan Auto - Gulf Breeze, FL`} />
-                    <meta property="og:description" content={`${car.year} ${car.make} ${car.model} for sale at Naan Auto in Gulf Breeze, FL. ${car.mileage} miles, ${car.trans}.`} />
+                    <meta property="og:description" content={`${car.year} ${car.make} ${car.model} for sale at Naan Auto in Gulf Breeze, FL. ${car.mileage} miles, ${car.trans}, ${car.exteriorColor}.`} />
                     <meta property="og:type" content="website" />
                     <meta property="og:site_name" content="Naan Auto" />
                     <meta property="og:image" content={car.imageUrl?.[0] || "https://naanauto.com/logo.PNG"} />
+                    <meta property="og:image:alt" content={`${car.year} ${car.make} ${car.model} for sale at Naan Auto`} />
+                    <meta property="og:locale" content="en_US" />
+                    <meta name="twitter:card" content="summary_large_image" />
+                    <meta name="twitter:title" content={`${car.year} ${car.make} ${car.model} | Naan Auto - Gulf Breeze, FL`} />
+                    <meta name="twitter:description" content={`${car.year} ${car.make} ${car.model} for sale at Naan Auto in Gulf Breeze, FL. ${car.mileage} miles, ${car.trans}.`} />
+                    <meta name="twitter:image" content={car.imageUrl?.[0] || "https://naanauto.com/logo.PNG"} />
+                    <meta name="twitter:image:alt" content={`${car.year} ${car.make} ${car.model} for sale at Naan Auto`} />
+                    <meta name="mobile-web-app-capable" content="yes" />
+                    <meta name="apple-mobile-web-app-capable" content="yes" />
+                    <meta name="apple-mobile-web-app-title" content="Naan Auto" />
+                    <meta name="format-detection" content="telephone=yes" />
                 </Helmet>
             )}
             <div className="car-details-container">
                 <div className={`${HeaderTabletUnderVw}  ${HeaderTabletOverVw}`} >
                     {cars.map((car) => (
-                        [<div className="info-top-left"><p >{car.year} {car.make} {car.model} </p> </div>,
+                        [<div className="info-top-left"><p >{car.year} {car.make} {car.model}{car.trim ? ` ${car.trim}` : ''} </p> </div>,
                         <div className="info-top-right"><p> ${car.price}</p></div>]
                     ))}
                 </div>
                 <section className="center-dup">
-                    <section>
+                    <section className="invid-main">
                         <div className={`${pictureSpaceTabletUnderVw} ${pictuerSpaceTabletOverVw}`}>
                             <div className="slideshow-container"> 
                             {cars[0].sold === true && <span className="sold" style={{zIndex:'1',fontSize:'100px'}}>SOLD</span>}
                                 <div className="slide-wrapper" style={{ transform: `translateX(-${slideIndex * 100}%)`, position:'relative' }}>
                                     {dataImg?.map((src, index) => (
-                                        <img key={index} src={src} alt={`Car ${index}`} />
+                                        <img key={index} src={src} alt={`${car.year} ${car.make} ${car.model} - Naan Auto Gulf Breeze FL photo ${index + 1}`} />
                                     ))}
                                 </div>
                                 <button className="slider-button left" onClick={() => setIndexBackwards()}>&#60;</button>
@@ -212,19 +273,20 @@ const InvId = () => {
                                 }
                             </div>
                             <div className="picture-list " ref={outerPictureRef} >
-                                <div className="img-wrapper" ref={pictureRef}>
+                                <div className="img-wrapper" ref={pictureRef}
+                                    onTouchStart={touchStart}
+                                    onTouchMove={draggingPic}
+                                    onTouchEnd={touchEnd}
+                                >
                                     {dataImg?.map((src, index) => (
                                         <img key={index}
                                             src={src}
-                                            alt={`Car ${index}`}
+                                            alt={`${car.year} ${car.make} ${car.model} - Naan Auto Gulf Breeze FL photo ${index + 1}`}
                                             width={'103px'}
                                             height={'85px'}
                                             className={index === slideIndex ? "active  mini-picture-spacing" : "mini-picture-spacing"}
                                             onClick={() => jumpToIndex(index)}
-                                            onTouchStart={touchStart}
-                                            onTouchMove={draggingPic}
-                                            onTouchEnd={touchEnd}
-                                            ref={el => innerPictureRef.current[index] = el} 
+                                            ref={el => innerPictureRef.current[index] = el}
                                             draggable={false}
                                         />
                                     ))}
@@ -310,18 +372,18 @@ const InvId = () => {
                             <h2 className="car-description">Description</h2>
                             <p className="">{cars[0].description}</p>
                         </div>
-                        <div style={{ marginBottom: '50px' }}>
+                        <div>
                             <GoogleMaps className='google-api' />
                         </div>
                     </section>
-                    <section style={{ marginBottom: '49px' }}>
+                    <section className="sticky-buttons-section">
                         <div className="sticky-buttons ">
                             <div className="btn-list car-info">
                                 <Link to='/contactUs'>
-                                    <button>contact us</button>
+                                    <button>Contact Us</button>
                                 </Link>
                                 <a href='https://www.accreditapp.com/ACCreditApp.aspx?ACCFX=124945o17730'>
-                                    <button>Finance</button>
+                                    <button>Apply for Financing</button>
                                 </a>
                             </div>
                             <div className="contact-widget-bg flexcolumn">

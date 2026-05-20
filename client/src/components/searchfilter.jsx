@@ -1,29 +1,21 @@
 
-import { SEARCH_FIELD, } from '../utils/querys.js'
-import { useQuery, useLazyQuery } from '@apollo/client';
+import { SEARCH_FIELD } from '../utils/querys.js'
+import { useLazyQuery } from '@apollo/client';
 import { useEffect, useState } from 'react'
 
-
 const Searchfilter = ({ onData }) => {
-    // queries data only when called by the fetchData function
-    const [fetchData, { data, error, loading }] = useLazyQuery(SEARCH_FIELD)
-    // this hook recieves the data quiried by SEARCH_FIELD and is then mapped through to display the current car options
+    const [fetchData, { data, error }] = useLazyQuery(SEARCH_FIELD)
     const [filteredData, setfilteredData] = useState([])
 
     useEffect(() => {
         setfilteredData(data?.searchField || [])
     }, [data]);
-  
 
-    // if search filter has been used
-
-    // ships data to parent component adminForm
     useEffect(() => {
         if (filteredData && hasActiveFilters())
             onData(filteredData, hasActiveFilters());
     }, [filteredData])
 
-    // integer form
     const [filterInt, setFilterInt] = useState({
         minYear: 0,
         maxYear: 0,
@@ -33,23 +25,10 @@ const Searchfilter = ({ onData }) => {
         maxMileage: 0,
     });
 
-    // string form
     const [filterString, setFilterString] = useState({
         make: '',
         model: '',
-        description: '',
-        trans: '',
-        imageUrl: '',
-        vin: '',
-        drivetrain: '',
-        exteriorColor: '',
-        interiorColor: '',
-        fuelType: '',
-        engineType: '',
-        condition: '',
-        titleHistory: '',
-        ownership: '',
-    })
+    });
 
     const hasActiveFilters = () => {
         const hasIntFilters = Object.values(filterInt).some(val => val > 0)
@@ -57,344 +36,99 @@ const Searchfilter = ({ onData }) => {
         return hasIntFilters || hasStringFilters;
     }
 
-
-
     if (error) {
-        console.error("we got a problem", error)
+        console.error("search filter error", error)
     }
 
-    // get queried data and set the final use hook to give data to /inventory page
-
-
-    // this hook fetches the data chosen from the form in filter and int reference the fetchdata function at the top
     useEffect(() => {
-        const peanutButterSpread = { ...filterInt, ...filterString }
-        fetchData({ variables: peanutButterSpread })
+        const variables = { ...filterInt, ...filterString }
+        fetchData({ variables })
     }, [filterInt, filterString])
 
-    // handles the form and parses the values correctly for backend
     function formHandler(e) {
         const name = e.target.name;
         const value = e.target.value;
-        if (
-            name === "minYear" ||
-            name === "maxYear" ||
-            name === "minPrice" ||
-            name === "maxPrice" ||
-            name === "minMileage" ||
-            name === "maxMileage" ||
-            name === "price") {
-            setFilterInt((prevData) => ({
-                ...prevData,
-                [name]: parseInt(value) || 0
-            }));
+        const intFields = ['minYear', 'maxYear', 'minPrice', 'maxPrice', 'minMileage', 'maxMileage'];
+        if (intFields.includes(name)) {
+            setFilterInt(prev => ({ ...prev, [name]: parseInt(value) || 0 }));
         } else {
-
-            setFilterString((prevData) => ({
-                ...prevData,
-                [name]: value
-            }));
+            setFilterString(prev => ({ ...prev, [name]: value }));
         }
-        if (name === 'make' && value !== '') {
-            condition(value)
-        }
-        if (name === 'make' && value === 'all') {
+        if (name === 'make' && (value === 'all' || value === '')) {
             setMakeFirst(false)
+            setFilterString(prev => ({ ...prev, model: '' }))
         }
-    }
-
-    // this hook makes sure that car.make is first chosen before they can search model
-    const [makeFirst, setMakeFirst] = useState(false)
-    const [formReset, setFormReset] = useState(false)
-
-    const condition = (value) => {
-        if (value !== null && value !== 'all') {
+        if (name === 'make' && value !== '' && value !== 'all') {
             setMakeFirst(true)
         }
     }
-    // gets the minimum or maximum amount to tell the users what the lowest/heighest value they can go to
+
+    const [makeFirst, setMakeFirst] = useState(false)
+
     const getMinMax = (value) => {
-        if (filteredData && filteredData.length === 0) return { min: 0, max: 0 }
-
-        const validValues = filteredData.map(data => data[value]).filter(value => value !== null && value !== undefined)
-
+        if (!filteredData || filteredData.length === 0) return { min: 0, max: 0 }
+        const validValues = filteredData.map(d => d[value]).filter(v => v != null)
         if (validValues.length === 0) return { min: 0, max: 0 }
-
-        return {
-            min: Math.min(...validValues),
-            max: Math.max(...validValues)
-        }
-    }
-    // displays the count of how many duplicates per car for any filter option below 
-    const getDuplicates = (value) => {
-        if (filteredData && filteredData.length === 0) return {};
-
-        const array = filteredData.map((data) => {
-            const val = data[value]; 
-            return typeof val === 'string' ? val.toLowerCase() : val;
-        }).filter(val => val !== null && val !== undefined);
-
-
-        const counts = {};
-        for (const element of array) {
-            counts[element] = (counts[element] || 0) + 1
-        }
-        return counts;
+        return { min: Math.min(...validValues), max: Math.max(...validValues) }
     }
 
-
-    const makeCount = getDuplicates('make');
-    const modelCount = getDuplicates('model');
-    const transCount = getDuplicates('trans');
-    const drivetrainCount = getDuplicates('drivetrain');
-    const exteriorColorCount = getDuplicates('exteriorColor');
-    const interiorColorCount = getDuplicates('interiorColor');
-    const fuelTypeCount = getDuplicates('fuelType');
-    const engineTypeCount = getDuplicates('engineType');
-    const ownershipCount = getDuplicates('ownership');
-    const titleHistoryCount = getDuplicates('titleHistory');
+    const getUniqueCounts = (field) => {
+        if (!filteredData || filteredData.length === 0) return { values: [], counts: {} }
+        const values = filteredData
+            .map(d => typeof d[field] === 'string' ? d[field] : null)
+            .filter(Boolean)
+        const counts = {}
+        for (const v of values) counts[v] = (counts[v] || 0) + 1
+        return { values: [...new Set(values)], counts }
+    }
 
     const year = getMinMax('year');
     const price = getMinMax('price');
     const mileage = getMinMax('mileage');
-
-
-
-
-    const validMakeData = 
-    [...new Set(filteredData.map(data => typeof data?.make === 'string' ? data.make.toLowerCase() : ''))].filter(val => val);
-    const validModelData = 
-    [...new Set(filteredData.map(data => typeof data?.model === 'string' ? data.model.toLowerCase() : ''))].filter(val => val);
-    const validTransData = 
-    [...new Set(filteredData.map(data => typeof data?.trans === 'string' ? data.trans.toLowerCase() : ''))].filter(val => val);
-    const validDrivetrainData = 
-    [...new Set(filteredData.map(data => typeof data?.drivetrain === 'string' ? data.drivetrain.toLowerCase() : ''))].filter(val => val);
-    const validExteriorColorData = 
-    [...new Set(filteredData.map(data => typeof data?.exteriorColor === 'string' ? data.exteriorColor.toLowerCase() : ''))].filter(val => val);
-    const validInteriorColorData = 
-    [...new Set(filteredData.map(data => typeof data?.interiorColor === 'string' ? data.interiorColor.toLowerCase() : ''))].filter(val => val);
-    const validFuelTypeData = 
-    [...new Set(filteredData.map(data => typeof data?.fuelType === 'string' ? data.fuelType.toLowerCase() : ''))].filter(val => val);
-    const validEngineTypeData = 
-    [...new Set(filteredData.map(data => typeof data?.engineType === 'string' ? data.engineType.toLowerCase() : ''))].filter(val => val);
-    const validOwnershipData = 
-    [...new Set(filteredData.map(data => typeof data?.ownership === 'string' ? data.ownership.toLowerCase() : ''))].filter(val => val);
-    const validTitleHistoryData = 
-    [...new Set(filteredData.map(data => typeof data?.titleHistory === 'string' ? data.titleHistory.toLowerCase() : ''))].filter(val => val);
+    const { values: makeValues, counts: makeCounts } = getUniqueCounts('make');
+    const { values: modelValues, counts: modelCounts } = getUniqueCounts('model');
 
     return (
-        <form className="search_filter__form" >
+        <form className="search_filter__form">
             <div className='search_filter__background'>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                    <h2>basic filters</h2>
-                    <div className="search_filter__group" onBlur={e => formHandler(e)}>
-                        <input type="number" name='minPrice' placeholder={`min Price ($${price.min}) `} className=' search-filter__style' />
-                        <input type="number" name='maxPrice' placeholder={`max Price ($${price.max})`} className=' search-filter__style' />
-                    </div>
-                    <div className="search_filter__group " onBlur={e => formHandler(e)}>
-                        <input type="number" name='minYear' placeholder={`min Year (${year.min})`} className=' search-filter__style' />
-                        <input type="number" name='maxYear' placeholder={`max Year (${year.max})`} className=' search-filter__style' />
-                    </div>
-                    <div className="search_filter__group" onBlur={e => formHandler(e)}>
-                        <input type="number" name='minMileage' placeholder={`min Mileage (${mileage.min})`} className=' search-filter__style' />
-                        <input type="number" name='maxMileage' placeholder={`max Mileage (${mileage.max})`} className=' search-filter__style' />
-                    </div>
-                </div>
-                <h2>advanced filters</h2>
-                <div className='advanced-filters__column'>
-
-                    <select onChange={e => formHandler(e)} name='make' value={filterString.make === undefined ? '' : filterString.make} className='search-filter__style'>
-                        <option key={`make-default`} value='' disabled hidden>Make</option>
-                        <option key={`make-all`} value='all'>All</option>
-                        {validMakeData.length <= 0 ? (
-                            <option key="no-options" value=''>
-                                no make search options
-                            </option>
-                        ) : (
-                            validMakeData.map((data, index) => {
-                                const key = `make-${index}`; 
-                                return (
-                                    <option key={key} value={data}>
-                                        {`${data} (${makeCount[data]})`}
-                                    </option>
-                                );
-                               
-                            })
-                        )}
-                    </select>
-
-                    <select onChange={e => formHandler(e)} name='model' value={filterString.model === undefined ? '' : filterString.model}  {...makeFirst === false ? { disabled: true } : ''} className='search-filter__style'>
-                        <option key={`model-default`} value='' disabled hidden>Model</option>
-                        <option key={`model-all`} value='all'>All</option>
-                        {validModelData.length <= 0 ? (
-                            <option key="no-options" value=''>
-                                no model search options
-                            </option>
-                        ) : (
-                            validModelData.map((data, index) => {
-                                const key = `make-${index}`;
-                                return (
-                                    <option key={key} value={data}>
-                                        {`${data} (${modelCount[data]})`}
-                                    </option>
-                                );
-                            })
-                        )}
-                    </select>
-                    <select onChange={e => formHandler(e)} name='trans' value={filterString.trans === undefined ? '' : filterString.trans} className='search-filter__style'>
-                        <option key={`trans-default`} value='' disabled hidden>Transmission</option>
-                        <option key={`trans-all`} value='all'>All</option>
-                        {validTransData.length <= 0 ? (
-                            <option key="no-options" value=''>
-                                no trans search options
-                            </option>
-                        ) : (
-                            validTransData.map((data, index) => {
-                                const key = `make-${index}`;
-                                return (
-                                    <option key={key} value={data}>
-                                        {`${data} (${transCount[data]})`}
-                                    </option>
-                                );
-                            })
-                        )}
-                    </select>
-                    <select onChange={e => formHandler(e)} name='drivetrain' value={filterString.drivetrain === undefined ? '' : filterString.drivetrain} className='search-filter__style'>
-                        <option key={`drivetrain-default`} value='' disabled hidden>drivetrain</option>
-                        <option key={`drivetrain-all`} value='all'>All</option>
-                        {validDrivetrainData.length <= 0 ? (
-                            <option key="no-options" value=''>
-                                no drivetrain search options
-                            </option>
-                        ) : (
-                            validDrivetrainData.map((data, index) => {
-                                const key = `make-${index}`;
-                                return (
-                                    <option key={key} value={data}>
-                                        {`${data} (${ drivetrainCount[data]})`}
-                                    </option>
-                                );
-                            })
-                        )}
-                    </select>
-                    <select onChange={e => formHandler(e)} name='exteriorColor' value={filterString.exteriorColor === undefined ? '' : filterString.exteriorColor} className='search-filter__style'>
-                        <option key={`exteriorColor-default`} value='' disabled hidden>Exterior Color</option>
-                        <option key={`exteriorColor-all`} value='all'>All</option>
-                        {validExteriorColorData.length <= 0 ? (
-                            <option key="no-options" value=''>
-                                no exterior color search options
-                            </option>
-                        ) : (
-                            validExteriorColorData.map((data, index) => {
-                                const key = `make-${index}`;
-                                return (
-                                    <option key={key} value={data}>
-                                        {`${data} (${exteriorColorCount[data]})`}
-                                    </option>
-                                );
-                            })
-                        )}
-                    </select>
-                    <select onChange={e => formHandler(e)} name='interiorColor' value={filterString.interiorColor === undefined ? '' : filterString.interiorColor} className='search-filter__style'>
-                        <option key={`interiorColor-default`} value='' disabled hidden>Interior Color</option>
-                        <option key={`interiorColor-all`} value='all'>All</option>
-                        {validInteriorColorData.length <= 0 ? (
-                            <option key="no-options" value=''>
-                                no interior color search options
-                            </option>
-                        ) : (
-                            validInteriorColorData.map((data, index) => {
-                                const key = `make-${index}`;
-                                return (
-                                    <option key={key} value={data}>
-                                        {`${data} (${interiorColorCount[data]})`}
-                                    </option>
-                                );
-                            })
-                        )}
-                    </select>
-                    <select onChange={e => formHandler(e)} name='fuelType' value={filterString.fuelType ? '' : filterString.fuelType} className='search-filter__style'>
-                        <option key={`fuelType-default`} value='' disabled hidden>Fuel Type</option>
-                        <option key={`fuelType-all`} value='all'>All</option>
-                        {validFuelTypeData.length <= 0 ? (
-                            <option key="no-options" value=''>
-                                no fuel type search options
-                            </option>
-                        ) : (
-                            validFuelTypeData.map((data, index) => {
-                                const key = `make-${index}`;
-                                return (
-                                    <option key={key} value={data}>
-                                        {`${data} (${fuelTypeCount[data]})`}
-                                    </option>
-                                );
-                            })
-                        )}
-                    </select>
-                    <select onChange={e => formHandler(e)} name='engineType' value={filterString.engineType === undefined ? '' : filterString.engineType} className='search-filter__style'>
-                        <option key={`engineType-default`} value='' disabled hidden>Engine Type</option>
-                        <option key={`engineType-all`} value='all'>All</option>
-                        {validEngineTypeData.length <= 0 ? (
-                            <option key="no-options" value=''>
-                                no engine type search options
-                            </option>
-                        ) : (
-                            validEngineTypeData.map((data, index) => {
-                                const key = `make-${index}`;
-                                return (
-                                    <option key={key} value={data}>
-                                        {`${data} (${engineTypeCount[data]})`}
-                                    </option>
-                                );
-                            })
-                        )}
-                    </select>
-                </div>
+                <h2>Filter</h2>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                    <h2>Vehicle History</h2>
-                    <div className="search_filter__group ">
-                        <input type="text" name="vin" placeholder="vin" className='search-filter__style' />
+                    <label className='search-filter__label'>Price</label>
+                    <div className="search_filter__group" onBlur={e => formHandler(e)}>
+                        <input type="number" name='minPrice' placeholder={`Min ($${price.min})`} className='search-filter__style' />
+                        <input type="number" name='maxPrice' placeholder={`Max ($${price.max})`} className='search-filter__style' />
                     </div>
-                    <div >
-                        <select className='search-filter__style' name='titleHistory' value={filterString.titleHistory === undefined ? '' : filterString.titleHistory} style={{ width: '100%', height: '30px' }}>
-                            <option key={0} value='' disabled hidden>Title History</option>
-                            <option key={1} value='all'>All</option>
-                            {validTitleHistoryData.length <= 0 ? (
-                            <option key="no-options" value=''>
-                                no make search options
-                            </option>
-                        ) : (
-                            validTitleHistoryData.map((data, index) => {
-                                const key = `make-${index}`;
-                                return (
-                                    <option key={key} value={data}>
-                                        {`${data} (${titleHistoryCount[data]})`}
-                                    </option>
-                                );
-                            })
-                        )}
-                        </select>
+
+                    <label className='search-filter__label'>Year</label>
+                    <div className="search_filter__group" onBlur={e => formHandler(e)}>
+                        <input type="number" name='minYear' placeholder={`Min (${year.min})`} className='search-filter__style' />
+                        <input type="number" name='maxYear' placeholder={`Max (${year.max})`} className='search-filter__style' />
                     </div>
-                    <select className='search-filter__style' name='ownership' value={filterString.ownership === undefined ? '' : filterString.ownership} style={{ width: '100%', height: '30px' }}>
-                        
-                            <option key={0} value='' disabled hidden>Ownership</option>
-                            <option key={1} value='all'>All</option>
-                            {validOwnershipData.length <= 0 ? (
-                            <option key="no-options" value=''>
-                                no ownership search options
-                            </option>
-                        ) : (
-                            validOwnershipData.map((data, index) => {
-                                const key = `make-${index}`;
-                                return (
-                                    <option key={key} value={data}>
-                                        {`${data} (${ownershipCount[data]})`}
-                                    </option>
-                                );
-                            })
-                        )}
-                        </select>
+
+                    <label className='search-filter__label'>Mileage</label>
+                    <div className="search_filter__group" onBlur={e => formHandler(e)}>
+                        <input type="number" name='minMileage' placeholder={`Min (${mileage.min})`} className='search-filter__style' />
+                        <input type="number" name='maxMileage' placeholder={`Max (${mileage.max})`} className='search-filter__style' />
+                    </div>
+
+                    <label className='search-filter__label'>Make</label>
+                    <select onChange={e => formHandler(e)} name='make' value={filterString.make || ''} className='search-filter__style'>
+                        <option value='' disabled hidden>Make</option>
+                        <option value='all'>All</option>
+                        {makeValues.map((val, i) => (
+                            <option key={i} value={val}>{`${val} (${makeCounts[val]})`}</option>
+                        ))}
+                    </select>
+
+                    <label className='search-filter__label'>Model</label>
+                    <select onChange={e => formHandler(e)} name='model' value={filterString.model || ''} disabled={!makeFirst} className='search-filter__style'>
+                        <option value='' disabled hidden>Model</option>
+                        <option value='all'>All</option>
+                        {modelValues.map((val, i) => (
+                            <option key={i} value={val}>{`${val} (${modelCounts[val]})`}</option>
+                        ))}
+                    </select>
                 </div>
             </div>
         </form>
@@ -402,4 +136,3 @@ const Searchfilter = ({ onData }) => {
 }
 
 export default Searchfilter;
-

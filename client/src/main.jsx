@@ -1,7 +1,7 @@
 import  ReactDOM  from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import {lazy,Suspense} from 'react'
-import {Navigate} from 'react-router-dom'
+import Home from './pages/home.jsx'
 import './app.css';
 import App from './app.jsx';
 import Error from './pages/error.jsx';
@@ -25,7 +25,7 @@ const router = createBrowserRouter([
         children: [
             {
                 index: true,
-                element: <Navigate to="/inventory" replace />
+                element: <Home />
             },
             {
                 path: 'aboutUs',

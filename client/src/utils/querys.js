@@ -7,7 +7,8 @@ export const GET_CARS = gql`
             year
             make
             model
-            mileage 
+            trim
+            mileage
             description
             trans
             imageUrl
@@ -32,7 +33,8 @@ export const FIND_CAR = gql`
             year
             make
             model
-            mileage 
+            trim
+            mileage
             description
             trans
             imageUrl
@@ -58,7 +60,7 @@ export const ADD_CAR = gql`
         $mileage: Int!
         $description: String
         $trans: String
-        $imageUrl: [String] 
+        $imageUrl: [String]
         $price: Int
         $vin: String
         $drivetrain: String
@@ -69,15 +71,15 @@ export const ADD_CAR = gql`
         $condition: String
         $titleHistory: String
         $ownership: String
-        
+        $trim: String
         ) {
         addCar(
             year: $year
             make: $make
             model: $model
             mileage: $mileage
-            description: $description 
-            trans: $trans 
+            description: $description
+            trans: $trans
             imageUrl: $imageUrl
             price: $price
             vin: $vin
@@ -89,6 +91,7 @@ export const ADD_CAR = gql`
             condition: $condition
             titleHistory: $titleHistory
             ownership: $ownership
+            trim: $trim
             ){
             year
             make
@@ -251,10 +254,10 @@ mutation updateCar(
     $make: String
     $model: String
     $mileage: Int
-    $description: String 
-    $trans: String 
+    $description: String
+    $trans: String
     $imageUrl: [String]
-    $price: Int 
+    $price: Int
     $vin: String
     $drivetrain: String
     $exteriorColor: String
@@ -264,6 +267,7 @@ mutation updateCar(
     $condition: String
     $titleHistory: String
     $ownership: String
+    $trim: String
     $sold: Boolean
 ) {
     updateCar(
@@ -272,8 +276,8 @@ mutation updateCar(
         make: $make
         model: $model
         mileage: $mileage
-        description: $description 
-        trans: $trans 
+        description: $description
+        trans: $trans
         imageUrl: $imageUrl
         price: $price
         vin: $vin
@@ -285,6 +289,7 @@ mutation updateCar(
         condition: $condition
         titleHistory: $titleHistory
         ownership: $ownership
+        trim: $trim
         sold: $sold
     ) {
         _id
@@ -305,6 +310,7 @@ mutation updateCar(
         condition
         titleHistory
         ownership
+        trim
         sold
     }
 }
@@ -333,6 +339,7 @@ export const SEND_MESSAGE = gql`
 export const GET_MESSAGE = gql`
     query getMessage {
             getMessage {
+                _id
                 firstName
                 lastName
                 emailAddress
@@ -340,7 +347,23 @@ export const GET_MESSAGE = gql`
                 message
                 timeString
                 dateString
+                isRead
             }
+    }`
+
+export const DELETE_MESSAGE = gql`
+    mutation deleteMessage($_id: String!) {
+        deleteMessage(_id: $_id) {
+            _id
+        }
+    }`
+
+export const MARK_MESSAGE_READ = gql`
+    mutation markMessageRead($_id: String!) {
+        markMessageRead(_id: $_id) {
+            _id
+            isRead
+        }
     }`
 
 export const DELETE_IMG = gql`

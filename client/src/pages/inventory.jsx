@@ -79,19 +79,33 @@ const Inventory = () => {
         <div>
             <Helmet>
                 <title>Used Cars for Sale in Gulf Breeze, FL | Naan Auto</title>
-                <meta name='description' content='Browse quality used cars, trucks, and SUVs for sale at Naan Auto in Gulf Breeze, FL. Serving Pensacola and the surrounding area. Honest pricing, no gimmicks.' />
-                <meta property='og:title' content='Used Car Inventory - Naan Auto | Gulf Breeze, FL' />
-                <meta property='og:description' content='Browse quality used cars, trucks, and SUVs for sale at Naan Auto in Gulf Breeze, FL. Serving Pensacola and the surrounding area.' />
-                <meta property='og:site_name' content='Naan Auto' />
+                <meta name="description" content="Browse quality used cars, trucks, and SUVs for sale at Naan Auto in Gulf Breeze, FL. Serving Pensacola, Navarre, Fort Walton Beach, Destin, Niceville, Crestview, Freeport, and the Florida Panhandle. Honest pricing, no gimmicks." />
+                <meta name="keywords" content="used cars Gulf Breeze FL, used car inventory Pensacola, used trucks SUVs Florida Panhandle, buy used car Navarre FL, used cars Fort Walton Beach, used cars Destin FL, used cars Niceville FL, used cars Crestview FL, used cars Freeport FL, affordable used cars Northwest Florida" />
+                <meta name="robots" content="index, follow" />
+                <meta name="author" content="Naan Auto" />
+                <meta name="theme-color" content="#e95918" />
+                <meta name="geo.region" content="US-FL" />
+                <meta name="geo.placename" content="Gulf Breeze, Florida" />
+                <meta name="geo.position" content="30.3929398;-87.0428434" />
+                <meta name="ICBM" content="30.3929398, -87.0428434" />
+                <meta property="og:title" content="Used Car Inventory - Naan Auto | Gulf Breeze, FL" />
+                <meta property="og:description" content="Browse quality used cars, trucks, and SUVs for sale at Naan Auto in Gulf Breeze, FL. Serving Pensacola, Navarre, Fort Walton Beach, Destin, and the Florida Panhandle." />
+                <meta property="og:site_name" content="Naan Auto" />
                 <meta property="og:type" content="website" />
                 <meta property="og:url" content="https://naanauto.com/inventory" />
-                <link rel="canonical" href="https://naanauto.com/inventory" />
                 <meta property="og:image" content="https://naanauto.com/logo.PNG" />
-
-                <meta name='twitter:card' content='summary_large_image' />
+                <meta property="og:image:alt" content="Naan Auto Used Car Inventory - Gulf Breeze FL" />
+                <meta property="og:locale" content="en_US" />
+                <link rel="canonical" href="https://naanauto.com/inventory" />
+                <meta name="twitter:card" content="summary_large_image" />
                 <meta name="twitter:title" content="Used Cars for Sale in Gulf Breeze, FL | Naan Auto" />
-                <meta name="twitter:description" content="Browse quality used cars, trucks, and SUVs at Naan Auto in Gulf Breeze, FL. Honest pricing, no gimmicks." />
+                <meta name="twitter:description" content="Browse quality used cars, trucks, and SUVs at Naan Auto in Gulf Breeze, FL. Serving the Florida Panhandle. Honest pricing, no gimmicks." />
                 <meta name="twitter:image" content="https://naanauto.com/logo.PNG" />
+                <meta name="twitter:image:alt" content="Naan Auto Used Car Inventory - Gulf Breeze FL" />
+                <meta name="mobile-web-app-capable" content="yes" />
+                <meta name="apple-mobile-web-app-capable" content="yes" />
+                <meta name="apple-mobile-web-app-title" content="Naan Auto" />
+                <meta name="format-detection" content="telephone=yes" />
             </Helmet>
             <div className='space'>
                 {loggedIn ? (
@@ -136,42 +150,16 @@ const Inventory = () => {
 
                                     <div className='title-price-holder'>
                                         <div className='price-holder'>
-                                            <div>
-                                                <span>{car.year} {car.make} {car.model}</span>
-                                            </div>
-                                            <div >
-                                                <span>${car.price}</span>
-                                            </div>
+                                            <span className='card__title'>{car.year} {car.make} {car.model}</span>
+                                            <span className='card__price'>${car.price}</span>
                                         </div>
                                     </div>
-                                    <div >
-                                        <ul className='list-style'>
-                                            <li><img src={speedo} className='favicon' draggable={false} />
-                                                <span className='short-info'>{car.mileage}</span> </li>
-                                            <li><img src={gearBox} className='favicon' draggable={false} />
-                                                <span className='short-info'>{car.trans}</span></li>
-                                            <li>
-
-                                                <img src={exteriorColor} className='favicon' draggable={false} />
-                                                <span className='short-info'>{car.exteriorColor}</span>
-                                            </li>
-
-                                            <li>
-                                                <img src={interiorColor} className='favicon' draggable={false} />
-                                                <span className='short-info'>{car.interiorColor}</span>
-                                            </li>
-
-
-                                            <li>
-                                                <img src={enginePng} className='favicon' draggable={false} />
-                                                <span className='short-info'>{car.engineType}</span>
-                                            </li>
-
-                                        </ul>
-                                    </div>
-                                    <div style={{ overflowX: 'hidden', overflowY: 'hidden', paddingRight: '15px', boxSizing: 'border-box', marginRight: '15px' }}>
-                                        <p style={{ paddingLeft: '15px', overflow: 'clip', width: '100%' }}> {car.description}
-                                        </p>
+                                    <div className='spec-pills'>
+                                        <span className='spec-pill'><img src={speedo} draggable={false} />{car.mileage}</span>
+                                        <span className='spec-pill'><img src={gearBox} draggable={false} />{car.trans}</span>
+                                        <span className='spec-pill'><img src={exteriorColor} draggable={false} />{car.exteriorColor}</span>
+                                        <span className='spec-pill'><img src={interiorColor} draggable={false} />{car.interiorColor}</span>
+                                        <span className='spec-pill'><img src={enginePng} draggable={false} />{car.engineType}</span>
                                     </div>
                                 </div>
                             ))}

@@ -6,6 +6,9 @@ const bcrypt = require("bcrypt");
 const { S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectsCommand, DeleteObjectCommand } = require('@aws-sdk/client-s3');
 const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
 const nodeMailer = require('nodemailer');
+const twilio = require('twilio');
+
+const twilioClient = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 
 
 let transporter = nodeMailer.createTransport({
@@ -160,8 +163,8 @@ const resolvers = {
         titleHistory,
         ownership,)
 
-      make && make !== 'all' ? query.make = make : delete query.make;
-      model && model !== 'all' ? query.model = model : delete query.model;
+      make && make !== 'all' ? query.make = { $regex: new RegExp(`^${make}$`, 'i') } : delete query.make;
+      model && model !== 'all' ? query.model = { $regex: new RegExp(`^${model}$`, 'i') } : delete query.model;
       description && description !== 'all' ? query.description = description : delete query.description;
       trans && trans !== 'all' ? query.trans = trans : delete query.trans;
       if (vin) query.vin = vin;
@@ -241,6 +244,7 @@ const resolvers = {
         condition,
         titleHistory,
         ownership,
+        trim,
       }, context) => {
       console.log(context.user)
       if (!context || !context.user) {
@@ -278,6 +282,7 @@ const resolvers = {
         condition,
         titleHistory,
         ownership,
+        trim,
       });
       console.log('year: ', year, "Make:", make, " Mileage:", mileage, "desription", description, "trans:", trans, "this is image url", imageUrl);
       console.log(context)
@@ -303,6 +308,7 @@ const resolvers = {
       condition,
       titleHistory,
       ownership,
+      trim,
       sold
     }, context) => {
       console.log(context.user)
@@ -330,6 +336,7 @@ const resolvers = {
       if (condition !== undefined && condition !== null) query.condition = condition;
       if (titleHistory !== undefined && titleHistory !== null) query.titleHistory = titleHistory;
       if (ownership !== undefined && ownership !== null) query.ownership = ownership;
+      if (trim !== undefined && trim !== null) query.trim = trim;
       if (sold !== undefined && sold !== null) query.sold = sold
 
       try {
@@ -538,17 +545,19 @@ const resolvers = {
       const month = now.getMonth() + 1;
       const day = now.getDate();
 
-      const hours = now.getHours();
-      const minutes = now.getMinutes();
+      const rawHours = now.getHours();
+      const minutes = now.getMinutes().toString().padStart(2, '0');
+      const ampm = rawHours >= 12 ? 'PM' : 'AM';
+      const hours = (rawHours % 12) || 12;
 
       const dateString = `${month}/${day}/${year}`;
-      const timeString = `${hours}:${minutes}`
+      const timeString = `${hours}:${minutes} ${ampm}`
 
       const apolloMessage = await Message.create({ firstName, lastName, emailAddress, phoneNumber, message, timeString, dateString })
 
       const emailMessage = {
         from: `${emailAddress}`,
-        to: "iansills04@gmail.com",
+        to: "iansills04@gmail.com, naanauto@gmail.com",
         subject: `you have one message from ${firstName} ${lastName}`,
         html: `
           <h2>You have a new message</h2>
@@ -570,6 +579,12 @@ const resolvers = {
             console.log(info.response)
           }
         })
+
+        twilioClient.messages.create({
+          body: `New message from ${firstName} ${lastName}\nPhone: ${phoneNumber}\nEmail: ${emailAddress}\nMessage: ${message}\nSent: ${timeString} ${dateString}`,
+          from: process.env.TWILIO_PHONE_NUMBER,
+          to: process.env.OWNER_PHONE_NUMBER
+        }).catch(err => console.error('Twilio SMS error:', err));
       }
 
       return {
@@ -577,13 +592,18 @@ const resolvers = {
       };
 
     },
-    deleteMessage: async (parent, { id }) => {
+    deleteMessage: async (parent, { _id }, context) => {
+      if (!context || !context.user) throw new Error("Authentication required.");
       try {
-        const result = await Message.findByIdAndDelete({ _id: id })
-        return result
+        await Message.findByIdAndDelete(_id)
+        return Message.find()
       } catch {
-        throw new Error('failed to delete error')
+        throw new Error('failed to delete message')
       }
+    },
+    markMessageRead: async (parent, { _id }, context) => {
+      if (!context || !context.user) throw new Error("Authentication required.");
+      return Message.findByIdAndUpdate(_id, { isRead: true }, { new: true });
     },
     deleteImage: async (parent, { url }) => {
       console.log(url)

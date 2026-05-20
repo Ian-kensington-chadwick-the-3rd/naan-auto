@@ -26,6 +26,7 @@
     "nodemon": "^3.0.3",
     "particles.js": "^2.0.0",
     "server": "^1.0.38",
+    "twilio": "^6.0.2",
     "uuid": "^11.0.3"
   },
   "devDependencies": {

@@ -137,7 +137,7 @@ const Inventory = () => {
 
                             <div className='inventory-child-container_R'>
                                 <a href='https://www.accreditapp.com/ACCreditApp.aspx?ACCFX=124945o17730'>
-                                    <button>Check Out Financing Here</button>
+                                    <button>Apply for Financing</button>
                                 </a>
                             </div>
 

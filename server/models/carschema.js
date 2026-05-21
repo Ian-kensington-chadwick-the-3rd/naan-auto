@@ -63,7 +63,7 @@ const carSchema = new Schema({
     sold:{
         type: Boolean
     }
-});
+}, { timestamps: true });
 
 const Car = mongoose.model('Car', carSchema);
 

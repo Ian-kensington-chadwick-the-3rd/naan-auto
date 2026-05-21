@@ -99,8 +99,10 @@ const InvId = () => {
 
     const pictureRef = useRef(null);
     const outerPictureRef = useRef(null);
+    const innerPictureRef = useRef([]);
 
     useEffect(() => {
+        innerPictureRef.current = [];
         offsetRef.current = 0;
         if (pictureRef.current) {
             pictureRef.current.style.transition = 'none';
@@ -133,6 +135,20 @@ const InvId = () => {
             pictureRef.current.style.transition = 'transform 0.15s ease-out';
         }
     };
+
+    useEffect(() => {
+        if (draggingRef.current || !pictureRef.current || !outerPictureRef.current) return;
+        const currentImg = innerPictureRef.current[slideIndex];
+        if (!currentImg) return;
+        const parentWidth = outerPictureRef.current.offsetWidth;
+        const stripWidth = pictureRef.current.scrollWidth;
+        const maxOffset = Math.min(0, parentWidth - stripWidth);
+        const targetOffset = -(currentImg.offsetLeft - (parentWidth / 2) + (currentImg.offsetWidth / 2));
+        const clamped = Math.max(maxOffset, Math.min(0, targetOffset));
+        offsetRef.current = clamped;
+        pictureRef.current.style.transition = 'transform 0.3s ease';
+        pictureRef.current.style.transform = `translateX(${clamped}px)`;
+    }, [slideIndex]);
 
 
     
@@ -256,6 +272,7 @@ const InvId = () => {
                                             height={'85px'}
                                             className={index === slideIndex ? "active  mini-picture-spacing" : "mini-picture-spacing"}
                                             onClick={() => jumpToIndex(index)}
+                                            ref={el => innerPictureRef.current[index] = el}
                                             draggable={false}
                                         />
                                     ))}

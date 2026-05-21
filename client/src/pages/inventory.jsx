@@ -78,9 +78,22 @@ const Inventory = () => {
     return (
         <div>
             <Helmet>
+                <script type="application/ld+json">{JSON.stringify({
+                    "@context": "https://schema.org",
+                    "@type": "ItemList",
+                    "name": "Used Cars for Sale at Naan Auto — Gulf Breeze, FL",
+                    "url": "https://naanauto.com/inventory",
+                    "numberOfItems": carData?.Cars?.length || 0,
+                    "itemListElement": (carData?.Cars || []).map((car, index) => ({
+                        "@type": "ListItem",
+                        "position": index + 1,
+                        "url": `https://naanauto.com/inventory/${car._id}`,
+                        "name": `${car.year} ${car.make} ${car.model}${car.trim ? ` ${car.trim}` : ''}`
+                    }))
+                })}</script>
                 <title>Used Cars for Sale in Gulf Breeze, FL | Naan Auto</title>
-                <meta name="description" content="Browse quality used cars, trucks, and SUVs for sale at Naan Auto in Gulf Breeze, FL. Serving Pensacola, Navarre, Fort Walton Beach, Destin, Niceville, Crestview, Freeport, and the Florida Panhandle. Honest pricing, no gimmicks." />
-                <meta name="keywords" content="used cars Gulf Breeze FL, used car inventory Pensacola, used trucks SUVs Florida Panhandle, buy used car Navarre FL, used cars Fort Walton Beach, used cars Destin FL, used cars Niceville FL, used cars Crestview FL, used cars Freeport FL, affordable used cars Northwest Florida" />
+                <meta name="description" content="Browse affordable used cars, trucks, and SUVs for sale at Naan Auto in Gulf Breeze, FL. Serving Pensacola, Navarre, Pace, Milton, Fort Walton Beach, Destin, Niceville, Crestview, Freeport, and the Florida Panhandle. Honest pricing, no gimmicks." />
+                <meta name="keywords" content="used cars Gulf Breeze FL, used car inventory Pensacola, used trucks SUVs Florida Panhandle, buy used car Navarre FL, used cars Pace FL, used cars Milton FL, used cars Fort Walton Beach, used cars Destin FL, used cars Niceville FL, used cars Crestview FL, used cars Freeport FL, affordable used cars Northwest Florida, car dealerships gulf breeze, used car dealers gulf breeze" />
                 <meta name="robots" content="index, follow" />
                 <meta name="author" content="Naan Auto" />
                 <meta name="theme-color" content="#e95918" />
@@ -89,7 +102,7 @@ const Inventory = () => {
                 <meta name="geo.position" content="30.3929398;-87.0428434" />
                 <meta name="ICBM" content="30.3929398, -87.0428434" />
                 <meta property="og:title" content="Used Car Inventory - Naan Auto | Gulf Breeze, FL" />
-                <meta property="og:description" content="Browse quality used cars, trucks, and SUVs for sale at Naan Auto in Gulf Breeze, FL. Serving Pensacola, Navarre, Fort Walton Beach, Destin, and the Florida Panhandle." />
+                <meta property="og:description" content="Browse affordable used cars, trucks, and SUVs at Naan Auto in Gulf Breeze, FL. Serving Pensacola, Navarre, Pace, Milton, Fort Walton Beach, Destin, Niceville, and Crestview." />
                 <meta property="og:site_name" content="Naan Auto" />
                 <meta property="og:type" content="website" />
                 <meta property="og:url" content="https://naanauto.com/inventory" />
@@ -99,7 +112,7 @@ const Inventory = () => {
                 <link rel="canonical" href="https://naanauto.com/inventory" />
                 <meta name="twitter:card" content="summary_large_image" />
                 <meta name="twitter:title" content="Used Cars for Sale in Gulf Breeze, FL | Naan Auto" />
-                <meta name="twitter:description" content="Browse quality used cars, trucks, and SUVs at Naan Auto in Gulf Breeze, FL. Serving the Florida Panhandle. Honest pricing, no gimmicks." />
+                <meta name="twitter:description" content="Browse affordable used cars, trucks, and SUVs at Naan Auto in Gulf Breeze, FL. Serving Pensacola, Navarre, Pace, Milton, Fort Walton Beach, Destin, Niceville, and Crestview." />
                 <meta name="twitter:image" content="https://naanauto.com/logo.PNG" />
                 <meta name="twitter:image:alt" content="Naan Auto Used Car Inventory - Gulf Breeze FL" />
                 <meta name="mobile-web-app-capable" content="yes" />

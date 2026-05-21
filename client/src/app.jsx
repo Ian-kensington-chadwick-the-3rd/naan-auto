@@ -8,7 +8,8 @@ import {
 import { Helmet } from 'react-helmet';
 
 import { setContext } from "@apollo/client/link/context";
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
 import Header from './components/header'
 import Footer from './components/footer'
 import FloatingCall from './components/floatingCall'
@@ -19,25 +20,20 @@ const url = import.meta.env.VITE_GRAPHQL_URI || '/graphql'
 
 const httpLink = createHttpLink({
   uri: url,
-  credentials:'include',
 });
 
-// const authLink = setContext((_, { headers }) => {
-  
-//   const token = localStorage.getItem('token');
-
-//   return {
-//     headers: {
-//       ...headers,
-//       authorization: token ? `Bearer ${token}` : "",
-//     }
-//   }
-// });
-
-
+const authLink = setContext((_, { headers }) => {
+  const token = localStorage.getItem('token');
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token}` : "",
+    }
+  }
+});
 
 const client = new ApolloClient({
-  link: httpLink,
+  link: authLink.concat(httpLink),
   cache: new InMemoryCache(),
 });
 
@@ -74,6 +70,12 @@ const schemaMarkup = {
   "description": "Family-owned used car dealership in Gulf Breeze, FL serving Pensacola and surrounding areas. Honest pricing, quality vehicles, no gimmicks."
 };
 
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => { window.scrollTo(0, 0); }, [pathname]);
+  return null;
+}
+
 function App() {
   return (
     <ApolloProvider client={client}>
@@ -84,6 +86,7 @@ function App() {
         <video autoPlay muted loop playsInline className='video-background'>
           <source src={videoBackground} type='video/mp4' />
         </video>
+        <ScrollToTop />
         <Header />
         <Outlet />
         <Footer />

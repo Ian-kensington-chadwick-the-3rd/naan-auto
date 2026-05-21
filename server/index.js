@@ -56,8 +56,8 @@ const startApolloServer = async () => {
     app.use('/graphql', expressMiddleware(server, {
 
         context: async ({ req, res }) => {
-            // const token = req?.headers?.authorization || ""
-            const token = req.cookies.token
+            const authHeader = req?.headers?.authorization || ""
+            const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null
             const userDecoded = getUserFromToken(token);
 
             const rawIp = req.headers['x-forwarded-for']?.split(',')[0] ||
@@ -81,8 +81,6 @@ const startApolloServer = async () => {
                 { url: '/inventory', priority: '1.0', changefreq: 'daily' },
                 { url: '/aboutUs', priority: '0.8', changefreq: 'monthly' },
                 { url: '/contactUs', priority: '0.8', changefreq: 'monthly' },
-                { url: '/termsandconditions', priority: '0.3', changefreq: 'yearly' },
-                { url: '/privacypolicy', priority: '0.3', changefreq: 'yearly' },
             ];
 
             const staticXml = staticPages.map(page => `

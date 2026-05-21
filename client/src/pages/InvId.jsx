@@ -4,8 +4,6 @@ import { useQuery } from '@apollo/client'
 import { useEffect, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import GoogleMaps from './../components/googlemaps'
-import play from '../assets/icons8-play-32.png'
-import pause from '../assets/icons8-pause-32.png'
 import Ripple from '../components/loading.jsx'
 
 const InvId = () => {
@@ -33,14 +31,6 @@ const InvId = () => {
         setSlideIndex(index);
     }
 
-    const [timerPause, setTimerPause] = useState(false)
-
-    useEffect(() => {
-        if (timerPause || arrayLength <= 1) return;
-        const id = setInterval(setIndexForwards, 5000)
-
-        return () => clearInterval(id)
-    }, [arrayLength, timerPause]);
 
 
     const [stickyHeader, setStickyHeader] = useState(false);
@@ -88,6 +78,20 @@ const InvId = () => {
         "stickyheadertopspaceovertabletvw" : ''
     // add 20vh if tablet and sticky header true
     // else add
+    const swipeStartX = useRef(null);
+
+    const onSwipeTouchStart = (e) => {
+        swipeStartX.current = e.touches[0].clientX;
+    };
+
+    const onSwipeTouchEnd = (e) => {
+        if (swipeStartX.current === null) return;
+        const delta = e.changedTouches[0].clientX - swipeStartX.current;
+        swipeStartX.current = null;
+        if (delta < -40) setIndexForwards();
+        else if (delta > 40) setIndexBackwards();
+    };
+
     const draggingRef = useRef(false);
     const startXRef = useRef(0);
     const startOffsetRef = useRef(0);
@@ -95,10 +99,8 @@ const InvId = () => {
 
     const pictureRef = useRef(null);
     const outerPictureRef = useRef(null);
-    const innerPictureRef = useRef([]);
 
     useEffect(() => {
-        innerPictureRef.current = [];
         offsetRef.current = 0;
         if (pictureRef.current) {
             pictureRef.current.style.transition = 'none';
@@ -132,34 +134,6 @@ const InvId = () => {
         }
     };
 
-    const timedSlider = () => {
-        if (draggingRef.current) return;
-        if (!pictureRef.current || !outerPictureRef.current) return;
-
-        const parentWidth = outerPictureRef.current.offsetWidth;
-        const stripWidth = pictureRef.current.scrollWidth;
-        const maxOffset = Math.min(0, parentWidth - stripWidth);
-        const currentImg = innerPictureRef.current[slideIndex];
-        if (!currentImg) return;
-
-        const imgOffsetLeft = currentImg.offsetLeft;
-        const imgWidth = currentImg.offsetWidth;
-        const targetOffset = -(imgOffsetLeft - (parentWidth / 2) + (imgWidth / 2));
-        const clamped = Math.max(maxOffset, Math.min(0, targetOffset));
-
-        offsetRef.current = clamped;
-        pictureRef.current.style.transition = 'transform 0.3s ease';
-        pictureRef.current.style.transform = `translateX(${clamped}px)`;
-    };
-
-    useEffect(() => {
-        if (slideIndex == null) return;
-        requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-                timedSlider();
-            });
-        });
-    }, [slideIndex]);
 
     
 
@@ -245,6 +219,7 @@ const InvId = () => {
                     <meta name="apple-mobile-web-app-capable" content="yes" />
                     <meta name="apple-mobile-web-app-title" content="Naan Auto" />
                     <meta name="format-detection" content="telephone=yes" />
+                    <link rel="canonical" href={`https://naanauto.com/inventory/${car._id}`} />
                 </Helmet>
             )}
             <div className="car-details-container">
@@ -257,7 +232,7 @@ const InvId = () => {
                 <section className="center-dup">
                     <section className="invid-main">
                         <div className={`${pictureSpaceTabletUnderVw} ${pictuerSpaceTabletOverVw}`}>
-                            <div className="slideshow-container"> 
+                            <div className="slideshow-container" onTouchStart={onSwipeTouchStart} onTouchEnd={onSwipeTouchEnd}>
                             {cars[0].sold === true && <span className="sold" style={{zIndex:'1',fontSize:'100px'}}>SOLD</span>}
                                 <div className="slide-wrapper" style={{ transform: `translateX(-${slideIndex * 100}%)`, position:'relative' }}>
                                     {dataImg?.map((src, index) => (
@@ -266,11 +241,6 @@ const InvId = () => {
                                 </div>
                                 <button className="slider-button left" onClick={() => setIndexBackwards()}>&#60;</button>
                                 <button className="slider-button right" onClick={() => setIndexForwards()}>&#62;</button>
-                                {!timerPause ?
-                                    <img src={pause} className="pause-btn" onClick={() => setTimerPause(true)}></img>
-                                    :
-                                    <img src={play} className="pause-btn" onClick={() => setTimerPause(false)}></img>
-                                }
                             </div>
                             <div className="picture-list " ref={outerPictureRef} >
                                 <div className="img-wrapper" ref={pictureRef}
@@ -286,7 +256,6 @@ const InvId = () => {
                                             height={'85px'}
                                             className={index === slideIndex ? "active  mini-picture-spacing" : "mini-picture-spacing"}
                                             onClick={() => jumpToIndex(index)}
-                                            ref={el => innerPictureRef.current[index] = el}
                                             draggable={false}
                                         />
                                     ))}
@@ -296,74 +265,83 @@ const InvId = () => {
                         {cars.map((car, index) => (
                             <section key={index} className="car-info">
 
-                                <div className="description-box " >
-                                    <h2 className="car-description">vehicle Info</h2>
+                                <div className="description-box">
+                                    <h2 className="car-description">Vehicle Info</h2>
                                 </div>
-                                <div className="info-bg-flex">
-                                    <div className="flex-col-gap">
-                                        <div className="info-bg" >
-                                            <div className="vehicle-info-flex">
-                                                <span className="car-inv-header title-bg">Mileage</span>
-                                                <span className="car-inv">{car.mileage || '...'} </span>
-                                            </div>
-                                        </div>
-                                        <div className="info-bg">
-                                            <div className="vehicle-info-flex">
-                                                <span className="car-inv-header title-bg">Drivetrain</span>
-                                                <span className="car-inv">{car.drivetrain || '...'}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="flex-col-gap">
-                                        <div className="info-bg">
-                                            <div className="vehicle-info-flex">
-                                                <span className="car-inv-header title-bg ">Int Color</span>
-                                                <span className="car-inv">{car.interiorColor || '...'}</span>
-                                            </div>
-                                        </div>
-                                        <div className="info-bg">
-                                            <div className="vehicle-info-flex">
-                                                <span className="car-inv-header title-bg">Ext Color</span>
-                                                <span className="car-inv">{car.exteriorColor || '...'}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="flex-col-gap">
-                                        <div className="info-bg">
-                                            <div className="vehicle-info-flex">
-                                                <span className="car-inv-header title-bg">Fuel Type</span>
-                                                <span className="car-inv">{car.fuelType || '...'}</span>
-                                            </div>
-                                        </div>
-                                        <div className="info-bg">
-                                            <div className="vehicle-info-flex">
-                                                <span className="car-inv-header title-bg">Transmission</span>
-                                                <span className="car-inv">{car.trans || '...'}</span>
+                                <div className="invid__sections">
 
+                                    <div className="invid__section">
+                                        <h3 className="invid__section-title">Specifications</h3>
+                                        <div className="info-bg-flex">
+                                            <div className="info-bg">
+                                                <div className="vehicle-info-flex">
+                                                    <span className="car-inv-header">Mileage</span>
+                                                    <span className="car-inv">{car.mileage || '...'}</span>
+                                                </div>
+                                            </div>
+                                            <div className="info-bg">
+                                                <div className="vehicle-info-flex">
+                                                    <span className="car-inv-header">Transmission</span>
+                                                    <span className="car-inv">{car.trans || '...'}</span>
+                                                </div>
+                                            </div>
+                                            <div className="info-bg">
+                                                <div className="vehicle-info-flex">
+                                                    <span className="car-inv-header">Drivetrain</span>
+                                                    <span className="car-inv">{car.drivetrain || '...'}</span>
+                                                </div>
+                                            </div>
+                                            <div className="info-bg">
+                                                <div className="vehicle-info-flex">
+                                                    <span className="car-inv-header">Fuel Type</span>
+                                                    <span className="car-inv">{car.fuelType || '...'}</span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="flex-col-gap">
-                                        <div className="info-bg">
-                                            <div className="vehicle-info-flex">
-                                                <span className="car-inv-header vehicle-history title-bg" >Ownership</span>
-                                                <span className="car-inv">{car.ownership || '...'}</span>
 
+                                    <div className="invid__section">
+                                        <h3 className="invid__section-title">Appearance</h3>
+                                        <div className="info-bg-flex">
+                                            <div className="info-bg">
+                                                <div className="vehicle-info-flex">
+                                                    <span className="car-inv-header">Exterior Color</span>
+                                                    <span className="car-inv">{car.exteriorColor || '...'}</span>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div className=" info-bg">
-                                            <div className="vehicle-info-flex">
-                                                <span className="car-inv-header title-bg">Title History</span>
-                                                <span className="car-inv"> {car.titleHistory || '...'}</span>
+                                            <div className="info-bg">
+                                                <div className="vehicle-info-flex">
+                                                    <span className="car-inv-header">Interior Color</span>
+                                                    <span className="car-inv">{car.interiorColor || '...'}</span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="info-bg" >
-                                        <div className="vehicle-info-flex">
-                                            <span className="car-inv-header vehicle-history title-bg">VIN</span>
-                                            <span className="car-inv">{car.vin || '...'}</span>
+
+                                    <div className="invid__section invid__section--last">
+                                        <h3 className="invid__section-title">History</h3>
+                                        <div className="info-bg-flex">
+                                            <div className="info-bg">
+                                                <div className="vehicle-info-flex">
+                                                    <span className="car-inv-header">Ownership</span>
+                                                    <span className="car-inv">{car.ownership || '...'}</span>
+                                                </div>
+                                            </div>
+                                            <div className="info-bg">
+                                                <div className="vehicle-info-flex">
+                                                    <span className="car-inv-header">Title History</span>
+                                                    <span className="car-inv">{car.titleHistory || '...'}</span>
+                                                </div>
+                                            </div>
+                                            <div className="info-bg info-bg--vin">
+                                                <div className="vehicle-info-flex">
+                                                    <span className="car-inv-header">VIN</span>
+                                                    <span className="car-inv">{car.vin || '...'}</span>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
+
                                 </div>
                             </section>
                         ))}

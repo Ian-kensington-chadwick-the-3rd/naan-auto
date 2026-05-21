@@ -451,15 +451,6 @@ const resolvers = {
 
         var token = jwt.sign({ id: randomId, username: Admin.username }, process.env.JWT_SECRET_KEY, { expiresIn: "1h" })
 
-
-        res.cookie('token', token, {
-          signed: false,
-          httpOnly: true,
-          secure: true,
-          sameSite: 'none',
-          maxAge: 3600000
-        })
-
         return {
           user: {
             Username: Admin.username,

@@ -117,6 +117,7 @@ mutation signIn($usernameInput: String!, $passwordInput: String!){
     signIn(usernameInput: $usernameInput, passwordInput: $passwordInput){
         success
         message
+        token
     }
 
 }`

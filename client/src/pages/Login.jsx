@@ -2,6 +2,7 @@ import { useState, useEffect } from "react"
 import { useMutation } from "@apollo/client"
 import { SIGN_IN } from "../utils/querys";
 import { useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 
 
 const login = () => {
@@ -43,6 +44,7 @@ const login = () => {
                 }
             })
             if (data.signIn.success === true) {
+                localStorage.setItem('token', data.signIn.token)
                 setLoggedInSuccess(true)
             }
             alert(data.signIn.message)
@@ -54,7 +56,10 @@ const login = () => {
 
     }
     return (
-
+        <>
+        <Helmet>
+            <meta name="robots" content="noindex, nofollow" />
+        </Helmet>
         <div className="log-in_container">
             <form onSubmit={e => handleSubmit(e)} className="log-in_form">
 
@@ -80,7 +85,7 @@ const login = () => {
                 <input type='submit' value='submit' className="log-in_button"></input>
             </form>
         </div>
-
+        </>
     )
 }
 

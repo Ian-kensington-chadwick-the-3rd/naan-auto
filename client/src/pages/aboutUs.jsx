@@ -92,8 +92,8 @@ const AboutUs = () => {
                ]
             })}</script>
             <title>About Us | Naan Auto - Used Car Dealership in Gulf Breeze, FL</title>
-            <meta name="description" content="Learn about Naan Auto, a family-owned used car dealership in Gulf Breeze, FL serving Pensacola, Navarre, Fort Walton Beach, Destin, Niceville, Crestview, Freeport, and the Florida Panhandle. Honest, trustworthy service with no gimmicks." />
-            <meta name="keywords" content="about Naan Auto, family owned car dealership Gulf Breeze FL, used car dealer Pensacola, honest car dealership Florida Panhandle, used cars Navarre, used cars Fort Walton Beach, used cars Destin, used cars Niceville, used cars Crestview, used cars Freeport" />
+            <meta name="description" content="Learn about Naan Auto, a family-owned used car dealership in Gulf Breeze, FL serving Pensacola, Navarre, Pace, Milton, Fort Walton Beach, Destin, Niceville, Crestview, Freeport, and the Florida Panhandle. Honest, trustworthy service with no gimmicks." />
+            <meta name="keywords" content="about Naan Auto, family owned car dealership Gulf Breeze FL, used car dealer Pensacola, honest car dealership Florida Panhandle, used cars Navarre, used cars Pace FL, used cars Milton FL, used cars Fort Walton Beach, used cars Destin, used cars Niceville, used cars Crestview, used cars Freeport, family owned used car dealer" />
             <meta name="robots" content="index, follow" />
             <meta name="author" content="Naan Auto" />
             <meta name="theme-color" content="#e95918" />
@@ -102,7 +102,7 @@ const AboutUs = () => {
             <meta name="geo.position" content="30.3929398;-87.0428434" />
             <meta name="ICBM" content="30.3929398, -87.0428434" />
             <meta property="og:title" content="About Naan Auto - Family-Owned Used Car Dealer in Gulf Breeze, FL" />
-            <meta property="og:description" content="Family-owned used car dealership in Gulf Breeze, FL. Jason and Stephanie are committed to honest, trustworthy service for customers in Pensacola and beyond." />
+            <meta property="og:description" content="Family-owned used car dealership in Gulf Breeze, FL. Serving Pensacola, Navarre, Pace, Milton, Fort Walton Beach, Destin, Niceville, and Crestview. Honest service, no gimmicks." />
             <meta property="og:site_name" content="Naan Auto" />
             <meta property="og:type" content="website" />
             <meta property="og:url" content="https://naanauto.com/aboutUs" />
@@ -113,7 +113,7 @@ const AboutUs = () => {
             <link rel="preload" href="./assets/pexelsfinal.webp" as="image" />
             <meta name="twitter:card" content="summary_large_image" />
             <meta name="twitter:title" content="About Naan Auto - Family-Owned Used Car Dealer in Gulf Breeze, FL" />
-            <meta name="twitter:description" content="Family-owned used car dealership in Gulf Breeze, FL. Honest, trustworthy service with no gimmicks." />
+            <meta name="twitter:description" content="Family-owned used car dealership in Gulf Breeze, FL. Serving Pensacola, Navarre, Pace, Milton, Fort Walton Beach, Destin, Niceville, and Crestview." />
             <meta name="twitter:image" content="https://naanauto.com/logo.PNG" />
             <meta name="twitter:image:alt" content="Naan Auto - Family-Owned Used Car Dealership Gulf Breeze FL" />
             <meta name="mobile-web-app-capable" content="yes" />

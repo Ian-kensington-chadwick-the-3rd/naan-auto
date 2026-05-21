@@ -1,7 +1,12 @@
+import { Helmet } from 'react-helmet'
 
 const PrivacyPolicy = () => {
     return (
         <div className="terms-and-conditions-container">
+            <Helmet>
+                <link rel="canonical" href="https://naanauto.com/privacypolicy" />
+                <meta name="robots" content="noindex, follow" />
+            </Helmet>
             <div className="terms-and-conditions-background">
                 <h1>Privacy Policy</h1>
                 <p>Effective Date: 05/21/2025</p>

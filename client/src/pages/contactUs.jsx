@@ -5,8 +5,8 @@ import { SEND_MESSAGE, GET_MESSAGE } from "../utils/querys";
 import { Helmet } from "react-helmet";
 import successfullMessage from '../assets/message200.gif'
 import unsuccessfullMessage from '../assets/message404.gif'
-import ringingGif from '../assets/icons8-phone-ringing.gif'
-import mapMarker from '../assets/icons8-map-pin.gif'
+import ringingGif from '../assets/icons8-phone-50.png'
+import mapMarker from '../assets/icons8-place-marker-24.png'
 
 const contactUs = () => {
    const [sendMessage] = useMutation(SEND_MESSAGE, {
@@ -119,8 +119,8 @@ const contactUs = () => {
       <div>
          <Helmet>
             <title>Contact Us | Naan Auto - Used Car Dealer in Gulf Breeze, FL</title>
-            <meta name="description" content="Contact Naan Auto, your local used car dealership in Gulf Breeze, FL. Call 850-861-5000 or send us a message. Serving Pensacola, Navarre, Fort Walton Beach, Destin, Niceville, Crestview, Freeport, and the Florida Panhandle." />
-            <meta name="keywords" content="contact Naan Auto, used car dealer Gulf Breeze FL phone number, car dealership Pensacola contact, used cars Navarre FL, used cars Fort Walton Beach, used cars Destin FL, used cars Niceville FL, used cars Crestview FL, used cars Freeport FL, Florida Panhandle car dealer" />
+            <meta name="description" content="Contact Naan Auto, your local used car dealership in Gulf Breeze, FL. Call 850-861-5000 or send us a message. Serving Pensacola, Navarre, Pace, Milton, Fort Walton Beach, Destin, Niceville, Crestview, Freeport, and the Florida Panhandle." />
+            <meta name="keywords" content="contact Naan Auto, used car dealer Gulf Breeze FL phone number, car dealership Pensacola contact, used cars Navarre FL, used cars Pace FL, used cars Milton FL, used cars Fort Walton Beach, used cars Destin FL, used cars Niceville FL, used cars Crestview FL, used cars Freeport FL, Florida Panhandle car dealer, car dealerships gulf breeze" />
             <meta name="robots" content="index, follow" />
             <meta name="author" content="Naan Auto" />
             <meta name="theme-color" content="#e95918" />
@@ -129,7 +129,7 @@ const contactUs = () => {
             <meta name="geo.position" content="30.3929398;-87.0428434" />
             <meta name="ICBM" content="30.3929398, -87.0428434" />
             <meta property="og:title" content="Contact Naan Auto - Used Car Dealer in Gulf Breeze, FL" />
-            <meta property="og:description" content="Get in touch with Naan Auto in Gulf Breeze, FL. Call 850-861-5000 or send us a message. Serving Pensacola and surrounding areas." />
+            <meta property="og:description" content="Get in touch with Naan Auto in Gulf Breeze, FL. Call 850-861-5000 or send us a message. Serving Pensacola, Navarre, Pace, Milton, Fort Walton Beach, Destin, Niceville, and Crestview." />
             <meta property="og:site_name" content="Naan Auto" />
             <meta property="og:type" content="website" />
             <meta property="og:url" content="https://naanauto.com/contactUs" />
@@ -140,7 +140,7 @@ const contactUs = () => {
             <link rel="preload" href="./assets/rowancomp.webp" as="image" />
             <meta name="twitter:card" content="summary_large_image" />
             <meta name="twitter:title" content="Contact Naan Auto - Used Car Dealer in Gulf Breeze, FL" />
-            <meta name="twitter:description" content="Get in touch with Naan Auto in Gulf Breeze, FL. Call 850-861-5000 or send us a message." />
+            <meta name="twitter:description" content="Get in touch with Naan Auto in Gulf Breeze, FL. Call 850-861-5000. Serving Pensacola, Navarre, Pace, Milton, Fort Walton Beach, Destin, Niceville, and Crestview." />
             <meta name="twitter:image" content="https://naanauto.com/logo.PNG" />
             <meta name="twitter:image:alt" content="Contact Naan Auto - Used Car Dealership Gulf Breeze FL" />
             <meta name="mobile-web-app-capable" content="yes" />
@@ -149,12 +149,11 @@ const contactUs = () => {
             <meta name="format-detection" content="telephone=yes" />
          </Helmet>
          {showPopUp &&
-            <section className="pop-up-message ">
-               {successMessage ?
-                  <div className="popup-center"><span style={{ color: 'green' }}>{clientMessage}</span><img src={successfullMessage} /></div> :
-                  <div className="popup-center"><span style={{ color: 'red' }}>{clientMessage}</span><img src={unsuccessfullMessage} /></div>
-               }
-
+            <section className={`pop-up-message ${successMessage ? 'pop-up-message--success' : 'pop-up-message--error'}`}>
+               <div className="popup-center">
+                  <img src={successMessage ? successfullMessage : unsuccessfullMessage} alt="" />
+                  <span>{clientMessage}</span>
+               </div>
             </section>}
          <section className='scenerybackground'>
             <div className="about-us-hero-overlay">
@@ -171,8 +170,10 @@ const contactUs = () => {
                   <span className="crev-eyebrow parkinsans">Gulf Breeze, FL</span>
                   <h1 className="crev-heading">Get In Touch</h1>
                   <p className="crev-subtext parkinsans">
-                     We're a family-owned dealership and we treat every customer like one of our own.
-                     Reach out anytime — we'd love to hear from you.
+                     Don't see what you're looking for on the lot? Just let us know your budget and what
+                     you have in mind — we'll go out and find it for you. Whether it's a specific make,
+                     model, or just a reliable daily driver under a certain price, we'll do the legwork
+                     so you don't have to.
                   </p>
                </div>
 

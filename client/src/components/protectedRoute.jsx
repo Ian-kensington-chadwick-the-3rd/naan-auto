@@ -4,19 +4,12 @@ import { AUTH_CHECK } from '../utils/querys';
 
 
 
-const ProtectedRoute = () =>{ 
-    // const auth = localStorage.getItem('token');
- 
+const ProtectedRoute = () =>{
+    const auth = localStorage.getItem('token');
 
-//     const {loading,data,error} = useQuery(AUTH_CHECK, {variables:{
-//         Key: auth,
-        
-//     },  skip:!auth,
-//         fetchPolicy: 'network-only'
-// });
-
-    const {loading, data, error} = useQuery(AUTH_CHECK,{
-        fetchPolicy:'network-only'
+    const {loading, data, error} = useQuery(AUTH_CHECK, {
+        skip: !auth,
+        fetchPolicy: 'network-only'
     });
 
     if(loading){

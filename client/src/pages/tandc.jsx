@@ -1,8 +1,13 @@
 import { Link } from 'react-router-dom'
+import { Helmet } from 'react-helmet'
 
 const TermsAndConditions = () => {
     return (
         <section className='terms-and-conditions-container'>
+            <Helmet>
+                <link rel="canonical" href="https://naanauto.com/termsandconditions" />
+                <meta name="robots" content="noindex, follow" />
+            </Helmet>
             <div className='terms-and-conditions-background'>
                 <div>
                     <h1>Acceptance of Terms</h1>

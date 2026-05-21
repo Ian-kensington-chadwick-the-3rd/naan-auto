@@ -5,6 +5,8 @@ import { useState } from 'react'
 import phone from '../assets/icons8-phone-50.png'
 import placemarker from '../assets/icons8-place-marker-24.png'
 import email from '../assets/icons8-email-50.png'
+import successfullMessage from '../assets/message200.gif'
+import unsuccessfullMessage from '../assets/message404.gif'
 
 const footer = () => {
     const [sendMessage] = useMutation(SEND_MESSAGE, {
@@ -18,6 +20,14 @@ const footer = () => {
         phoneNumber: '',
     })
     const [validationErrors, setValidationErrors] = useState({})
+    const [showPopUp, setShowPopUp] = useState(false)
+    const [successMessage, setSuccessMessage] = useState(false)
+    const [clientMessage, setClientMessage] = useState('')
+
+    const popUpMessage = () => {
+        setShowPopUp(true)
+        setTimeout(() => setShowPopUp(false), 3000)
+    }
 
     const changeHandler = (e) => {
         e.preventDefault();
@@ -35,20 +45,23 @@ const footer = () => {
     const submitHandler = async (e) => {
         e.preventDefault();
         const notValid = {};
-        if (!form.firstName) notValid.firstName = 'please input first name'
-        if (!form.lastName) notValid.lastName = 'please input last name'
-        if (!form.emailAddress) notValid.emailAddress = 'please input email address'
-        if (!form.message) notValid.message = 'please input message'
-        if (!form.phoneNumber) notValid.phoneNumber = 'please input phoneNumber'
+        if (!form.firstName) notValid.firstName = true
+        if (!form.lastName) notValid.lastName = true
+        if (!form.emailAddress) notValid.emailAddress = true
+        if (!form.message) notValid.message = true
+        if (!form.phoneNumber) notValid.phoneNumber = true
         if (form.emailAddress && !/^\S+@\S+\.\S+$/.test(form.emailAddress)) {
-            notValid.emailAddress = 'Please enter a valid email address';
+            notValid.emailAddress = true;
         }
         if (Object.keys(notValid).length > 0) {
             setValidationErrors(notValid);
+            setSuccessMessage(false);
+            setClientMessage('please fill out each input.');
+            popUpMessage();
             return;
         }
         try {
-            sendMessage({
+            const { data } = await sendMessage({
                 variables: {
                     firstName: form.firstName,
                     lastName: form.lastName,
@@ -57,9 +70,19 @@ const footer = () => {
                     phoneNumber: form.phoneNumber,
                 }
             })
+            if (data?.sendMessage?.success) {
+                setSuccessMessage(true);
+                setClientMessage('message sent');
+            } else {
+                setSuccessMessage(false);
+                setClientMessage('message not sent');
+            }
         } catch (err) {
             console.error(err)
+            setSuccessMessage(false);
+            setClientMessage('message not sent');
         }
+        popUpMessage();
     }
 
     const mapLink = 'https://www.google.com/maps/place/4327+Gulf+Breeze+Pkwy,+Gulf+Breeze,+FL+32563/@30.3929444,-87.0454237,17z/data=!3m1!4b1!4m6!3m5!1s0x8890db5d648dea2b:0xf659fe1011b45078!8m2!3d30.3929398!4d-87.0428434!16s%2Fg%2F11f54xlgyw?entry=ttu&g_ep=EgoyMDI1MDUyNi4wIKXMDSoASAFQAw%3D%3D';
@@ -67,6 +90,14 @@ const footer = () => {
     const emailLink = 'mailto:naanauto@gmail.com';
 
     return (
+        <>
+        {showPopUp &&
+            <section className={`pop-up-message ${successMessage ? 'pop-up-message--success' : 'pop-up-message--error'}`}>
+                <div className="popup-center">
+                    <img src={successMessage ? successfullMessage : unsuccessfullMessage} alt="" />
+                    <span>{clientMessage}</span>
+                </div>
+            </section>}
         <footer>
             <div className='footer'>
                 <div className="footer-columns">
@@ -143,6 +174,7 @@ const footer = () => {
                 <span className="footer-copyright">© {new Date().getFullYear()} Naan Auto. All rights reserved.</span>
             </section>
         </footer>
+        </>
     );
 }
 

@@ -4,6 +4,7 @@ import AdminForm from '../components/adminForm'
 import Messages from '../components/messages'
 import AddCarData from '../components/addCar'
 import { GET_MESSAGE } from '../utils/querys'
+import { Helmet } from 'react-helmet'
 
 const adminDashboard = () => {
     const [action, setAction] = useState()
@@ -30,6 +31,10 @@ const adminDashboard = () => {
     }
 
     return (
+        <>
+        <Helmet>
+            <meta name="robots" content="noindex, nofollow" />
+        </Helmet>
         <div style={{ marginBottom: '50px' }}>
             <section>
                 <div className='admin-dashboard__action-btn-container admin-dashboard__action-tab'>
@@ -58,6 +63,7 @@ const adminDashboard = () => {
             {setPage()}
 
         </div>
+        </>
     )
 
 }

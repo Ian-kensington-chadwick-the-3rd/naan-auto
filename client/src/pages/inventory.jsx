@@ -69,8 +69,6 @@ const Inventory = () => {
         setTotalCars(total)
     }
 
-    if (carLoading) return <Ripple className='inventory-rippleloading' />;
-    if (carError) return `Error!!!! ${carError.message}`;
 
     // to splice we are going to give a page index of 0 which will splice from array 0 - 10 items. next page index is going to be 1 * 10 which will equal index 10 in the next index of 10 b
 
@@ -145,7 +143,14 @@ const Inventory = () => {
                         </div>
                         <div className='container'>
 
-                            {paginatedData.map((car) => (
+                            {carLoading ? (
+                                <Ripple className='inventory-rippleloading' />
+                            ) : carError ? (
+                                <p style={{ padding: '2rem', textAlign: 'center' }}>
+                                    Unable to load inventory right now. Please call us at{' '}
+                                    <a href="tel:+18508615000">850-861-5000</a> or check back shortly.
+                                </p>
+                            ) : paginatedData.map((car) => (
 
                                 <div key={car._id} ref={carRef} style={{ textDecoration: 'none' }} className='card'>
 
@@ -177,7 +182,7 @@ const Inventory = () => {
                                 </div>
                             ))}
                         </div>
-                        <Pagination data={data1} handlePaginatedData={handlePaginatedData} />
+                        {!carLoading && !carError && <Pagination data={data1} handlePaginatedData={handlePaginatedData} />}
                     </div>
                 </div>
             </div>

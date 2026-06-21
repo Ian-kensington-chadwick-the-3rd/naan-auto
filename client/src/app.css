@@ -2026,36 +2026,279 @@ p.orangebottom:hover {
     margin-top: 25px
 }
 
-.admin-dashboard___modal-background{
+/* image customization modal */
+.img-modal__overlay {
     position: fixed;
-    top: 50%;
-    left:50%;
-    transform: translate(-50%, -50%);
-    background: white;
-    border-radius: 8px;
-    width: 800px;
-    height: 800px;
-    z-index: 2;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.78);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    padding: 16px;
+    box-sizing: border-box;
 }
 
-.admin-dashboard___image-direction{
+.img-modal__panel {
+    background: #1a1a1a;
+    border: 1px solid #2e2e2e;
+    border-top: 3px solid var(--maincolor);
+    border-radius: 14px;
+    width: 100%;
+    max-width: 560px;
+    max-height: 90vh;
+    overflow-y: auto;
     display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.img-modal__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px 0;
+}
+
+.img-modal__title {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.13em;
+    color: var(--maincolor);
+}
+
+.img-modal__close {
+    all: unset;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
     justify-content: center;
-    padding:10px;
-    margin-top: 200px;
-    max-width: 800px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.06);
+    color: #888;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+}
+
+.img-modal__close:hover {
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+}
+
+.img-modal__hint {
+    margin: 8px 24px 0;
+    font-size: 0.75rem;
+    color: #555;
+    letter-spacing: 0.02em;
+}
+
+.img-modal__grid {
+    display: flex;
     flex-wrap: wrap;
+    gap: 8px;
+    padding: 16px 24px;
+    min-height: 60px;
 }
 
-.admin-dashboard___btn-container{
-    display: flex;
-    justify-content: center;
-    margin-bottom: 10px;
+.img-modal__card {
+    position: relative;
+    width: calc(33.333% - 6px);
+    aspect-ratio: 4 / 3;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1.5px solid #2e2e2e;
+    cursor: grab;
+    transition: opacity 0.15s, border-color 0.15s;
+    background: #111;
 }
 
-.deleteimg{
+.img-modal__card:active {
+    cursor: grabbing;
+}
+
+.img-modal__card--dragging {
+    opacity: 0.35;
+    border-color: var(--maincolor);
+}
+
+.img-modal__card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    pointer-events: none;
+}
+
+.img-modal__card-index {
     position: absolute;
-    transform: translate(-25px,2px);
+    top: 5px;
+    left: 6px;
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    font-size: 0.65rem;
+    font-weight: 700;
+    border-radius: 4px;
+    padding: 1px 5px;
+    line-height: 1.6;
+    pointer-events: none;
+}
+
+.img-modal__card-delete {
+    all: unset;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(224, 85, 85, 0.85);
+    color: #fff;
+    font-size: 0.6rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.img-modal__card-delete:hover {
+    background: #e05555;
+}
+
+.img-modal__section {
+    padding: 0 24px 16px;
+    border-top: 1px solid #252525;
+    margin-top: 4px;
+}
+
+.img-modal__section-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.13em;
+    color: var(--maincolor);
+    margin: 16px 0 10px;
+}
+
+.img-modal__upload-zone {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 20px 16px;
+    border: 2px dashed #333;
+    border-radius: 10px;
+    background: #202020;
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+
+.img-modal__upload-zone:hover {
+    border-color: var(--maincolor);
+}
+
+.img-modal__upload-icon {
+    font-size: 22px;
+    line-height: 1;
+}
+
+.img-modal__upload-text {
+    font-size: 13px;
+    font-weight: 500;
+    color: #ccc;
+}
+
+.img-modal__file-input {
+    font-size: 11px;
+    color: #666;
+    max-width: 100%;
+    cursor: pointer;
+    background: none;
+    border: none;
+}
+
+.img-modal__upload-hint {
+    font-size: 11px;
+    color: #555;
+    letter-spacing: 0.3px;
+}
+
+.img-modal__error {
+    margin: 0 24px 4px;
+    padding: 12px 14px;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.25);
+    border-radius: 8px;
+}
+
+.img-modal__error-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #f87171;
+    margin: 0 0 6px;
+}
+
+.img-modal__error-list {
+    margin: 0;
+    padding-left: 16px;
+    font-size: 0.78rem;
+    color: #e0e0e0;
+}
+
+.img-modal__actions {
+    display: flex;
+    gap: 8px;
+    padding: 16px 24px 20px;
+    border-top: 1px solid #252525;
+}
+
+.img-modal__btn {
+    all: unset;
+    flex: 1;
+    height: 40px;
+    text-align: center;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s, opacity 0.2s;
+}
+
+.img-modal__btn--cancel {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #aaa;
+}
+
+.img-modal__btn--cancel:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+.img-modal__btn--save {
+    background: var(--maincolor);
+    color: #fff;
+}
+
+.img-modal__btn--save:hover {
+    background: #c94a12;
+}
+
+.img-modal__btn--loading {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+@media (max-width: 480px) {
+    .img-modal__card {
+        width: calc(50% - 4px);
+    }
 }
 
 /* addCar page */

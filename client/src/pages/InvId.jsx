@@ -154,11 +154,21 @@ const InvId = () => {
     
 
 
-    if (loading) return <Ripple/>;
+    if (loading) return <Ripple className='invid-ripple' />;
     if (error) return <p>Error: {error.message}</p>;
 
-
     const car = cars[0];
+
+    if (!car) return (
+        <section className="listing-removed">
+            <div className="listing-removed__card">
+                <span className="listing-removed__icon">&#x1F697;</span>
+                <h1 className="listing-removed__title">Listing Removed</h1>
+                <p className="listing-removed__sub">This vehicle is no longer available.</p>
+                <Link to="/inventory" className="listing-removed__btn">Browse Inventory</Link>
+            </div>
+        </section>
+    );
 
     return (
         <section>
@@ -249,7 +259,7 @@ const InvId = () => {
                     <section className="invid-main">
                         <div className={`${pictureSpaceTabletUnderVw} ${pictuerSpaceTabletOverVw}`}>
                             <div className="slideshow-container" onTouchStart={onSwipeTouchStart} onTouchEnd={onSwipeTouchEnd}>
-                            {cars[0].sold === true && <span className="sold" style={{zIndex:'1',fontSize:'100px'}}>SOLD</span>}
+                            {cars[0]?.sold === true && <span className="sold" style={{zIndex:'1',fontSize:'100px'}}>SOLD</span>}
                                 <div className="slide-wrapper" style={{ transform: `translateX(-${slideIndex * 100}%)`, position:'relative' }}>
                                     {dataImg?.map((src, index) => (
                                         <img key={index} src={src} alt={`${car.year} ${car.make} ${car.model} - Naan Auto Gulf Breeze FL photo ${index + 1}`} />
@@ -365,7 +375,7 @@ const InvId = () => {
 
                         <div className="description-box">
                             <h2 className="car-description">Description</h2>
-                            <p className="">{cars[0].description}</p>
+                            <p className="">{cars[0]?.description}</p>
                         </div>
                         <div>
                             <GoogleMaps className='google-api' />

@@ -1926,6 +1926,74 @@ p.orangebottom:hover {
     0 11px 0 #17202A, 0 12px 0 #17202A;
 }
 
+/* listing removed page */
+.listing-removed {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 70vh;
+    padding: 40px 20px;
+    box-sizing: border-box;
+}
+
+.listing-removed__card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    background: #fff;
+    border-top: 3px solid var(--maincolor);
+    border-radius: 14px;
+    padding: 56px 48px;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.08);
+    max-width: 420px;
+    width: 100%;
+    text-align: center;
+}
+
+.listing-removed__icon {
+    font-size: 3.5rem;
+    line-height: 1;
+    filter: grayscale(0.3);
+}
+
+.listing-removed__title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0;
+    letter-spacing: -0.01em;
+}
+
+.listing-removed__sub {
+    font-size: 0.95rem;
+    color: #888;
+    margin: 0;
+    line-height: 1.5;
+}
+
+.listing-removed__btn {
+    margin-top: 8px;
+    display: inline-block;
+    padding: 12px 28px;
+    background: var(--maincolor);
+    color: #fff;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 0.88rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: background 0.2s, box-shadow 0.2s;
+    box-shadow: 0 2px 10px rgba(233, 89, 24, 0.3);
+}
+
+.listing-removed__btn:hover {
+    background: #c94a12;
+    box-shadow: 0 4px 16px rgba(233, 89, 24, 0.4);
+}
+/* listing removed page end */
+
 .admin-dashboard___btncontainer {
     display: flex;
     gap: 8px;
@@ -3062,7 +3130,16 @@ p.orangebottom:hover {
 
 .inventory-rippleloading{
     height:100vh;
-    width:100vw;
+}
+
+.invid-ripple {
+    display: block;
+    width: 120px;
+    height: 120px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 /* aboutUs.jsx */

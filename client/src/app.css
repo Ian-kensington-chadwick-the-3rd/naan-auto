@@ -2048,7 +2048,7 @@ p.orangebottom:hover {
     width: 100%;
     max-width: 560px;
     max-height: 90vh;
-    overflow-y: auto;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
     gap: 0;
@@ -2102,6 +2102,11 @@ p.orangebottom:hover {
     gap: 8px;
     padding: 16px 24px;
     min-height: 60px;
+    flex: 1 1 auto;
+    min-height: 0;
+    max-height: 45vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 .img-modal__card {

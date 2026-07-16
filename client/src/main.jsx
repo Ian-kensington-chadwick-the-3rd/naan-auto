@@ -15,6 +15,7 @@ import Credits from './pages/credits.jsx'
 import TermsAndConditions from "./pages/tandc.jsx";
 import SiteMap from "./pages/sitemap.jsx";
 import PrivacyPolicy from "./pages/privacypolicy.jsx";
+import Upcoming from "./pages/upcoming.jsx";
 const Dashboard = lazy(()=> import('./pages/adminDashboard.jsx'))
 
 const router = createBrowserRouter([
@@ -34,6 +35,10 @@ const router = createBrowserRouter([
             {
                 path: 'inventory',
                 element: <Inventory/>,
+            },
+            {
+                path: 'upcoming',
+                element: <Upcoming/>,
             },
             {
                 path: 'inventory/:Id',

@@ -104,7 +104,10 @@ const newBucketAlgo = new bucketAlgo();
 const resolvers = {
   Query: {
     Cars: async () => {
-      return Car.find()
+      return Car.find({ $or: [{ upcoming: false }, { upcoming: { $exists: false } }] })
+    },
+    AllCars: async () => {
+      return Car.find({})
     },
     findCar: async (_, ID) => {
       return Car.find({ _id: ID })
@@ -178,6 +181,8 @@ const resolvers = {
 
 
 
+      query.$or = [{ upcoming: false }, { upcoming: { $exists: false } }];
+
       const searchResult = await Car.find(query)
 
 
@@ -209,6 +214,9 @@ const resolvers = {
         throw new Error("not logged in")
       }
       return User.find()
+    },
+    UpcomingCars: async () => {
+      return Car.find({ upcoming: true });
     },
     getMessage: async (parent, data, context) => {
       if (!context || !context.user) {
@@ -245,6 +253,7 @@ const resolvers = {
         titleHistory,
         ownership,
         trim,
+        upcoming,
       }, context) => {
       console.log(context.user)
       if (!context || !context.user) {
@@ -283,6 +292,7 @@ const resolvers = {
         titleHistory,
         ownership,
         trim,
+        upcoming: upcoming ?? false,
       });
       console.log('year: ', year, "Make:", make, " Mileage:", mileage, "desription", description, "trans:", trans, "this is image url", imageUrl);
       console.log(context)
@@ -309,7 +319,8 @@ const resolvers = {
       titleHistory,
       ownership,
       trim,
-      sold
+      sold,
+      upcoming
     }, context) => {
       console.log(context.user)
 
@@ -338,6 +349,7 @@ const resolvers = {
       if (ownership !== undefined && ownership !== null) query.ownership = ownership;
       if (trim !== undefined && trim !== null) query.trim = trim;
       if (sold !== undefined && sold !== null) query.sold = sold
+      if (upcoming !== undefined && upcoming !== null) query.upcoming = upcoming
 
       try {
         console.log(sold)

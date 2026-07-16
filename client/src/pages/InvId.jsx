@@ -5,12 +5,14 @@ import { useEffect, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import GoogleMaps from './../components/googlemaps'
 import Ripple from '../components/loading.jsx'
+import Lightbox from '../components/lightbox.jsx'
 
 const InvId = () => {
     // use the useParams hook to extract data from the specific id 
     const { Id } = useParams();
     const { loading, error, data } = useQuery(FIND_CAR, { variables: { id: Id } });
     const [slideIndex, setSlideIndex] = useState(0);
+    const [lightboxOpen, setLightboxOpen] = useState(false);
 
     const cars = data?.findCar || [];
 
@@ -260,7 +262,11 @@ const InvId = () => {
                         <div className={`${pictureSpaceTabletUnderVw} ${pictuerSpaceTabletOverVw}`}>
                             <div className="slideshow-container" onTouchStart={onSwipeTouchStart} onTouchEnd={onSwipeTouchEnd}>
                             {cars[0]?.sold === true && <span className="sold" style={{zIndex:'1',fontSize:'100px'}}>SOLD</span>}
-                                <div className="slide-wrapper" style={{ transform: `translateX(-${slideIndex * 100}%)`, position:'relative' }}>
+                                <div
+                                    className="slide-wrapper"
+                                    style={{ transform: `translateX(-${slideIndex * 100}%)`, position:'relative', cursor: tabletAndUnderVw ? 'default' : 'zoom-in' }}
+                                    onClick={() => !tabletAndUnderVw && setLightboxOpen(true)}
+                                >
                                     {dataImg?.map((src, index) => (
                                         <img key={index} src={src} alt={`${car.year} ${car.make} ${car.model} - Naan Auto Gulf Breeze FL photo ${index + 1}`} />
                                     ))}
@@ -268,6 +274,13 @@ const InvId = () => {
                                 <button className="slider-button left" onClick={() => setIndexBackwards()}>&#60;</button>
                                 <button className="slider-button right" onClick={() => setIndexForwards()}>&#62;</button>
                             </div>
+                            {lightboxOpen && dataImg && (
+                                <Lightbox
+                                    images={dataImg}
+                                    startIndex={slideIndex}
+                                    onClose={() => setLightboxOpen(false)}
+                                />
+                            )}
                             <div className="picture-list " ref={outerPictureRef} >
                                 <div className="img-wrapper" ref={pictureRef}
                                     onTouchStart={touchStart}

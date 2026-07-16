@@ -23,6 +23,7 @@ const AddCarData = () => {
         exteriorColor: '', interiorColor: '',
         fuelType: '', engineType: '', condition: '',
         titleHistory: '', ownership: '', trim: '',
+        upcoming: false,
     };
 
     const [loadingCss, setLoadingCss] = useState(false);
@@ -47,9 +48,11 @@ const AddCarData = () => {
 
     const handleInputChange = (e) => {
         e.preventDefault();
-        const { name, value, type, files } = e.target;
+        const { name, value, type, files, checked } = e.target;
         if (type === 'file') {
             setForm(prev => ({ ...prev, imageUrl: Array.from(files) }));
+        } else if (type === 'checkbox') {
+            setForm(prev => ({ ...prev, [name]: checked }));
         } else if (name === 'price' || name === 'year' || name === 'mileage') {
             setForm(prev => ({ ...prev, [name]: value === 0 ? '' : Number(value) }));
         } else {
@@ -183,7 +186,8 @@ const AddCarData = () => {
                     exteriorColor: form.exteriorColor, interiorColor: form.interiorColor,
                     fuelType: form.fuelType, engineType: form.engineType,
                     condition: form.condition, titleHistory: form.titleHistory,
-                    ownership: form.ownership, trim: form.trim
+                    ownership: form.ownership, trim: form.trim,
+                    upcoming: form.upcoming
                 }
             });
             if (!result) throw new Error('Car failed to add');
@@ -330,6 +334,20 @@ const AddCarData = () => {
                         className="addcar__description"
                         placeholder="Enter vehicle description..."
                     />
+                </div>
+
+                <div className="addcar__section">
+                    <h3 className="addcar__section-title">Listing Options</h3>
+                    <label className="addcar__toggle-row">
+                        <input
+                            type="checkbox"
+                            name="upcoming"
+                            checked={form.upcoming}
+                            onChange={handleInputChange}
+                            className="addcar__toggle-checkbox"
+                        />
+                        <span className="addcar__toggle-label">Add to Upcoming</span>
+                    </label>
                 </div>
 
                 <div className="addcar__submit-row">

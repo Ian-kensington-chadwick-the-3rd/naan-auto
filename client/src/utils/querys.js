@@ -26,6 +26,33 @@ export const GET_CARS = gql`
         }
     }`
 
+export const GET_ALL_CARS = gql`
+    query GetAllCars {
+        AllCars {
+            _id
+            year
+            make
+            model
+            trim
+            mileage
+            description
+            trans
+            imageUrl
+            price
+            vin
+            drivetrain
+            exteriorColor
+            interiorColor
+            fuelType
+            engineType
+            condition
+            titleHistory
+            ownership
+            sold
+            upcoming
+        }
+    }`
+
 export const FIND_CAR = gql`
     query Cars($id: ID!){
         findCar(_id:$id){
@@ -72,6 +99,7 @@ export const ADD_CAR = gql`
         $titleHistory: String
         $ownership: String
         $trim: String
+        $upcoming: Boolean
         ) {
         addCar(
             year: $year
@@ -92,6 +120,7 @@ export const ADD_CAR = gql`
             titleHistory: $titleHistory
             ownership: $ownership
             trim: $trim
+            upcoming: $upcoming
             ){
             year
             make
@@ -270,6 +299,7 @@ mutation updateCar(
     $ownership: String
     $trim: String
     $sold: Boolean
+    $upcoming: Boolean
 ) {
     updateCar(
         _id: $_id
@@ -292,6 +322,7 @@ mutation updateCar(
         ownership: $ownership
         trim: $trim
         sold: $sold
+        upcoming: $upcoming
     ) {
         _id
         year
@@ -313,6 +344,7 @@ mutation updateCar(
         ownership
         trim
         sold
+        upcoming
     }
 }
 `
@@ -376,3 +408,29 @@ export const DELETE_IMG = gql`
                 }
     }
 `
+
+export const GET_UPCOMING_CARS = gql`
+    query GetUpcomingCars {
+        UpcomingCars {
+            _id
+            year
+            make
+            model
+            trim
+            mileage
+            description
+            trans
+            imageUrl
+            price
+            vin
+            drivetrain
+            exteriorColor
+            interiorColor
+            fuelType
+            engineType
+            condition
+            titleHistory
+            ownership
+            upcoming
+        }
+    }`

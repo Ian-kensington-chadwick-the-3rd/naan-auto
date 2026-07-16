@@ -259,7 +259,7 @@ const Home = () => {
                         Whether you've been going to church your whole life or you're just curious, you're welcome here.
                     </p>
                     <p className="home-bible-study-detail parkinsans">
-                        <strong>Fridays at 6:00 PM</strong> &mdash; stop by the lot or give us a call at{' '}
+                        <strong>Fridays 10:00 AM – 4:00 PM</strong> &mdash; stop by the lot or give us a call at{' '}
                         <a href="tel:+18508615000" className="home-phone-link">850-861-5000</a> for details.
                     </p>
                 </section>

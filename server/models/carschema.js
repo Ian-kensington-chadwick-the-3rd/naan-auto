@@ -62,6 +62,10 @@ const carSchema = new Schema({
     },
     sold:{
         type: Boolean
+    },
+    upcoming: {
+        type: Boolean,
+        default: false
     }
 }, { timestamps: true });
 

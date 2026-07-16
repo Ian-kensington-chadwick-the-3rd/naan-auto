@@ -1720,14 +1720,17 @@ p.orangebottom:hover {
 }
 
 .admin-dashboard__accordion-sold {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    z-index: 2;
     font-size: 0.7rem;
     font-weight: 700;
     letter-spacing: 0.08em;
-    color: var(--maincolor);
-    border: 1px solid var(--maincolor);
+    color: #fff;
+    background: var(--maincolor);
     border-radius: 4px;
     padding: 2px 8px;
-    flex-shrink: 0;
 }
 
 .admin-dashboard__accordion-chevron {
@@ -1743,10 +1746,11 @@ p.orangebottom:hover {
 }
 
 .admin-dashboard__accordion-list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
     width: 100%;
+    align-items: start;
 }
 
 .admin-dashboard__fields-grid {
@@ -1887,28 +1891,23 @@ p.orangebottom:hover {
 }
 
 .admin-dashboard__slideshow-container {
-    height:255px;
-    width: 340px;
+    width: 100%;
+    height: 100%;
     overflow: hidden;
     position: relative;
     background-color: #f5f5f5;
-    /* light gray background */
 }
 
-.admin-dashboard__slideshow-container img {
-
-    width: 100%;
+.admin-dashboard__slideshow-container .slide-wrapper1 {
     height: 100%;
-    object-fit: contain;
 }
 
 .admin-dashboard__slideshow-container img {
+    flex: 0 0 100%;
+    min-width: 100%;
+    height: 100%;
+    object-fit: cover;
     display: block;
-    margin-top: auto;
-    margin-bottom: auto;
-    margin-left: 0;
-    margin-right: 0;
-
 }
 
 .sold{
@@ -2684,6 +2683,17 @@ p.orangebottom:hover {
 .addcar__section {
     padding: 20px 24px 18px;
     border-bottom: 1px solid #252525;
+}
+
+.addcar__toggle-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.addcar__toggle-label {
+    color: #fff;
 }
 
 .addcar__section-title {
@@ -3560,6 +3570,10 @@ p.orangebottom:hover {
 
     .admin-dashboard__list-wrapper {
         padding: 0 12px;
+    }
+
+    .admin-dashboard__accordion-list {
+        grid-template-columns: repeat(2, 1fr);
     }
 
     .inventory-topbar-container {
@@ -4528,4 +4542,135 @@ p.orangebottom:hover {
     .home-features {
         flex-direction: column;
     }
+
+    .admin-dashboard__accordion-list {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Lightbox */
+.lightbox__overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: rgba(0, 0, 0, 0.95);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.lightbox__close {
+    position: absolute;
+    top: 16px;
+    right: 20px;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.8rem;
+    cursor: pointer;
+    z-index: 10000;
+    line-height: 1;
+    opacity: 0.8;
+    transition: opacity 0.15s;
+}
+
+.lightbox__close:hover {
+    opacity: 1;
+}
+
+.lightbox__main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    flex: 1;
+    min-height: 0;
+    gap: 12px;
+    padding: 48px 8px 12px;
+    box-sizing: border-box;
+}
+
+.lightbox__img-wrapper {
+    flex: 1;
+    min-width: 0;
+    max-width: 90vw;
+    max-height: calc(100vh - 180px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.lightbox__img {
+    max-width: 100%;
+    max-height: calc(100vh - 180px);
+    object-fit: contain;
+    display: block;
+    transition: transform 0.25s ease;
+    user-select: none;
+}
+
+.lightbox__arrow {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+    font-size: 2.5rem;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.15s;
+    line-height: 1;
+}
+
+.lightbox__arrow:hover {
+    background: rgba(255, 255, 255, 0.22);
+}
+
+.lightbox__thumbs {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 10px 16px 16px;
+    width: 100%;
+    box-sizing: border-box;
+    scrollbar-width: thin;
+    scrollbar-color: #555 transparent;
+    flex-shrink: 0;
+    justify-content: center;
+}
+
+.lightbox__thumbs::-webkit-scrollbar {
+    height: 4px;
+}
+
+.lightbox__thumbs::-webkit-scrollbar-thumb {
+    background: #555;
+    border-radius: 2px;
+}
+
+.lightbox__thumb {
+    width: 80px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 4px;
+    cursor: pointer;
+    opacity: 0.5;
+    flex-shrink: 0;
+    border: 2px solid transparent;
+    transition: opacity 0.15s, border-color 0.15s;
+}
+
+.lightbox__thumb:hover {
+    opacity: 0.85;
+}
+
+.lightbox__thumb--active {
+    opacity: 1;
+    border-color: var(--maincolor);
 }

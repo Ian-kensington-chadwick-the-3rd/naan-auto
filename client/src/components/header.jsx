@@ -13,7 +13,7 @@ const Header = () => {
 
     const { data } = useQuery(AUTH_CHECK);
     useEffect(() => {
-        if (data?.AuthCheck) {
+        if (data?.AuthCheck?.success) {
             setIsAdmin(true);
         }
     }, [data])
@@ -84,6 +84,7 @@ const Header = () => {
 
     const [urlLocation, setUrlLocation] = useState({
         inventory: true,
+        upcoming: false,
         contactUs: false,
         aboutUs: false,
         login: false,
@@ -99,6 +100,17 @@ const Header = () => {
             case '/inventory':
                 setUrlLocation({
                     inventory: true,
+                    upcoming: false,
+                    contactUs: false,
+                    aboutUs: false,
+                    login: false,
+                    dashboard: false,
+                })
+                break;
+            case '/upcoming':
+                setUrlLocation({
+                    inventory: false,
+                    upcoming: true,
                     contactUs: false,
                     aboutUs: false,
                     login: false,
@@ -108,6 +120,7 @@ const Header = () => {
             case '/contactUs':
                 setUrlLocation({
                     inventory: false,
+                    upcoming: false,
                     contactUs: true,
                     aboutUs: false,
                     login: false,
@@ -117,6 +130,7 @@ const Header = () => {
             case '/aboutUs':
                 setUrlLocation({
                     inventory: false,
+                    upcoming: false,
                     contactUs: false,
                     aboutUs: true,
                     login: false,
@@ -126,6 +140,7 @@ const Header = () => {
             case '/Login':
                 setUrlLocation({
                     inventory: false,
+                    upcoming: false,
                     contactUs: false,
                     aboutUs: false,
                     login: true,
@@ -135,6 +150,7 @@ const Header = () => {
             case '/protectedRoute/dashboard':
                 setUrlLocation({
                     inventory: false,
+                    upcoming: false,
                     contactUs: false,
                     aboutUs: false,
                     login: false,
@@ -144,6 +160,7 @@ const Header = () => {
             default:
                 setUrlLocation({
                     inventory: false,
+                    upcoming: false,
                     contactUs: false,
                     aboutUs: false,
                     login: false,
@@ -191,6 +208,11 @@ const Header = () => {
                             Inventory
                         </span>
                     </Link>
+                    <Link to='/upcoming' className="link" id="nav-mobile" onClick={() => scrollTo({ top: 0, behavior: 'smooth' })}>
+                        <span className={urlLocation.upcoming && "orangebottom"} id="nav-mobile">
+                            Upcoming
+                        </span>
+                    </Link>
                     <Link to='/contactUs' className="link" id="nav-mobile" onClick={() => scrollTo({ top: 0, behavior: 'smooth' })}>
                         <span className={urlLocation.contactUs && "orangebottom"} id="nav-mobile">
                             Contact Us
@@ -227,6 +249,11 @@ const Header = () => {
                                 <li className="nostyle">
                                     <Link to='/inventory' className={urlLocation.inventory ? "urltrue link nostyle" : "link nostyle"} onClick={() => scrollTo({ top: 0, behavior: 'smooth' })}>
                                         Inventory
+                                    </Link>
+                                </li>
+                                <li className="nostyle">
+                                    <Link to='/upcoming' className={urlLocation.upcoming ? "urltrue link nostyle" : "link nostyle"} onClick={() => scrollTo({ top: 0, behavior: 'smooth' })}>
+                                        Upcoming
                                     </Link>
                                 </li>
                                 <li className="nostyle ">

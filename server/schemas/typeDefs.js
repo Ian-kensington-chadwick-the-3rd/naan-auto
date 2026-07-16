@@ -20,6 +20,7 @@ const typeDefs = `
     ownership: String
     trim: String
     sold: Boolean
+    upcoming: Boolean
   }
 
   type Login {
@@ -66,6 +67,7 @@ const typeDefs = `
   type Query {
     User: [User]
     Cars: [Car]
+    AllCars: [Car]
     findCar(_id: ID!): [Car]
     Login: [Login]
     searchField
@@ -96,6 +98,7 @@ const typeDefs = `
     ) : [Car]
       AuthCheck : Auth
       getMessage: [userMessage]
+      UpcomingCars: [Car]
   }
 
   type Mutation {
@@ -119,6 +122,7 @@ const typeDefs = `
       ownership: String
       trim: String
       sold: Boolean
+      upcoming: Boolean
       ): Car
       updateCar(
         _id: String
@@ -141,6 +145,7 @@ const typeDefs = `
         ownership: String
         trim: String
         sold: Boolean
+        upcoming: Boolean
       ): Car
     deleteCar(carId: ID!, key:[String]!): Car
     signIn(usernameInput: String!, passwordInput:String!): AuthResponse

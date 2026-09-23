@@ -42,6 +42,15 @@ const startApolloServer = async () => {
     app.use(express.urlencoded({ extended: false }));
     app.use(express.json());
     app.use(cookieParser());
+
+    app.use((req, res, next) => {
+        const host = req.headers.host || '';
+        if (host.endsWith('.onrender.com')) {
+            return res.redirect(301, `https://naanauto.com${req.originalUrl}`);
+        }
+        next();
+    })
+
     app.use(cors({
         origin: [
             'https://naan-auto.vercel.app',

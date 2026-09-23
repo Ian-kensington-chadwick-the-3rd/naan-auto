@@ -73,7 +73,7 @@ const login = () => {
                 </label>
 
                 <label htmlFor="passwordInputId">
-                    <input type='text'
+                    <input type='password'
                         id="passwordInputId"
                         value={formData.passwordInput}
                         name="passwordInput"

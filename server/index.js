@@ -45,7 +45,7 @@ const startApolloServer = async () => {
 
     app.use((req, res, next) => {
         const host = req.headers.host || '';
-        if (host.endsWith('.onrender.com')) {
+        if (host.endsWith('.onrender.com') && !req.path.startsWith('/graphql')) {
             return res.redirect(301, `https://naanauto.com${req.originalUrl}`);
         }
         next();
